@@ -1,0 +1,4 @@
+name: OreVeins
+main: com.icloud.kevinmendoza.OreVeins.OreVeins
+version: 1.0A
+load: startup
