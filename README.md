@@ -84,3 +84,43 @@ For the purposes of this project, the desireable qualities we'd like to emulate 
 
 Lapiz Lazuli
 ============
+
+Lapiz Lazuli is a tectosilicate mineral that has been used since ancient times in pigments, decorations, and various expensive and fine trimmings. On an elemental basis, it is composed of nothing really interesting or surprising; just sodium, calcium, aluminum, silicon, oxygen, sulphur and chlorine. Thus its rarity comes from the fact that it occasionally occurs when an ingeous intrusion comes into contact with marble. Other minerals like pyrite, quartz, mica, and calcite sometimes also form along with Lapiz.
+
+Lapiz deposits thus are expected to follow the original bedding planes of the marble along the igneous contact. This may be in the form of parallel metamorphososed planes, thick-skinned ellipsoids, and other such shapes.
+
+For this project, the qualities of Lapiz Deposits which we will try and emulate are the following:
+-majority of deposits in planar, tightly folded sheets
+-sheets may be discontinuous and broken up, with the majority of physical ore blocks being grouped in small groupings rather than large ones.
+-Individual sheets should be located approximately around eachother, such that lapiz bearing regions are formed
+
+Emerald
+=======
+
+Emerald is a beryllium, aluminum, silicon mineral colored by trace amounts of chromium and occasionally vanadium. As such it occurs in settings which favor the growth of large beryl minerals: high pressure, medium temperature, tectonically quiet settings. The Emeralds grow in small hydrothermal pockets where the gradient of temperature and pressure is generally low, and often occur with other gems and minerals. The pockets themselves range from a few inches in diameter to several tens of feet, and take the appearance of a geode. Individual pockets may be linked by veins or planes of large grained igneous rocks called pegmatites, and may bear emeralds as well. 
+
+Emeralds should occur as extensive networks of these pockets connected by fissures of emeralds.
+For this project, Emerald deposits will have the following featuers:
+-Pockets of emeralds will take the form of hollow ellipsoidal geodes, where the x,y, and z axes of the ellipsoid itself can ocurr in many orientations. 
+-Pockets have the chance to overlap, be congruent to each other, and occur in sizes varying from a single ore block to a max of 20 blocks in diameter
+-pockets will be linked by short planar structures no more than 7-8 blocks in length, and may be folded or bent
+-these planar structuers will have varying probabilities of having the emerald block forming in it, and will exist as single block thickness structures
+
+Redstone
+========
+
+The clear real-world analouge to redstone is copper. Both redstone and copper are used in their respective worlds for circuitry and can carry signals. Oxidized copper is in fact sometimes reddish. However real world copper deposits are much more common than gold, and very few examples of native copper deposits have survived to this day. Therefore redstone in this project will be assumed to take on a hydrothermal character (much like native copper veins do), but will be much smaller and less varied than the gold veins above.
+
+So for this redstone ore impelmentation, the following procecure will be adhered to:
+-Small 'pockets' of restone no more than 3-4 blocks in diameter will be interlinked by a network of short planar veins (no more than 7-12 long and 2-3 wide) of varying grade. 
+-Redstone should occur spacially between deposits of gold and deposits of lapiz, regardless of existing emerald deposits.
+
+Diamond
+=======
+
+Diamond in nature forms in the deep crust under high pressure-low temperature conditions. It is brought to the surface by supersonic erupions of magma, which leave ice-cream cone like crater at the surface which may exhibit a characteristic cinder-cone shape of ejecta. This particular volcanic rock, called kimberlite, sometimes forms long planar structures connected to the main pipe underground, usually no more than a few tens of meters wide, but extending many hundreds of feet.
+
+For this implementation, Diamond ores will have the following qualities:
+-Diamond deposits will be extraordinarily rare (we'll need to play around with the frequency of these structures)
+-they'll consist of either progressed volcanic diatreme structures forming broad cones which flatten at the top and narrow at the bottom, and having a small chance of diamond occurring within them.
+-both failed (small fingers that don't/didn't reach the surface) and progressed deposits will have a chance of planar structures extending from deep underground, no more than 50 blocks x 40 blocks x 7 blocks, and having a lower chance of diamonds in them than the main finger/diatreme branch.
