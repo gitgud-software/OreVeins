@@ -23,41 +23,40 @@ public class VeinDrawer {
 				x = vein.p1x + (int)(t*vein.vx) - 16*chunk.getX();
 				y = vein.p1y + (int)(t*vein.vy);
 				z = vein.p1z + (int)(t*vein.vz)- 16*chunk.getZ();
-				switch(vein.ore)
-				{
-				case "GOLD": if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
-					}
-				case "IRON":
+				if(vein.ore == "GOLD")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
 						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
 					}
-				case "COAL":
+				else if (vein.ore == "IRON")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						chunk.getBlock(x, y, z).setType(Material.IRON_ORE);
 					}
-				case "REDSTONE":
+				else if (vein.ore == "COAL")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						chunk.getBlock(x, y, z).setType(Material.COAL_ORE);
 					}
-				case "LAPIZ":
+				else if (vein.ore == "LAPIZ")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						chunk.getBlock(x, y, z).setType(Material.LAPIS_ORE);
 					}
-				case "EMERALD":
+				else if (vein.ore == "REDSTONE")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						chunk.getBlock(x, y, z).setType(Material.REDSTONE_ORE);
 					}
-				case "DIAMOND":
+				else if (vein.ore == "EMERALD")
 					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
 					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						chunk.getBlock(x, y, z).setType(Material.EMERALD_ORE);
+					}
+				else if (vein.ore == "DIAMOND")
+					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+					{
+						chunk.getBlock(x, y, z).setType(Material.DIAMOND_ORE);
 					}
 				}
 				t = t +vein.dt;
@@ -66,4 +65,4 @@ public class VeinDrawer {
 	}
 	
 
-}
+
