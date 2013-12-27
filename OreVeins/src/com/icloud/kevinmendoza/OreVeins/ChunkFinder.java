@@ -41,7 +41,7 @@ public class ChunkFinder
 			}
 			zoffset=zneg*(int)(end*rand.nextDouble());
 			xoffset =xneg*(int)Math.sqrt((end*end) - (zoffset*zoffset));
-			if(world.getChunkAt(x + zoffset, z+ xoffset)== null)
+			if(world.getChunkAt(x + zoffset, z+ xoffset)== null) //Not populated
 			{
 				break;
 			}

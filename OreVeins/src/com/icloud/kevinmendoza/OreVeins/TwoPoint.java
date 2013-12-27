@@ -1,5 +1,8 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+/*ThreePoint is coord within chunk, TwoPoint is coord of chunk
+ThreePoint and TwoPoint coordinates are NOT the same! */
+
 public class TwoPoint 
 {
 	public int x;
@@ -12,7 +15,7 @@ public class TwoPoint
 	@Override
 	public boolean equals(Object ob)
 	{
-		if(ob == null || ob != this.getClass())
+		if(ob == null || ob.getClass() != this.getClass())
 		{
 			return false;
 		}

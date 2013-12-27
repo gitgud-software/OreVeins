@@ -19,10 +19,11 @@ public final class ChunkGenListener implements Listener
 		addVeins(event.getChunk());
 	}
 	private void addVeins(Chunk chunk) 
-	{
+	{ /*Goal: make a linear vein from this chunk to another chunk, only generating vein 
+		that is in this chunk. Save info about vein for generation in another chunk*/
 		Random rand = new Random();
 		int end = (int)(100*rand.nextDouble());
-		int probability = 1; //probability percentage that it will generate a vein in this chunk
+		int probability = 1; //probaby percentage that it will generate a vein in this chunkilit
 		if(end <= probability)
 		{
 			ChunkFinder finder = new ChunkFinder(chunk);
