@@ -23,7 +23,7 @@ public final class ChunkGenListener implements Listener
 		that is in this chunk. Save info about vein for generation in another chunk*/
 		Random rand = new Random();
 		int end = (int)(100*rand.nextDouble());
-		int probability = 1; //probaby percentage that it will generate a vein in this chunkilit
+		int probability = 50; //probability percentage that it will generate a vein in this chunk
 		if(end <= probability)
 		{
 			ChunkFinder finder = new ChunkFinder(chunk);
