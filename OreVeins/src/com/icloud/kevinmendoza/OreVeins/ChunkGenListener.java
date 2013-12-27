@@ -22,7 +22,7 @@ public final class ChunkGenListener implements Listener
 	{
 		Random rand = new Random();
 		int end = (int)(100*rand.nextDouble());
-		int probability = 1; //probability percentage that it will generate a vein in this chunk
+		int probability = 50; //probability percentage that it will generate a vein in this chunk
 		if(end <= probability)
 		{
 			ChunkFinder finder = new ChunkFinder(chunk);

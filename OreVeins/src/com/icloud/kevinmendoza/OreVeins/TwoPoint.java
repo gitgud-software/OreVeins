@@ -12,7 +12,7 @@ public class TwoPoint
 	@Override
 	public boolean equals(Object ob)
 	{
-		if(ob == null || ob != this.getClass())
+		if(ob == null || ob.getClass() != this.getClass())
 		{
 			return false;
 		}
