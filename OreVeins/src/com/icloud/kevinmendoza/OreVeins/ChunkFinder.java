@@ -25,7 +25,7 @@ public class ChunkFinder
 		{
 			if(rand.nextBoolean())
 			{
-				xneg = -1;
+				xneg = 1;
 			}
 			else
 			{
