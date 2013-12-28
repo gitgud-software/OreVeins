@@ -14,14 +14,14 @@ public class VeinDrawer {
 		TwoPoint chunkPoint = new TwoPoint(this.chunk.getX(),this.chunk.getZ());
 		if(vein.contains(chunkPoint))
 		{
-			DebugLogger.console("vein is in current chunk");
+			//DebugLogger.console("vein is in current chunk");
 			ChunkParametric paramet = vein.returnChunkInfo(chunkPoint);
 			double t = paramet.p1;
 			double tf = paramet.p2;
 			int x, y, z;
 			if(vein.dt != 0)
 			{
-				DebugLogger.console("drawing vein with p1 "+ t +" p2 "+tf+" dt "+ vein.dt+" & mat "+vein.ore);
+				//DebugLogger.console("drawing vein with p1 "+ t +" p2 "+tf+" dt "+ vein.dt+" & mat "+vein.ore);
 				while(t<=tf)
 				{
 					x = vein.p1x + (int)(t*vein.vx) - 16*chunk.getX();
@@ -32,7 +32,7 @@ public class VeinDrawer {
 						//DebugLogger.console("String matches");
 						if(this.chunk.getBlock(x, y, z).getType().compareTo(Material.STONE)==0)
 						{
-							DebugLogger.console("making gold at x"+x + " y"+ y + " z"+ z);
+							//DebugLogger.console("making gold at x"+x + " y"+ y + " z"+ z);
 							chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
 						}
 					}
