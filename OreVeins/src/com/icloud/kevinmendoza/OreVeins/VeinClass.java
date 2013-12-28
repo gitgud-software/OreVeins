@@ -2,7 +2,6 @@ package com.icloud.kevinmendoza.OreVeins;
 
 import java.util.ArrayList;
 
-import org.bukkit.Material;
 
 public class VeinClass {
 	public ThreePoint start;
@@ -20,6 +19,7 @@ public class VeinClass {
 	public ArrayList<ChunkParametric> chunkInfo;
 	public VeinClass(TwoPoint startChunk, TwoPoint endChunk, String ore)
 	{
+		DebugLogger.console("in vein constructor beginning");
 		this.ore = ore;
 		this.endChunk = endChunk;
 		this.startChunk = startChunk;
@@ -33,6 +33,7 @@ public class VeinClass {
 		double distz2 = (double)(end.x + (endChunk.x*16));
 		double totaldist = Math.sqrt(Math.pow(distx1-distx2,2) + Math.pow(disty1-disty2,2) + Math.pow(distz1 - distz2,2));
 		this.dt = 1 / totaldist;
+		DebugLogger.console("in vein constructor dt is"+ this.dt);
 		/*
 		 int lowChunkX = lowX >> 4;
 		 int lowChunkZ = lowZ >> 4;
@@ -57,6 +58,7 @@ public class VeinClass {
 		x = p1x;
 		z = p1z;
 		int chx = x >> 4; int chz= z >> 4; double ti = 0;
+		DebugLogger.console("about to analyse endpoints to make vein");
 		while (t<=1)
 		{
 			x = (int)(p1x + (double)(vx)*t);
@@ -79,6 +81,7 @@ public class VeinClass {
 		TwoPoint theChunk = new TwoPoint(chx,chz);
 		ChunkParametric par = new ChunkParametric(theChunk,ti, 1); 
 		this.chunkInfo.add(par);
+		DebugLogger.console("added chunks to veins " + this.chunkInfo.size());
 	}
 	public Boolean contains(TwoPoint chunk)
 	{

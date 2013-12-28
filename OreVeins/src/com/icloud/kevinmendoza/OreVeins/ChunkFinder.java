@@ -21,6 +21,7 @@ public class ChunkFinder
 		int xneg;
 		int zneg;
 		Random rand = new Random();
+		int it=0;
 		while(true)
 		{
 			if(rand.nextBoolean())
@@ -41,9 +42,23 @@ public class ChunkFinder
 			}
 			zoffset=zneg*(int)(end*rand.nextDouble());
 			xoffset =xneg*(int)Math.sqrt((end*end) - (zoffset*zoffset));
-			if(world.getChunkAt(x + zoffset, z+ xoffset)== null) //Not populated
+			if(!world.isChunkLoaded(x + zoffset, z+ xoffset)) //Not currently loaded
 			{
-				break;
+				Boolean exists = world.loadChunk(x + zoffset, z+ xoffset,false);
+				if(exists)
+				{
+					world.unloadChunk(x + zoffset, z+ xoffset);
+				}
+				else
+				{
+					break;
+				}
+			}
+			it++;
+			DebugLogger.console("tried" + it + " to find good chunk");
+			if(it > 300)
+			{
+				return null;
 			}
 		}
 		TwoPoint freechunk = new TwoPoint(x+xoffset, z +zoffset);

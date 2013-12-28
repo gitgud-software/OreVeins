@@ -26,14 +26,24 @@ public final class ChunkGenListener implements Listener
 		int probability = 50; //probability percentage that it will generate a vein in this chunk
 		if(end <= probability)
 		{
+			DebugLogger.console("lets make a vein");
 			ChunkFinder finder = new ChunkFinder(chunk);
+			DebugLogger.console("made chunk Finder");
 			end = (int)(30*rand.nextDouble());//the thirty is the max chunk length a vein can be'
 			TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());
-			TwoPoint endpoint = finder.findchunk(chunk.getWorld(), end);
-			String ore = new String("GOlD");
-			VeinClass vein = new VeinClass(startpoint,endpoint,ore);
-			VeinDrawer draw = new VeinDrawer(chunk);
-			draw.drawVein(vein);
+			DebugLogger.console("starting chunk is X"+chunk.getX()+" Z"+chunk.getZ());
+			TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);
+			if(endpoint != null)
+			{
+				DebugLogger.console("ending chunk is X"+endpoint.x+" Z"+endpoint.z);
+				String ore = new String("GOlD");
+				VeinClass vein = new VeinClass(startpoint,endpoint,ore);
+				DebugLogger.console("vein object created");
+				VeinDrawer draw = new VeinDrawer(chunk);
+				DebugLogger.console("vein drawer initialized");
+				draw.drawVein(vein);
+				DebugLogger.console("drawing vein");
+			}
 		}
 	}
 	private void removeOres(Chunk chunk)
