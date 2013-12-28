@@ -55,8 +55,8 @@ public class ChunkFinder
 				}
 			}
 			it++;
-			DebugLogger.console("tried" + it + " to find good chunk");
-			if(it > 300)
+			//DebugLogger.console("tried" + it + " to find good chunk");
+			if(it > 100)
 			{
 				return null;
 			}

@@ -28,19 +28,19 @@ public final class ChunkGenListener implements Listener
 		{
 			DebugLogger.console("lets make a vein");
 			ChunkFinder finder = new ChunkFinder(chunk);
-			DebugLogger.console("made chunk Finder");
+			//DebugLogger.console("made chunk Finder");
 			end = (int)(30*rand.nextDouble());//the thirty is the max chunk length a vein can be'
 			TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());
-			DebugLogger.console("starting chunk is X"+chunk.getX()+" Z"+chunk.getZ());
+			//DebugLogger.console("starting chunk is X"+chunk.getX()+" Z"+chunk.getZ());
 			TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);
 			if(endpoint != null)
 			{
-				DebugLogger.console("ending chunk is X"+endpoint.x+" Z"+endpoint.z);
-				String ore = new String("GOlD");
+				//DebugLogger.console("ending chunk is X"+endpoint.x+" Z"+endpoint.z);
+				String ore = new String("GOLD");
 				VeinClass vein = new VeinClass(startpoint,endpoint,ore);
-				DebugLogger.console("vein object created");
+				//DebugLogger.console("vein object created");
 				VeinDrawer draw = new VeinDrawer(chunk);
-				DebugLogger.console("vein drawer initialized");
+				//DebugLogger.console("vein drawer initialized");
 				draw.drawVein(vein);
 				DebugLogger.console("drawing vein");
 			}
@@ -54,11 +54,11 @@ public final class ChunkGenListener implements Listener
 			for (int y = 0; y < 128; y++)
 			{
 				for (int z = 0; z < 16; z++)
-				{
+				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0
 					block = chunk.getBlock(x, y, z);
-					if (block.getType() == Material.IRON_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.GOLD_ORE || block.getType() == Material.LAPIS_ORE || block.getType() == Material.REDSTONE_ORE || block.getType() == Material.DIAMOND_ORE || block.getType() == Material.EMERALD_ORE)
+					if (block.getType().compareTo(Material.COAL_ORE)==0 || block.getType().compareTo(Material.IRON_ORE)==0 || block.getType().compareTo(Material.GOLD_ORE)==0 || block.getType().compareTo(Material.LAPIS_ORE)==0 || block.getType().compareTo(Material.REDSTONE_ORE)==0 || block.getType().compareTo(Material.DIAMOND_ORE)==0 || block.getType().compareTo(Material.EMERALD_ORE)==0)
 					{
-						block.setType(Material.STONE);
+						chunk.getBlock(x, y, z).setType(Material.STONE);
 					}
 				}
 			}

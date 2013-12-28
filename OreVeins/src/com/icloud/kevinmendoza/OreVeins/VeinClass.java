@@ -44,6 +44,7 @@ public class VeinClass {
 	}
 	private void createChunkInfo()
 	{
+		this.chunkInfo = new ArrayList<ChunkParametric>();
 		double t = 0;
 		this.p1x = (start.x + (startChunk.x*16));
 		int p2x= (end.x + (endChunk.x*16));
@@ -58,15 +59,13 @@ public class VeinClass {
 		x = p1x;
 		z = p1z;
 		int chx = x >> 4; int chz= z >> 4; double ti = 0;
-		DebugLogger.console("about to analyse endpoints to make vein");
+		//DebugLogger.console("about to analyse endpoints to make vein");
 		while (t<=1)
 		{
 			x = (int)(p1x + (double)(vx)*t);
 			z = (int)(p1z + (double)(vz)*t);
 			if(chx != x >> 4 || chz != z >> 4)
 			{
-					chx = x >> 4;
-					chz = z >> 4;
 					TwoPoint theChunk = new TwoPoint(chx,chz);
 					ChunkParametric par = new ChunkParametric(theChunk,ti, t-dt); 
 					this.chunkInfo.add(par);
@@ -85,7 +84,7 @@ public class VeinClass {
 	}
 	public Boolean contains(TwoPoint chunk)
 	{
-		for(int i = 1;i< this.chunkInfo.size();i++)
+		for(int i = 0;i<this.chunkInfo.size();i++)
 		{
 			if(chunkInfo.get(i).theChunk.equals(chunk))
 			{
@@ -97,7 +96,7 @@ public class VeinClass {
 	public void clearChunk(TwoPoint chunk)
 	{
 		int index = 1;
-		for(int i = 1;i< this.chunkInfo.size();i++)
+		for(int i = 0;i< this.chunkInfo.size();i++)
 		{
 			if(chunkInfo.get(i).theChunk.equals(chunk))
 			{
@@ -108,7 +107,7 @@ public class VeinClass {
 	}
 	public ChunkParametric returnChunkInfo(TwoPoint chunk)
 	{
-		for(int i = 1;i< this.chunkInfo.size();i++)
+		for(int i = 0;i< this.chunkInfo.size();i++)
 		{
 			if(chunkInfo.get(i).theChunk.equals(chunk))
 			{

@@ -19,58 +19,79 @@ public class VeinDrawer {
 			double t = paramet.p1;
 			double tf = paramet.p2;
 			int x, y, z;
-			DebugLogger.console("drawing vein with parameter1 "+ t +" parameter2 "+tf+" and dt "+ vein.dt);
-			//System.out.println("parameter 1 "+ t + " parameter2 " + tf + " dt "+ vein.dt);
-			while(t<=tf)
+			if(vein.dt != 0)
 			{
-				if(vein.dt == 0)
+				DebugLogger.console("drawing vein with p1 "+ t +" p2 "+tf+" dt "+ vein.dt+" & mat "+vein.ore);
+				while(t<=tf)
 				{
-					chunk.getBlock(0, 100, 1).setType(Material.GOLD_ORE);
-					break;
+					x = vein.p1x + (int)(t*vein.vx) - 16*chunk.getX();
+					y = vein.p1y + (int)(t*vein.vy);
+					z = vein.p1z + (int)(t*vein.vz)- 16*chunk.getZ();
+					if(vein.ore.contains("GOLD"))
+					{
+						//DebugLogger.console("String matches");
+						if(this.chunk.getBlock(x, y, z).getType().compareTo(Material.STONE)==0)
+						{
+							DebugLogger.console("making gold at x"+x + " y"+ y + " z"+ z);
+							chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+						}
+					}
+					else if (vein.ore == "IRON")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.IRON_ORE);
+						}
+					}
+					else if (vein.ore == "COAL")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.COAL_ORE);
+						}
+					}
+					else if (vein.ore == "LAPIZ")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.LAPIS_ORE);
+						}
+					}
+					else if (vein.ore == "REDSTONE")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.REDSTONE_ORE);
+						}
+					}
+					else if (vein.ore == "EMERALD")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.EMERALD_ORE);
+						}
+					}
+					else if (vein.ore == "DIAMOND")
+					{
+						if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
+						{
+							chunk.getBlock(x, y, z).setType(Material.DIAMOND_ORE);
+						}
+					}
+					t = t +vein.dt;
 				}
-				x = vein.p1x + (int)(t*vein.vx) - 16*chunk.getX();
-				y = vein.p1y + (int)(t*vein.vy);
-				z = vein.p1z + (int)(t*vein.vz)- 16*chunk.getZ();
-				if(vein.ore == "GOLD")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
-					}
-				else if (vein.ore == "IRON")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.IRON_ORE);
-					}
-				else if (vein.ore == "COAL")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.COAL_ORE);
-					}
-				else if (vein.ore == "LAPIZ")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.LAPIS_ORE);
-					}
-				else if (vein.ore == "REDSTONE")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.REDSTONE_ORE);
-					}
-				else if (vein.ore == "EMERALD")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.EMERALD_ORE);
-					}
-				else if (vein.ore == "DIAMOND")
-					if(this.chunk.getBlock(x, y, z).getType().equals(Material.STONE))
-					{
-						chunk.getBlock(x, y, z).setType(Material.DIAMOND_ORE);
-					}
-				}
-				t = t +vein.dt;
+			}
+			else
+			{
+				DebugLogger.console("vein drawing failed. current chunk not in vein chunk list");
 			}
 		}
+		else
+		{
+			chunk.getBlock(0, 100, 1).setType(Material.GOLD_ORE);
+		}
 	}
+}
 	
 
 
