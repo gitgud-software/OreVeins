@@ -1,8 +1,8 @@
 OreVeins
 ========
-Authors: Kevin M. and Possibly Kevin S.
+Authors: Kevin M. and  Kevin S.
 
-A naive attempt at creating realistic ore controls for a minecraft bukkit plugin
+A naive attempt at creating realistic ore controls for a minecraft bukkit plugin.
 Mojang has in the past taken a simplistic approach to Ore Generation and distribution in Minecraft. To understand why
 This plugin is in development, lets first look at how Minecraft 'nilla generates ores.
 
@@ -16,7 +16,7 @@ means that if you place a block at the coordinate x:33 y:64 z:34, you're placing
 (1,64,2) within that chunk.
 
 Ores in minecraft then are distributed in two ways within these chunks: by depth and by 'mass'. Mojang and most of the
-proggramming world feels that rarer ores should be deeper in the world (where deeper == harder or something?) and more 
+programming world feels that rarer ores should be deeper in the world (where deeper == harder or something?) and more 
 common and necessary ores should be able to be found over a wide range of depths. As a result, ores like Diamond and 
 Gold are only found below a certain depth, while coal and iron can be found quite high up. 
 
