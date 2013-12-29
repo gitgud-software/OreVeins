@@ -1,5 +1,7 @@
 package com.icloud.kevinmendoza.OreVeins;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.io.*;
+
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -15,4 +17,20 @@ public final class OreVeins extends JavaPlugin
 	        // TODO Insert logic to be performed when the plugin is disabled
 	    	getLogger().info("onDisable has been invoked!");
 	    }
+}
+
+private void popFileTree(){
+	File config = new File("config.yml");
+	File VeinInfo = new File("VeinInfo");
+	File ChunkInfo = new File("ChunkInfo");
+	try{
+		config.createNewFile();
+		VeinInfo.mkdir();
+		ChunkInfo.mkdir();
+	}
+	catch (IOException e){ //Hooray for horrible programming practices!
+		System.out.println("Whoopsie! File creation failed!");
+		e.printStackTrace();
+		//Also, fuck you checked exceptions!
+	}		
 }
