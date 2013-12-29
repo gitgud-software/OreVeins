@@ -33,7 +33,7 @@ public final class OreVeins extends JavaPlugin
 			ChunkInfo.mkdir();
 		}
 		catch (IOException e){ //Hooray for horrible programming practices!
-			System.out.println("Whoopsie! File creation failed!");
+			DebugLogger.console("Whoopsie! File creation failed!");
 			e.printStackTrace();
 			//Also, fuck you checked exceptions!
 		}		
