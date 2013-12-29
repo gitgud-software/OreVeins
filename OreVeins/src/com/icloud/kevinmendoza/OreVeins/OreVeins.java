@@ -24,10 +24,12 @@ public final class OreVeins extends JavaPlugin
 
 	private void popFileTree()
 	{
-		File config = new File("config.yml");
-		File VeinInfo = new File("VeinInfo");
-		File ChunkInfo = new File("ChunkInfo");
+		File Ovein = new File("plugins/OreVeins");
+		File config = new File("plugins/OreVeins/config.yml");
+		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
+		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		try{
+			Ovein.mkdir();
 			config.createNewFile();
 			VeinInfo.mkdir();
 			ChunkInfo.mkdir();
