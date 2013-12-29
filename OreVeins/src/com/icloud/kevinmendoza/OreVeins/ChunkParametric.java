@@ -1,6 +1,8 @@
 package com.icloud.kevinmendoza.OreVeins;
 
-public class ChunkParametric 
+import java.io.Serializable;
+
+public class ChunkParametric implements Serializable
 {
 	public TwoPoint theChunk;
 	public double p1;

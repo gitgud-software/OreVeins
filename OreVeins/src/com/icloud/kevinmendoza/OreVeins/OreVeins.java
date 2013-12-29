@@ -2,7 +2,6 @@ package com.icloud.kevinmendoza.OreVeins;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 
-
 public final class OreVeins extends JavaPlugin 
 {
 	@Override
@@ -20,8 +19,7 @@ public final class OreVeins extends JavaPlugin
 		// TODO Insert logic to be performed when the plugin is disabled
 		getLogger().info("onDisable has been invoked!");
 	}
-
-
+	
 	private void popFileTree()
 	{
 		File Ovein = new File("plugins/OreVeins");
@@ -37,6 +35,7 @@ public final class OreVeins extends JavaPlugin
 		catch (IOException e){ //Hooray for horrible programming practices!
 			DebugLogger.console("Whoopsie! File creation failed!");
 			e.printStackTrace();
+			onDisable();
 			//Also, fuck you checked exceptions!
 		}		
 	}

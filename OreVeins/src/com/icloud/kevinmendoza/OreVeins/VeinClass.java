@@ -1,9 +1,11 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class VeinClass {
+public class VeinClass implements Serializable {
+	public int VeinID;
 	public ThreePoint start;
 	public ThreePoint end;
 	public TwoPoint startChunk;
@@ -17,9 +19,10 @@ public class VeinClass {
 	public int p1y;
 	public int p1z;
 	public ArrayList<ChunkParametric> chunkInfo;
-	public VeinClass(TwoPoint startChunk, TwoPoint endChunk, String ore)
+	public VeinClass(TwoPoint startChunk, TwoPoint endChunk, String ore,int id)
 	{
 		//DebugLogger.console("in vein constructor beginning");
+		this.VeinID = id;
 		this.ore = ore;
 		this.endChunk = endChunk;
 		this.startChunk = startChunk;
@@ -42,6 +45,12 @@ public class VeinClass {
 		 */
 		createChunkInfo();
 	}
+	
+	public VeinClass()
+	{
+		
+	}
+	
 	private void createChunkInfo()
 	{
 		this.chunkInfo = new ArrayList<ChunkParametric>();
@@ -80,8 +89,31 @@ public class VeinClass {
 		TwoPoint theChunk = new TwoPoint(chx,chz);
 		ChunkParametric par = new ChunkParametric(theChunk,ti, 1); 
 		this.chunkInfo.add(par);
+		updateChunks();
 		//DebugLogger.console("added chunks to veins " + this.chunkInfo.size());
 	}
+	
+	private void updateChunks()
+	{
+		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
+		ArrayList<Integer> IncomingList;
+		ArrayList<Integer> newList = new ArrayList<Integer>();
+		for(int i=1;i<chunkInfo.size();i++)
+		{
+			IncomingList = RWObj.readChunks(chunkInfo.get(i).theChunk);
+			if(IncomingList==null)
+			{
+				newList.add(this.VeinID);
+				RWObj.writeChunkInfo(chunkInfo.get(i).theChunk, newList);
+			}
+			else
+			{
+				IncomingList.add(VeinID);
+				RWObj.writeChunkInfo(chunkInfo.get(i).theChunk, IncomingList);
+			}
+		}
+	}
+	
 	public Boolean contains(TwoPoint chunk)
 	{
 		for(int i = 0;i<this.chunkInfo.size();i++)

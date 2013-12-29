@@ -1,9 +1,11 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+import java.io.Serializable;
+
 /*ThreePoint is coord within chunk, TwoPoint is coord of chunk
 ThreePoint and TwoPoint coordinates are NOT the same! */
 
-public class TwoPoint 
+public class TwoPoint implements Serializable
 {
 	public int x;
 	public int z;
@@ -31,5 +33,12 @@ public class TwoPoint
 				return false;
 			}
 		}
+	}
+	public String location() 
+	{
+		String theX = new Integer(this.x).toString();
+		String theZ = new Integer(this.z).toString();
+		String filename = theX + ":" + theZ;
+		return filename;
 	}
 }
