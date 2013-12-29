@@ -11,12 +11,15 @@ import org.bukkit.event.world.ChunkPopulateEvent;
 
 public final class ChunkGenListener implements Listener 
 {
+	
 	@EventHandler
 	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		removeOres(event.getChunk());
-		//checkForVeins();
-		addVeins(event.getChunk());
+		Chunk chunk = event.getChunk();
+		removeOres(chunk);
+		addVeins(chunk);
+		removeStone(chunk);
+		//event.getChunk().getWorld().refreshChunk(event.getChunk().getX(),event.getChunk().getZ());
 	}
 	private void addVeins(Chunk chunk) 
 	{ /*Goal: make a linear vein from this chunk to another chunk, only generating vein 
@@ -26,10 +29,10 @@ public final class ChunkGenListener implements Listener
 		int probability = 50; //probability percentage that it will generate a vein in this chunk
 		if(end <= probability)
 		{
-			DebugLogger.console("lets make a vein");
+			//DebugLogger.console("lets make a vein");
 			ChunkFinder finder = new ChunkFinder(chunk);
 			//DebugLogger.console("made chunk Finder");
-			end = (int)(30*rand.nextDouble());//the thirty is the max chunk length a vein can be'
+			end = (int)(10*rand.nextDouble());//the thirty is the max chunk length a vein can be'
 			TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());
 			//DebugLogger.console("starting chunk is X"+chunk.getX()+" Z"+chunk.getZ());
 			TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);
@@ -43,6 +46,29 @@ public final class ChunkGenListener implements Listener
 				//DebugLogger.console("vein drawer initialized");
 				draw.drawVein(vein);
 				DebugLogger.console("drawing vein");
+				
+			}
+		}
+	}
+	private void removeStone(Chunk chunk)
+	{
+		Block block;
+		for (int x = 0; x < 16; x++)
+		{
+			for (int y = 1; y < 128; y++)
+			{
+				for (int z = 0; z < 16; z++)
+				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0
+					block = chunk.getBlock(x, y, z);
+					if (block.getType().compareTo(Material.STONE)==0 
+							|| block.getType().compareTo(Material.GRAVEL)==0 
+							|| block.getType().compareTo(Material.SAND)==0 
+							|| block.getType().compareTo(Material.WATER)==0 
+							|| block.getType().compareTo(Material.LAVA)==0)
+					{
+						block.setType(Material.AIR);
+					}
+				}
 			}
 		}
 	}
@@ -56,13 +82,18 @@ public final class ChunkGenListener implements Listener
 				for (int z = 0; z < 16; z++)
 				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0
 					block = chunk.getBlock(x, y, z);
-					if (block.getType().compareTo(Material.COAL_ORE)==0 || block.getType().compareTo(Material.IRON_ORE)==0 || block.getType().compareTo(Material.GOLD_ORE)==0 || block.getType().compareTo(Material.LAPIS_ORE)==0 || block.getType().compareTo(Material.REDSTONE_ORE)==0 || block.getType().compareTo(Material.DIAMOND_ORE)==0 || block.getType().compareTo(Material.EMERALD_ORE)==0)
+					if (block.getType().compareTo(Material.COAL_ORE)==0 
+							|| block.getType().compareTo(Material.IRON_ORE)==0 
+							|| block.getType().compareTo(Material.GOLD_ORE)==0 
+							|| block.getType().compareTo(Material.LAPIS_ORE)==0 
+							|| block.getType().compareTo(Material.REDSTONE_ORE)==0 
+							|| block.getType().compareTo(Material.DIAMOND_ORE)==0 
+							|| block.getType().compareTo(Material.EMERALD_ORE)==0)
 					{
-						chunk.getBlock(x, y, z).setType(Material.STONE);
+						block.setType(Material.STONE);
 					}
 				}
 			}
 		}
 	}
-	
 }

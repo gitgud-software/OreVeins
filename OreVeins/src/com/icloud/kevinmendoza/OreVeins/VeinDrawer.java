@@ -2,6 +2,7 @@ package com.icloud.kevinmendoza.OreVeins;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 public class VeinDrawer {
 	public Chunk chunk;
@@ -22,6 +23,7 @@ public class VeinDrawer {
 			if(vein.dt != 0)
 			{
 				//DebugLogger.console("drawing vein with p1 "+ t +" p2 "+tf+" dt "+ vein.dt+" & mat "+vein.ore);
+				Block block;
 				while(t<=tf)
 				{
 					x = vein.p1x + (int)(t*vein.vx) - 16*chunk.getX();
@@ -29,11 +31,12 @@ public class VeinDrawer {
 					z = vein.p1z + (int)(t*vein.vz)- 16*chunk.getZ();
 					if(vein.ore.contains("GOLD"))
 					{
+						block = this.chunk.getBlock(x, y, z);
 						//DebugLogger.console("String matches");
-						if(this.chunk.getBlock(x, y, z).getType().compareTo(Material.STONE)==0)
+						if(block.getType().compareTo(Material.STONE)==0)
 						{
 							//DebugLogger.console("making gold at x"+x + " y"+ y + " z"+ z);
-							chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
+							block.setType(Material.GOLD_ORE);
 						}
 					}
 					else if (vein.ore == "IRON")
@@ -80,6 +83,7 @@ public class VeinDrawer {
 					}
 					t = t +vein.dt;
 				}
+				vein.clearChunk(chunkPoint);
 			}
 			else
 			{
