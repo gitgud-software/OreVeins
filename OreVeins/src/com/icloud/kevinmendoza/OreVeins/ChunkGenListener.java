@@ -45,7 +45,7 @@ public final class ChunkGenListener implements Listener
 				VeinDrawer draw = new VeinDrawer(chunk);
 				//DebugLogger.console("vein drawer initialized");
 				draw.drawVein(vein);
-				DebugLogger.console("drawing vein");
+				//DebugLogger.console("drawing vein");
 				
 			}
 		}
