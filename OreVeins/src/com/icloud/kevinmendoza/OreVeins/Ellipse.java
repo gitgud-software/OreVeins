@@ -1,5 +1,6 @@
 package com.icloud.kevinmendoza.OreVeins;
-
+//this class creates a little chunk of blocks according to the ellipse formula
+//it also uses rotation matrix rules to rotate the formed blocks on three different coordinate axes
 
 public class Ellipse 
 {

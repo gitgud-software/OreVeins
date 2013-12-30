@@ -1,5 +1,7 @@
 package com.icloud.kevinmendoza.OreVeins;
-
+//this is the IO write to file class
+//for some reason, delete doesn't work :/
+//annd yeah, i mean its pretty simple
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

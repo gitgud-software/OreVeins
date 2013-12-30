@@ -3,7 +3,10 @@ package com.icloud.kevinmendoza.OreVeins;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-
+/*this vein drawer class draws any ores within a 3d string object array
+ * such simple, so block, much craft, shine daimond!
+ * 
+ */
 public class VeinDrawer {
 	public Chunk chunk;
 	public VeinDrawer(Chunk chunk)

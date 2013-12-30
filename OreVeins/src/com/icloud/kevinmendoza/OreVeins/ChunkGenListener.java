@@ -15,81 +15,94 @@ public final class ChunkGenListener implements Listener
 
 	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		Chunk chunk = event.getChunk();
-		removeOres(chunk);
-		addOres(chunk);
-		removeStone(chunk);
+		Chunk chunk = event.getChunk();//gets the current chunk info from the event
+		removeOres(chunk);//first loops through the chunk gotten and removes all the default ores
+		addOres(chunk);//adds in the custom defined ores, the point of this plugin
+		removeStone(chunk);//removes all the stone from this chunk for debugging purposes
 		//event.getChunk().getWorld().refreshChunk(event.getChunk().getX(),event.getChunk().getZ());
 	}
 	
 	private void addOres(Chunk chunk)
 	{
 		DebugLogger.console("adding veins");
-		String[][][] chunkveins = addVeins(chunk);
-		if(chunkveins==null)
+		String[][][] chunkveins = addVeins(chunk);//adds a 3x3 array String object containing info
+		// on which ores go where
+		if(chunkveins==null)//if chunkveins is empty, well then fuck that
 		{
 			DebugLogger.console("No cigar :(");
 		}
 		else
-		{
+		{//chunkveins is not null! there's info in here!
 			DebugLogger.console("drawing veins");
-			draw(chunkveins, chunk);
+			VeinDrawer draw = new VeinDrawer(chunk);//make a veindrawer object at the current chunk
+			draw.drawVein(chunkveins);//draw the vein 
 		}
 	}
 	
-	private void draw(String[][][] theveins, Chunk chunk)
-	{
-		VeinDrawer draw = new VeinDrawer(chunk);
-		draw.drawVein(theveins);
-		
-	}
-	
 	private String[][][] addVeins(Chunk chunk) 
-	{ /*Goal: make a linear vein from this chunk to another chunk, only generating vein 
-		that is in this chunk. Save info about vein for generation in another chunk*/
-		Random rand = new Random();
-		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
+	{ 
+		
+		Random rand = new Random();//create new random object..
+		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();//create the read,write object to read and write
+		//vein info from file
 		String xval = new Integer(chunk.getX()).toString();
 		String zval = new Integer(chunk.getZ()).toString();
 		String key = xval + ":" + zval;
-		String[][][] theVeins = RWObj.readChunks(key);
-		//DebugLogger.console("making new veins");//probability percentage that it will generate a vein in this chunk
-		if(rand.nextInt(100) <= 50)
+		//^^ create the string key used to retrieve pertinent chunk information
+		String[][][] theVeins = RWObj.readChunks(key);//<<-this returns any information 
+		//probability percentage that it will generate a vein in this chunk
+		if(rand.nextInt(100) <= 50)//look kevin, i made the probability cleaner! ^_^
 		{
 			//DebugLogger.console("probability dictates that I will have my vein");
-			String[][][] vein = addNewVein(chunk,rand);
-			if(vein!=null)
-			{
-				for(int x=0;x<16;x++)
+			String[][][] vein = addNewVein(chunk,rand);//calls the function to create a new vein!
+			//returns the 3x3 pertinent array
+			if(vein!=null)//only if the vein object was successfully created will it be added
+			{				//to the current vein object
+				if(theVeins!=null)//if there are veins from file, add to them
 				{
-					for(int y=1;y<128;y++)
+					for(int x=0;x<16;x++)//loop through all possible chunk coordinates
 					{
-						for(int z=0;z<16;z++)
+						for(int y=1;y<128;y++)
 						{
-							if(!theVeins[x][y][z].contains("COAL"))
+							for(int z=0;z<16;z++)
 							{
-								theVeins[x][y][z] = vein[x][y][z];
+								if(!theVeins[x][y][z].contains("COAL"))
+								{
+									theVeins[x][y][z] = vein[x][y][z];//combine the ores into the array
+									//but make sure any coal veins are crosscut, as is tradition 8D
+								}
 							}
 						}
 					}
 				}
+				else//else just copy current vein
+				{
+					theVeins = vein;
+				}
 			}
 		}
 		//DebugLogger.console("adding old veins");
-	return theVeins;
+	return theVeins;//return veins, null or not
 	}
 
 	private String[][][] addNewVein(Chunk chunk, Random rand)
 	{
-		ChunkFinder finder = new ChunkFinder(chunk);
-		int end = (int)(10*rand.nextDouble());//the thirty is the max chunk length a vein can be'
-		TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());
-		TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);
-		if(endpoint!=null)
+		ChunkFinder finder = new ChunkFinder(chunk);//find a nice empty chunk to settle down in 
+		//and have kids (aka for the endpoint of the line)
+		int end = (int)(10*rand.nextDouble());//the ten is the max chunk length a vein can be
+		//later on 10 will be replaced by something a little more meaningful
+		TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());//create a twopoint start point
+		TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);//get endpoint from the
+		//chunk finder
+		if(endpoint!=null)//if an endpoint could not be found, terminate trying to make a vein
 		{
-			String ore = new String("GOLD");
-			Vein vein = new Vein(startpoint,endpoint,ore);
-			String[][][] list = vein.returnAndPartitionBlocks(chunk);
+			String ore = new String("GOLD");//make a gold vein! GOOOOLLLDDDD
+			Vein vein = new Vein(startpoint,endpoint,ore);//give it the stuff it needs
+			String[][][] list = vein.returnAndPartitionBlocks(chunk);//this is a powerhouse method
+			//for more info, look in the vein class. it gets a 3x3 array of blocks that need to be
+			//placed
+			//THIS should never happen! if it gets this far it should return a list of blocks. this is just here for
+			//safeties sake?
 			if(list==null)
 				return null;
 			else
