@@ -44,8 +44,7 @@ public class ChunkFinder
 			xoffset =xneg*(int)Math.sqrt((end*end) - (zoffset*zoffset));
 			if(!world.isChunkLoaded(x + zoffset, z+ xoffset)) //Not currently loaded
 			{
-				Boolean exists = world.loadChunk(x + zoffset, z+ xoffset,false);
-				if(exists)
+				if(world.loadChunk(x + zoffset, z+ xoffset,false))
 				{
 					world.unloadChunk(x + zoffset, z+ xoffset);
 				}
