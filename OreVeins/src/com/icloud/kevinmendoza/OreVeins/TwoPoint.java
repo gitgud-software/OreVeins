@@ -1,11 +1,11 @@
 package com.icloud.kevinmendoza.OreVeins;
 
-import java.io.Serializable;
+
 
 /*ThreePoint is coord within chunk, TwoPoint is coord of chunk
 ThreePoint and TwoPoint coordinates are NOT the same! */
 
-public class TwoPoint implements Serializable
+public class TwoPoint 
 {
 	public int x;
 	public int z;

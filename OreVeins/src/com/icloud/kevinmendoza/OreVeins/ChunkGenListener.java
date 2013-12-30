@@ -1,6 +1,4 @@
 package com.icloud.kevinmendoza.OreVeins;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Chunk;
@@ -27,104 +25,80 @@ public final class ChunkGenListener implements Listener
 	private void addOres(Chunk chunk)
 	{
 		DebugLogger.console("adding veins");
-		ArrayList<VeinClass> theveins = addVeins(chunk);
-		if(theveins.isEmpty())
-			DebugLogger.console("No cigar :(");
-		else
-			DebugLogger.console("Veins isn't empty!");
-		draw(theveins, chunk);
-		
-		saveVeins(theveins);
-	}
-	
-	private void draw(ArrayList<VeinClass> theveins, Chunk chunk)
-	{
-		VeinDrawer draw = new VeinDrawer(chunk);
-		for(int i =0;i<theveins.size();i++)
+		String[][][] chunkveins = addVeins(chunk);
+		if(chunkveins==null)
 		{
-			draw.drawVein(theveins.get(i));
+			DebugLogger.console("No cigar :(");
+		}
+		else
+		{
+			DebugLogger.console("drawing veins");
+			draw(chunkveins, chunk);
 		}
 	}
 	
-	private ArrayList<VeinClass> addVeins(Chunk chunk) 
+	private void draw(String[][][] theveins, Chunk chunk)
+	{
+		VeinDrawer draw = new VeinDrawer(chunk);
+		draw.drawVein(theveins);
+		
+	}
+	
+	private String[][][] addVeins(Chunk chunk) 
 	{ /*Goal: make a linear vein from this chunk to another chunk, only generating vein 
 		that is in this chunk. Save info about vein for generation in another chunk*/
 		Random rand = new Random();
-		ArrayList<VeinClass> theVeins = new ArrayList<VeinClass>();
+		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
+		String xval = new Integer(chunk.getX()).toString();
+		String zval = new Integer(chunk.getZ()).toString();
+		String key = xval + ":" + zval;
+		String[][][] theVeins = RWObj.readChunks(key);
 		//DebugLogger.console("making new veins");//probability percentage that it will generate a vein in this chunk
 		if(rand.nextInt(100) <= 50)
 		{
 			//DebugLogger.console("probability dictates that I will have my vein");
-			VeinClass vein = addNewVein(chunk,rand);
+			String[][][] vein = addNewVein(chunk,rand);
 			if(vein!=null)
 			{
-				theVeins.add(vein);
-			}
-		}
-		//DebugLogger.console("adding old veins");
-		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
-		TwoPoint theChunk = new TwoPoint(chunk.getX(),chunk.getZ());
-		ArrayList<Integer> veinIDList = RWObj.readChunks(theChunk);
-		if(veinIDList!=null)
-		{
-			for(int i =0; i<veinIDList.size();i++)
-			{
-				VeinClass othervein = new VeinClass();
-				othervein = RWObj.readVein(veinIDList.get(i));
-				if(othervein!=null)
+				for(int x=0;x<16;x++)
 				{
-					theVeins.add(othervein);
+					for(int y=1;y<128;y++)
+					{
+						for(int z=0;z<16;z++)
+						{
+							if(!theVeins[x][y][z].contains("COAL"))
+							{
+								theVeins[x][y][z] = vein[x][y][z];
+							}
+						}
+					}
 				}
 			}
 		}
-		return theVeins;
+		//DebugLogger.console("adding old veins");
+	return theVeins;
 	}
 
-	private VeinClass addNewVein(Chunk chunk, Random rand)
+	private String[][][] addNewVein(Chunk chunk, Random rand)
 	{
 		ChunkFinder finder = new ChunkFinder(chunk);
 		int end = (int)(10*rand.nextDouble());//the thirty is the max chunk length a vein can be'
 		TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());
 		TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);
-		VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
-		int id=1;
-		//DebugLogger.console("fetching vein ID");
-		while(true)
-		{
-			if(RWObj.readVein(id)==null)
-			{
-				break;
-			}
-			id++;
-		}
-		//DebugLogger.console("fetched ID, making new Vein Object");
-		if(endpoint != null)
+		if(endpoint!=null)
 		{
 			String ore = new String("GOLD");
-			VeinClass vein = new VeinClass(startpoint,endpoint,ore,id);
-		//	DebugLogger.console("Vein Object created, passing it up");
-			return vein;
+			Vein vein = new Vein(startpoint,endpoint,ore);
+			String[][][] list = vein.returnAndPartitionBlocks(chunk);
+			if(list==null)
+				return null;
+			else
+				return list;
 		}
 		else
 		{
-			//DebugLogger.console("Vein Object Failed, passing null");
 			return null;
 		}
-	}
-
-	private void saveVeins(ArrayList<VeinClass> vein)
-	{
-		if(vein!=null && !vein.isEmpty())
-		{
-			DebugLogger.console("vein is being saved?");
-			VeinChunkReadWrite RWObject = new VeinChunkReadWrite();
-			for(int i =0;i<vein.size();i++)
-			{
-				DebugLogger.console("vein chunk span?" + vein.get(i).chunkInfo.size());
-				RWObject.writeVein(vein.get(i));
-			}
-		}
-		DebugLogger.console("arrayList was empty");
 	}
 	
 	private void removeStone(Chunk chunk)

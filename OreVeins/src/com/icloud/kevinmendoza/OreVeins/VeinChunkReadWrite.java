@@ -9,27 +9,6 @@ import java.util.ArrayList;
 
 public class VeinChunkReadWrite 
 {
-	private void deleteVein(VeinClass vein)
-	{
-		try
-		{
-			String v = new Integer(vein.VeinID).toString();
-    		File file = new File("plugins/OreVeins/ChunkInfo/"+v+".txt");
-    		if(file.delete())
-    		{
-    			//DebugLogger.console(file.getName() + " is deleted!");
-    		}
-    		else
-    		{
-    			DebugLogger.console("Delete operation is failed.");
-    		}
-    	
-    	}
-		catch(Exception e)
-		{
-			DebugLogger.console("Delete operation is failed.");
-    	}
-	}
 	
 	public void deleteChunkInfo(TwoPoint chunk)
 	{
@@ -51,22 +30,15 @@ public class VeinChunkReadWrite
     	}
 	}
 	
-	public void writeChunkInfo(TwoPoint chunk,ArrayList<Integer> veins)
+	public void writeChunkInfo(String key,String[][][] theOtherArray)
 	{
-		if(veins.isEmpty())
-		{
-			deleteChunkInfo(chunk);
-		}
-		else
-		{
 			try 
 			{
-				deleteChunkInfo(chunk);
-				File veinFile = new File("plugins/OreVeins/ChunkInfo/"+ chunk.location() +".txt");
+				File veinFile = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
 				veinFile.createNewFile();
-				FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/ChunkInfo/"+chunk.location()+".txt");
+				FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/ChunkInfo/"+key+".txt");
 				ObjectOutputStream chunkOut = new ObjectOutputStream(chunkdir);
-				chunkOut.writeObject(veins);
+				chunkOut.writeObject(theOtherArray);
 				chunkdir.close();
 				chunkOut.close();
 			}
@@ -74,43 +46,14 @@ public class VeinChunkReadWrite
 			{
 				DebugLogger.console("Couldn't save vein. Dir is missing");
 			}
-		}
-	}
-	
-	public void writeVein(VeinClass vein)
-	{
-		if(vein.chunkInfo.isEmpty())
-		{
-			deleteVein(vein);
-			DebugLogger.console("deleting vein");
-		}
-		else
-		{
-			try 
-			{
-				//deleteVein(vein);
-				String v = new Integer(vein.VeinID).toString();
-				File veinFile = new File("plugins/OreVeins/VeinInfo/"+ v +".txt");
-				veinFile.createNewFile();
-				FileOutputStream veindir = new FileOutputStream("plugins/OreVeins/VeinInfo/"+ v +".txt");
-				ObjectOutputStream veinOut = new ObjectOutputStream(veindir);
-				veinOut.writeObject(vein);
-				veindir.close();
-				veinOut.close();
-				DebugLogger.console("saving vein");
-			}
-			catch (Exception ex)
-			{
-				DebugLogger.console("Couldn't save vein. Dir is missing "+ ex.getMessage());
-			}
-		}
+		
 	}
 
-	public ArrayList<Integer> readChunks(TwoPoint chunk)
+	public String[][][] readChunks(String entry)
 	{
 		try 
 		{
-			FileInputStream fin = new FileInputStream("plugins/OreVeins/ChunkInfo/"+chunk.location() + ".txt");
+			FileInputStream fin = new FileInputStream("plugins/OreVeins/ChunkInfo/"+entry + ".txt");
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			Object obj =  ois.readObject();
 			ois.close();
@@ -121,7 +64,7 @@ public class VeinChunkReadWrite
 			{
 				try
 				{
-					ArrayList<Integer> veinIds = (ArrayList<Integer>) obj;
+					String[][][] veinIds = (String[][][]) obj;
 					return veinIds;
 				}
 				catch (Exception e)
@@ -129,31 +72,6 @@ public class VeinChunkReadWrite
 					return null;
 				}
 
-			}
-			else
-				return null;
-		}
-		catch (Exception ex)
-		{
-			return null;
-		}
-	}
-	
-	public VeinClass readVein(int id)
-	{
-		try 
-		{
-			String theID  = new Integer(id).toString();
-			FileInputStream fin = new FileInputStream("plugins/OreVeins/VeinInfo/"+ theID + ".txt");
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			Object obj =  ois.readObject();
-			ois.close();
-			fin.close();
-			VeinClass Ids =new VeinClass();
-			if(Ids.getClass() == obj.getClass() )
-			{
-				VeinClass vein = (VeinClass) obj;
-				return vein;
 			}
 			else
 				return null;
