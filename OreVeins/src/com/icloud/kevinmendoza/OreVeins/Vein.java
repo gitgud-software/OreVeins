@@ -25,6 +25,11 @@ public class Vein
 		this.ore = ore;
 		ThreePoint start = new ThreePoint();
 		ThreePoint end = new ThreePoint();
+		while(start.y > 128 && end.y > 128)
+		{
+			start = new ThreePoint();
+			end = new ThreePoint();
+		}
 		start.x = start.x + startChunk.x*16;
 		start.z = start.z + startChunk.z*16;
 		end.x = end.x + startChunk.x*16;
@@ -53,6 +58,8 @@ public class Vein
 				{
 					point = littleEllipses[j];
 					offset = nodal.get(i);
+					DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
+					DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
 					point.y = offset.y + point.y; //get the point from the ellipse object and add the offset
 					//from the line object
 					if(point.y>2 && point.y < 128)
