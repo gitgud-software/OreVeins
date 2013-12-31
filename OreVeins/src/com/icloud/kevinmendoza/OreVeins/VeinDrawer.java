@@ -20,18 +20,18 @@ public class VeinDrawer {
 		{
 			for(int z=0;z<16;z++)
 			{
-				for(int y=0;y<16;y++)
+				for(int y=2;y<128;y++)
 				{
 					if(vein[x][y][z]!=null)
 					{
 						block = this.chunk.getBlock(x, y, z);
-						if(block.getType().compareTo(Material.STONE)==0)
-						{
+						//if(block.getType().compareTo(Material.STONE)==0)
+						//{
 							if(vein[x][y][z].contains("GOLD"))
 							{
 
 								block.setType(Material.GOLD_ORE);
-
+								//DebugLogger.console("makin gold");
 							}
 							else if (vein[x][y][z].contains("IRON"))
 							{
@@ -68,7 +68,7 @@ public class VeinDrawer {
 								chunk.getBlock(x, y, z).setType(Material.DIAMOND_ORE);
 
 							}
-						}
+						//}
 					}
 				}
 			}

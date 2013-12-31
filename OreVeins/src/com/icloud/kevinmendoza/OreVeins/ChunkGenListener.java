@@ -18,21 +18,18 @@ public final class ChunkGenListener implements Listener
 		Chunk chunk = event.getChunk();//gets the current chunk info from the event
 		removeOres(chunk);//first loops through the chunk gotten and removes all the default ores
 		addOres(chunk);//adds in the custom defined ores, the point of this plugin
-		removeStone(chunk);//removes all the stone from this chunk for debugging purposes
+		//removeStone(chunk);//removes all the stone from this chunk for debugging purposes
 		//event.getChunk().getWorld().refreshChunk(event.getChunk().getX(),event.getChunk().getZ());
 	}
 	
 	private void addOres(Chunk chunk)
 	{
-		DebugLogger.console("adding veins");
+		//DebugLogger.console("adding veins");
 		String[][][] chunkveins = addVeins(chunk);//adds a 3x3 array String object containing info
 		// on which ores go where
-		if(chunkveins==null)//if chunkveins is empty, well then fuck that
+		if(chunkveins!=null)//if chunkveins is empty, well then fuck that
 		{
-			DebugLogger.console("No cigar :(");
-		}
-		else
-		{//chunkveins is not null! there's info in here!
+		//chunkveins is not null! there's info in here!
 			DebugLogger.console("drawing veins");
 			VeinDrawer draw = new VeinDrawer(chunk);//make a veindrawer object at the current chunk
 			draw.drawVein(chunkveins);//draw the vein 
@@ -60,13 +57,14 @@ public final class ChunkGenListener implements Listener
 			{				//to the current vein object
 				if(theVeins!=null)//if there are veins from file, add to them
 				{
+					//DebugLogger.console("uhoh.. its not reading the objects back");
 					for(int x=0;x<16;x++)//loop through all possible chunk coordinates
 					{
 						for(int y=1;y<128;y++)
 						{
 							for(int z=0;z<16;z++)
 							{
-								if(!theVeins[x][y][z].contains("COAL"))
+								if(theVeins[x][y][z]==null || theVeins[x][y][z].contains("COAL"))
 								{
 									theVeins[x][y][z] = vein[x][y][z];//combine the ores into the array
 									//but make sure any coal veins are crosscut, as is tradition 8D
@@ -89,7 +87,7 @@ public final class ChunkGenListener implements Listener
 	{
 		ChunkFinder finder = new ChunkFinder(chunk);//find a nice empty chunk to settle down in 
 		//and have kids (aka for the endpoint of the line)
-		int end = (int)(10*rand.nextDouble());//the ten is the max chunk length a vein can be
+		int end = rand.nextInt(10);//the ten is the max chunk length a vein can be
 		//later on 10 will be replaced by something a little more meaningful
 		TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());//create a twopoint start point
 		TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);//get endpoint from the
@@ -119,16 +117,17 @@ public final class ChunkGenListener implements Listener
 		Block block;
 		for (int x = 0; x < 16; x++)
 		{
-			for (int y = 1; y < 128; y++)
+			for (int z = 0; z < 16; z++)
 			{
-				for (int z = 0; z < 16; z++)
+				for (int y = 1; y < 60; y++)
 				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0
 					block = chunk.getBlock(x, y, z);
 					if (block.getType().compareTo(Material.STONE)==0 
 							|| block.getType().compareTo(Material.GRAVEL)==0 
 							|| block.getType().compareTo(Material.SAND)==0 
 							|| block.getType().compareTo(Material.WATER)==0 
-							|| block.getType().compareTo(Material.LAVA)==0)
+							|| block.getType().compareTo(Material.LAVA)==0
+							|| block.getType().compareTo(Material.DIRT)==0)
 					{
 						block.setType(Material.AIR);
 					}

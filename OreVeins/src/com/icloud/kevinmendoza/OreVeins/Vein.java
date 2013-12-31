@@ -33,8 +33,8 @@ public class Vein
 		}
 		start.x = start.x + startChunk.x*16;
 		start.z = start.z + startChunk.z*16;
-		end.x = end.x + startChunk.x*16;
-		end.z = end.z + startChunk.z*16;//what are the absolute coordinates of the vein line, these are! :D
+		end.x = end.x + endChunk.x*16;
+		end.z = end.z + endChunk.z*16;//what are the absolute coordinates of the vein line, these are! :D
 		BresenHam hammy = new BresenHam();//whos moons are over my hammy? Bresen's are!
 		//but in all seriousness, this bresenham function is an integer-operation-only line drawing function
 		//which returns all blocks that lie along this line.
@@ -46,7 +46,7 @@ public class Vein
 		//axes arguments that are random. 
 		crossSection.rotateX(rand.nextInt(180)-90);//and i even have rotation arguments!
 		crossSection.rotateY(rand.nextInt(180)-90);//We CAN SPIN IN ALL THE RIGHT
-		crossSection.rotateZ(rand.nextInt(180)-90);//DIRECTIONS
+		crossSection.rotateZ(rand.nextInt(180)-90);//DIRECTIONS you spin me right round baby right round!
 		ThreePoint[] littleEllipses = crossSection.ellipsePoints;//now with the
 		//ellipse all spun about, lets get the points it corresponds to
 		ThreePoint point;
@@ -61,16 +61,18 @@ public class Vein
 					point = littleEllipses[j];
 					offset = null;
 					offset = nodal.get(i);
-					DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
-					DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
-					DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
+					//DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
+					//DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
+					//DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
 					ThreePoint point2 = new ThreePoint(offset.x + point.x,offset.y + point.y,offset.z + point.z);
 					//get the point from the ellipse object and add the offset
 					//from the line object
-					if(point.y>2 && point.y < 128)
+					if(point2.y>2 && point2.y < 128)
 					{
-						DebugLogger.console("adding point " +point2.x + " " +point2.y + " "+ point2.z);
-						this.theOres.add(point2);//and finally add in the point object to the ores array
+						if(!this.theOres.contains(point2))
+						{
+							this.theOres.add(point2);
+						}
 					}
 				}
 			}
@@ -92,7 +94,7 @@ public class Vein
 				aPoint = this.theOres.get(i);//get the first point in the ores object
 				chx = aPoint.x >> 4;//get the chunk coordinate of the first point, and make a key based on it
 				chz = aPoint.z >> 4;
-				DebugLogger.console("point is "+ aPoint.x + " "+ aPoint.y +" "+ aPoint.z);
+				//DebugLogger.console("point is "+ aPoint.x + " "+ aPoint.y +" "+ aPoint.z);
 				String xval = new Integer(chx).toString();
 				String zval = new Integer(chz).toString();
 				key = xval + ":" + zval;
@@ -101,9 +103,9 @@ public class Vein
 					if(chunkMap.containsKey(key))//if the hashmap has that chunk point, place it in the map
 					{
 						theOtherArray = chunkMap.get(key);//there is that coal thing. only place it because of COAL :)
-						if(this.ore.contains("COAL") || theOtherArray[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))]!=null)
+						if(this.ore.contains("COAL") || theOtherArray[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))]==null)
 						{
-							DebugLogger.console("adding in point "+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
+							//DebugLogger.console("old chunk, placing point"+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
 							theOtherArray[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))] = ore;
 							chunkMap.put(key, theOtherArray);
 						}
@@ -111,7 +113,7 @@ public class Vein
 					else//if not, place it at a new key
 					{
 						String[][][] freshBool = new String[16][128][16];//size of the chunk
-						DebugLogger.console("trying to access at point "+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
+						//DebugLogger.console("new chunk, placed point "+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
 						freshBool[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))] = this.ore;
 						chunkMap.put(key, freshBool);
 					}
@@ -125,8 +127,9 @@ public class Vein
 			{
 				if(chunkMap.get(entry) !=null && !entry.contains(key))
 				{
-					theOtherArray = RWObj.readChunks(entry);
-					if(theOtherArray != null)
+					String[][][] readInChunks = new String[16][128][16];
+					readInChunks = RWObj.readChunks(entry);
+					if(readInChunks != null)
 					{//load up current ores from the chunks in the vein
 						for(int x =0;x<16;x++)
 						{
@@ -136,12 +139,12 @@ public class Vein
 								{
 									if(chunkMap.get(entry)[x][y][z]!=null)
 									{
-										theOtherArray[x][y][z] = ore;//add this ore to the chunk if its empty or coal
+										readInChunks[x][y][z] = ore;//add this ore to the chunk if its empty or coal
 									}
 								}
 							}
 						}
-						RWObj.writeChunkInfo(entry,theOtherArray);//store the info to file
+						RWObj.writeChunkInfo(entry,readInChunks);//store the info to file
 					}
 					else
 					{

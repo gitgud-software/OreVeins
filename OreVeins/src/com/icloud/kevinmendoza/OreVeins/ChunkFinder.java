@@ -40,13 +40,13 @@ public class ChunkFinder
 			{
 				zneg = -1;
 			}
-			zoffset=zneg*(int)(end*rand.nextDouble());
+			zoffset=zneg*(int)(.5*end*rand.nextDouble() +end*.5);
 			xoffset =xneg*(int)Math.sqrt((end*end) - (zoffset*zoffset));
-			if(!world.isChunkLoaded(x + zoffset, z+ xoffset)) //Not currently loaded
+			if(!world.isChunkLoaded(this.x + zoffset, this.z+ xoffset)) //Not currently loaded
 			{
-				if(world.loadChunk(x + zoffset, z+ xoffset,false))
+				if(world.loadChunk(this.x + zoffset, this.z+ xoffset,false))
 				{
-					world.unloadChunk(x + zoffset, z+ xoffset);
+					world.unloadChunk(this.x + zoffset, this.z+ xoffset);
 				}
 				else
 				{

@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 public class VeinChunkReadWrite 
 {
@@ -55,31 +54,37 @@ public class VeinChunkReadWrite
 	{
 		try 
 		{
+			//DebugLogger.console("Fetching "+ entry);
 			FileInputStream fin = new FileInputStream("plugins/OreVeins/ChunkInfo/"+entry + ".txt");
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			Object obj =  ois.readObject();
 			ois.close();
 			fin.close();
-			ArrayList<Integer> Ids = new ArrayList<Integer>();
-			Ids.add(1);
-			if(Ids.getClass() == obj.getClass() )
+			String[][][] chunk = new String[16][128][16];
+			if(chunk.getClass() == obj.getClass() )
 			{
 				try
 				{
 					String[][][] veinIds = (String[][][]) obj;
+					//DebugLogger.console("successful fetch!");
 					return veinIds;
 				}
 				catch (Exception e)
 				{
+					DebugLogger.console("ERROR!!1");
 					return null;
 				}
 
 			}
 			else
+			{
+				DebugLogger.console("ERROR!!2");
 				return null;
+			}
 		}
 		catch (Exception ex)
 		{
+			//DebugLogger.console("ERROR!!3");
 			return null;
 		}
 	}

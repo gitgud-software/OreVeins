@@ -18,9 +18,9 @@ public class ThreePoint {
 	public ThreePoint()
 	{
 		Random rand = new Random();
-		this.x =(int)(16*rand.nextDouble());
-		this.y =(int)(200*rand.nextDouble());
-		this.z =(int)(16*rand.nextDouble());
+		this.x =rand.nextInt(16);
+		this.y =rand.nextInt(200);
+		this.z =rand.nextInt(16);
 	}
 @Override	
 public boolean equals(Object ob)

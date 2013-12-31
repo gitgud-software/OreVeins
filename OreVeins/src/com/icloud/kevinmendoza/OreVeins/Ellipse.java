@@ -18,7 +18,7 @@ public class Ellipse
 			{
 				bigX = ((double)(x*x) / (double)aa);
 				bigY = ((double)(y*y) / (double)bb);
-				if(1 >= bigX+bigY)
+				if(1 >= (bigX+bigY))
 				{
 					ThreePoint point = new ThreePoint(x,y,1);
 					this.ellipsePoints[count] = point;
@@ -36,46 +36,51 @@ public class Ellipse
 		{
 			if(this.ellipsePoints[i]!=null)
 			{
-				yprime = (double)(ellipsePoints[i].y)*Math.cos(tau)- (double)(ellipsePoints[i].z)*Math.sin(tau);
-				zprime = (double)(ellipsePoints[i].y)*Math.sin(tau) + (double)(ellipsePoints[i].z)*Math.cos(tau);
+				ThreePoint point = ellipsePoints[i];
+				yprime = (double)(point.y)*Math.cos(tau)- (double)(point.z)*Math.sin(tau);
+				zprime = (double)(point.y)*Math.sin(tau) + (double)(point.z)*Math.cos(tau);
 				ellipsePoints[i].y = (int)yprime;
 				ellipsePoints[i].z = (int)zprime;
+				//DebugLogger.console("X the point is "+ellipsePoints[i].x +" "+ ellipsePoints[i].y + " "+ ellipsePoints[i].z);
 			}
 		}
 	}
 
 
-public void rotateY(double theta)
-{
-	double tau = Math.toRadians(theta);
-	double xprime; double zprime;
-	for(int i=0;i<ellipsePoints.length;i++)
+	public void rotateY(double theta)
 	{
-		if(ellipsePoints[i]!=null)
+		double tau = Math.toRadians(theta);
+		double xprime; double zprime;
+		for(int i=0;i<ellipsePoints.length;i++)
 		{
-			xprime = (double)(ellipsePoints[i].x)*Math.cos(tau)+ (double)(ellipsePoints[i].x)*Math.sin(tau);
-			zprime = -(double)(ellipsePoints[i].x)*Math.sin(tau) + (double)(ellipsePoints[i].z)*Math.cos(tau);
-			ellipsePoints[i].x = (int)xprime;
-			ellipsePoints[i].z = (int)zprime;
+			if(ellipsePoints[i]!=null)
+			{
+				ThreePoint point = ellipsePoints[i];
+				xprime = (double)(point.x)*Math.cos(tau)+ (double)(point.x)*Math.sin(tau);
+				zprime = -(double)(point.x)*Math.sin(tau) + (double)(point.z)*Math.cos(tau);
+				ellipsePoints[i].x = (int)xprime;
+				ellipsePoints[i].z = (int)zprime;
+				//DebugLogger.console("Y the point is "+ellipsePoints[i].x +" "+ ellipsePoints[i].y + " "+ ellipsePoints[i].z);
+			}
 		}
 	}
-}
 
-public void rotateZ(double theta)
-{
-	double tau = Math.toRadians(theta);
-	double xprime; double yprime;
-	for(int i=0;i<ellipsePoints.length;i++)
+	public void rotateZ(double theta)
 	{
-		if(ellipsePoints[i]!=null)
+		double tau = Math.toRadians(theta);
+		double xprime; double yprime;
+		for(int i=0;i<ellipsePoints.length;i++)
 		{
-
-			xprime = (double)(ellipsePoints[i].x)*Math.cos(tau)- (double)(ellipsePoints[i].y)*Math.sin(tau);
-			yprime = (double)(ellipsePoints[i].x)*Math.sin(tau) + (double)(ellipsePoints[i].y)*Math.cos(tau);
-			ellipsePoints[i].x = (int)xprime;
-			ellipsePoints[i].y = (int)yprime;
+			if(ellipsePoints[i]!=null)
+			{
+				ThreePoint point = ellipsePoints[i];
+				xprime = (double)(point.x)*Math.cos(tau)- (double)(point.y)*Math.sin(tau);
+				yprime = (double)(point.x)*Math.sin(tau) + (double)(point.y)*Math.cos(tau);
+				ellipsePoints[i].x = (int)xprime;
+				ellipsePoints[i].y = (int)yprime;
+				//DebugLogger.console("Z the point is "+ellipsePoints[i].x +" "+ ellipsePoints[i].y + " "+ ellipsePoints[i].z);
+			}
 		}
 	}
-}
 
 }
