@@ -32,6 +32,7 @@ public class BresenHam
 		while(dx+dy+dz >=0)
 		{
 			ThreePoint point = new ThreePoint(xmult*x,ymult*y,zmult*z);
+			DebugLogger.console("iterating through point "+ point.x +" "+ point.y +" "+ point.z + " with starting points " + start.x+ " "+start.y+" "+ start.z + " " + end.x+ " "+end.y+" "+ end.z);
 			thePoints.add(point);
 			if(dy>dz && dy>dx)
 			{

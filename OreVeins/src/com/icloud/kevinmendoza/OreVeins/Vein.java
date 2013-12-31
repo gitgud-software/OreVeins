@@ -21,6 +21,7 @@ public class Vein
 	//even the ones not in the current chunk
 	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore)
 	{
+		this.chunkMap = new HashMap<String,String[][][]>();
 		this.theOres = new ArrayList<ThreePoint>();
 		this.ore = ore;
 		ThreePoint start = new ThreePoint();
@@ -56,17 +57,20 @@ public class Vein
 			{
 				if(littleEllipses[j]!=null)//as long as the point of the ellipse object exists
 				{
+					point = null;
 					point = littleEllipses[j];
+					offset = null;
 					offset = nodal.get(i);
 					DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
 					DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
-					point.y = offset.y + point.y; //get the point from the ellipse object and add the offset
+					DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
+					ThreePoint point2 = new ThreePoint(offset.x + point.x,offset.y + point.y,offset.z + point.z);
+					//get the point from the ellipse object and add the offset
 					//from the line object
 					if(point.y>2 && point.y < 128)
 					{
-						point.x = offset.x + point.x;
-						point.z = offset.z + point.z;
-						this.theOres.add(point);//and finally add in the point object to the ores array
+						DebugLogger.console("adding point " +point2.x + " " +point2.y + " "+ point2.z);
+						this.theOres.add(point2);//and finally add in the point object to the ores array
 					}
 				}
 			}
@@ -81,30 +85,36 @@ public class Vein
 		String[][][] theOtherArray;// an array to save the portion of the vein to the hashmap based on
 		//its chunk coordinates
 		ThreePoint aPoint;
-		if(this.theOres!=null || this.theOres.size()==0)//this should not be null!! but it is so i put this here
+		if(this.theOres!=null && this.theOres.size()!=0)//this should not be null!! but it is so i put this here
 		{
-			for(int i=0;i<=this.theOres.size();i++)//for every point in the vein, iterate through it
+			for(int i=0;i<this.theOres.size();i++)//for every point in the vein, iterate through it
 			{
 				aPoint = this.theOres.get(i);//get the first point in the ores object
 				chx = aPoint.x >> 4;//get the chunk coordinate of the first point, and make a key based on it
 				chz = aPoint.z >> 4;
+				DebugLogger.console("point is "+ aPoint.x + " "+ aPoint.y +" "+ aPoint.z);
 				String xval = new Integer(chx).toString();
 				String zval = new Integer(chz).toString();
 				key = xval + ":" + zval;
-				if(chunkMap.containsKey(key))//if the hashmap has that chunk point, place it in the map
+				if(aPoint.y<128)
 				{
-					theOtherArray = chunkMap.get(key);//there is that coal thing. only place it because of COAL :)
-					if(this.ore.contains("COAL") || theOtherArray[aPoint.x - (aPoint.x >> 4)][aPoint.y][aPoint.z- (aPoint.z >> 4)]!=null)
+					if(chunkMap.containsKey(key))//if the hashmap has that chunk point, place it in the map
 					{
-						theOtherArray[aPoint.x - (aPoint.x >> 4)][aPoint.y][aPoint.z- (aPoint.z >> 4)] = ore;
-						chunkMap.put(key, theOtherArray);
+						theOtherArray = chunkMap.get(key);//there is that coal thing. only place it because of COAL :)
+						if(this.ore.contains("COAL") || theOtherArray[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))]!=null)
+						{
+							DebugLogger.console("adding in point "+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
+							theOtherArray[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))] = ore;
+							chunkMap.put(key, theOtherArray);
+						}
 					}
-				}
-				else//if not, place it at a new key
-				{
-					String[][][] freshBool = new String[16][128][16];//size of the chunk
-					freshBool[aPoint.x - (aPoint.x >> 4)][aPoint.y][aPoint.z - (aPoint.z >> 4)] = this.ore;
-					chunkMap.put(key, freshBool);
+					else//if not, place it at a new key
+					{
+						String[][][] freshBool = new String[16][128][16];//size of the chunk
+						DebugLogger.console("trying to access at point "+(aPoint.x - (16*(aPoint.x >> 4)))+" "+aPoint.y+ " "+(aPoint.z - (16*(aPoint.z >> 4))));
+						freshBool[aPoint.x - (16*(aPoint.x >> 4))][aPoint.y][aPoint.z - (16*(aPoint.z >> 4))] = this.ore;
+						chunkMap.put(key, freshBool);
+					}
 				}
 			}
 			VeinChunkReadWrite RWObj = new VeinChunkReadWrite();
@@ -115,27 +125,54 @@ public class Vein
 			{
 				if(chunkMap.get(entry) !=null && !entry.contains(key))
 				{
-					theOtherArray = RWObj.readChunks(entry);//load up current ores from the chunks in the vein
-					for(int x =0;x<16;x++)
-					{
-						for(int y=1;y<128;y++)
+					theOtherArray = RWObj.readChunks(entry);
+					if(theOtherArray != null)
+					{//load up current ores from the chunks in the vein
+						for(int x =0;x<16;x++)
 						{
-							for(int z=0;z<16;z++)
+							for(int y=2;y<128;y++)
 							{
-								if(theOtherArray[x][y][z]==null || theOtherArray[x][y][z].contains("COAL"))
+								for(int z=0;z<16;z++)
 								{
-									theOtherArray[x][y][z] = ore;//add this ore to the chunk if its empty or coal
+									if(chunkMap.get(entry)[x][y][z]!=null)
+									{
+										theOtherArray[x][y][z] = ore;//add this ore to the chunk if its empty or coal
+									}
 								}
 							}
 						}
+						RWObj.writeChunkInfo(entry,theOtherArray);//store the info to file
 					}
-					RWObj.writeChunkInfo(key,theOtherArray);//store the modified chunk data back to file
+					else
+					{
+						String[][][] Array = new String[16][128][16];
+						for(int x =0;x<16;x++)
+						{
+							for(int y=2;y<128;y++)
+							{
+								for(int z=0;z<16;z++)
+								{
+									if(chunkMap.get(entry)[x][y][z]!=null)
+									{
+										Array[x][y][z] = ore;//add this ore to the chunk if its empty or coal
+									}
+									else
+									{
+										Array[x][y][z] = null;
+									}
+								}
+							}
+						}
+						RWObj.writeChunkInfo(entry,Array);
+					}//store the modified chunk data back to file
 				}
 			}
 			return chunkMap.get(key);//aand return the data for the current chunk
 		}
 		else
+		{
 			return null;
+		}
 	}
 
 }
