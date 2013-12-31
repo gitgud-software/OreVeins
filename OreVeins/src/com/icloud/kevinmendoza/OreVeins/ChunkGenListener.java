@@ -95,7 +95,7 @@ public final class ChunkGenListener implements Listener
 		if(endpoint!=null)//if an endpoint could not be found, terminate trying to make a vein
 		{
 			String ore = new String("GOLD");//make a gold vein! GOOOOLLLDDDD
-			Vein vein = new Vein(startpoint,endpoint,ore);//give it the stuff it needs
+			Vein vein = new Vein(startpoint,endpoint,ore,rand);//give it the stuff it needs
 			String[][][] list = vein.returnAndPartitionBlocks(chunk);//this is a powerhouse method
 			//for more info, look in the vein class. it gets a 3x3 array of blocks that need to be
 			//placed
