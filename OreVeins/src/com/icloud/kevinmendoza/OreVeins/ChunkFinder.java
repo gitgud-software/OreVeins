@@ -22,7 +22,7 @@ public class ChunkFinder
 		int x,z,radius;
 		while(true)
 		{
-			radius = rand.nextInt(end+1);
+			radius = end;
 			theta = ((double)rand.nextInt(628)-314)/100;	
 			x = (int)(radius*Math.cos(theta));
 			z = (int)(radius*Math.sin(theta));

@@ -19,7 +19,7 @@ public class ThreePoint {
 	{
 		Random rand = new Random();
 		this.x =rand.nextInt(16);
-		this.y =rand.nextInt(200);
+		this.y =rand.nextInt(128);
 		this.z =rand.nextInt(16);
 	}
 @Override	

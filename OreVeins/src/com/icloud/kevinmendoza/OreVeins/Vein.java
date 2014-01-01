@@ -43,8 +43,10 @@ public class Vein implements Serializable
 		this.ore = ore;
 		ThreePoint start = new ThreePoint();
 		ThreePoint end = new ThreePoint();
-		while(start.y > 128 && end.y > 128)
+		while(true)
 		{
+			if(start.y < 128 && end.y < 128)
+				break;
 			start = new ThreePoint();
 			end = new ThreePoint();
 		}
