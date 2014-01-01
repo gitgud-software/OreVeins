@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 
 public class Vein implements Serializable
@@ -25,7 +26,6 @@ public class Vein implements Serializable
 	public int grade;
 	public int bonanza;
 	public int branch;
-	public int strike;
 	public int contin;
 	public ThreePoint startpoint;
 	public ThreePoint endpoint;
@@ -35,7 +35,7 @@ public class Vein implements Serializable
 	//this constructor is for all ores who's base is a line
 	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore, String second, Random rand)
 	{
-		this.contin = 7;
+		this.contin = 30;
 		this.grade = 10;
 		this.bonanza = 30;
 		this.chunkMap = new HashMap<String,String[][][]>();
@@ -53,13 +53,10 @@ public class Vein implements Serializable
 		start.x = start.x + startChunk.x*16;
 		start.z = start.z + startChunk.z*16;
 		end.x = end.x + endChunk.x*16;
-		end.z = end.z + endChunk.z*16;//what are the absolute coordinates of the vein line, these are! :D
-		BresenHam hammy = new BresenHam();//whos moons are over my hammy? Bresen's are!
-		//but in all seriousness, this bresenham function is an integer-operation-only line drawing function
-		//which returns all blocks that lie along this line.
+		end.z = end.z + endChunk.z*16;
 		if(this.ore.contains("GOLD") || this.ore.contains("Redstone") || this.ore.contains("Iron"))
 		{
-			hydroVein(rand, hammy, start, end);
+			hydroVein(rand, start, end);
 		}
 		else if (this.ore.contains("COAL") || this.ore.contains("BIF") || this.ore.contains("LAPIZ"))
 		{
@@ -80,16 +77,8 @@ public class Vein implements Serializable
 	{
 		this.ore = "DIAMOND";
 	}
-	
-	private void veinType()
-	{
-		
-		
-		
-		
-	}
-	
-	private void hydroStringer()
+	//this constructor is for stringer veins
+	private void hydroStringer(Random rand, ThreePoint start)
 	{
 		
 		
@@ -100,20 +89,120 @@ public class Vein implements Serializable
 		
 	}
 	
-	private void hydroVein(Random rand, BresenHam hammy, ThreePoint start, ThreePoint end)
+	private void hydroVein(Random rand, ThreePoint start, ThreePoint end)
 	{
-		
-		//This ellipse class is pretty cool to. Creates an ellipse in the x,y plane with major/minor
-		//axes arguments that are random. 
+		ThreePoint[] nodal = bezier(start,end,rand);
+		int x=0, y=0, z=0,a=1, b=1,A;
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
-		double r = Math.sqrt(vx^2 + vy^2 +vz^2);
-		int divisions =  (rand.nextInt(this.contin)+1);
-		int vxr = vx/divisions,x = start.x, y = start.y, z = start.z;
+		int rotateZ = rand.nextInt(90)-45;
+		double r = Math.sqrt(vx^2 + vy^2 +vz^2),phi,theta;
+		BresenHam hammy = new BresenHam();
+		for(int k=1;k<nodal.length;k++)
+		{
+			if(rand.nextInt(200)==0)
+			{
+				ThreePoint offset = offset(rand,nodal[k]);
+				x+=offset.x;
+				y+=offset.y;
+				z+=offset.z;//move the vein sideways
+			}
+			A = 2*rand.nextInt(this.grade)+2;
+			b = rand.nextInt(A)-1;
+			if(b<1)
+				b=1;
+			a = A-b;
+			ArrayList<ThreePoint> centers = hammy.returnPoints(nodal[k-1],nodal[k]);
+			Ellipse crossSection = new Ellipse(a,b);
+			phi = Math.acos(vy/r);
+			theta = Math.atan(vz/((double)vx+0.001));
+			crossSection.rotateX((int)Math.toDegrees(theta));//pitch
+			//and i even have rotation arguments!
+			crossSection.rotateY((int)Math.toDegrees(phi)+90);//rotation around the Y axis//We CAN SPIN IN ALL THE RIGHT
+			crossSection.rotateZ(rotateZ);//rotation about the axis//DIRECTIONS you spin me right round baby right round!
+			ThreePoint[] littleEllipses = crossSection.points;//now with the
+			//ellipse all spun about, lets get the points it corresponds to
+			for(int i = 0;i<centers.size();i++)//for all the points along the line
+			{
+				centers.get(i).x+=x;
+				centers.get(i).y+=y;
+				centers.get(i).z+=z;
+				if(rand.nextInt(this.bonanza)==0)//a little bonanza surprise for the miners
+				{
+					bonanza(rand, centers.get(i), i);
+				}//then place the normal grade in the ellipse shape
+				crossSectionPlace(littleEllipses,centers.get(i),rand);
+			}
+		}
+	}
+	
+	private ThreePoint offset(Random rand, ThreePoint nodal)
+	{
+		String biome = Bukkit.getWorlds().get(0).getBiome(nodal.x, nodal.z).name();
+		ThreePoint offset = new ThreePoint(0,0,0);
+		if(biome.contains("MOUNTAINS"))
+		{
+			if(rand.nextInt(150)==0)
+			{
+				offset.x=rand.nextInt(70)-35;
+				offset.y=rand.nextInt(70)-35;
+				offset.z=rand.nextInt(70)-35;
+			}	
+			return offset;
+		}
+		else if (biome.contains("HILLS"))
+		{
+			if(rand.nextInt(100)==0)
+			{
+				offset.x=rand.nextInt(50)-25;
+				offset.y=rand.nextInt(50)-25;
+				offset.z=rand.nextInt(50)-25;
+			}
+			return offset;
+		}
+		else
+		{
+			if(rand.nextInt(200)==0)
+			{
+				offset.x=rand.nextInt(30)-15;
+				offset.y=rand.nextInt(30)-15;
+				offset.z=rand.nextInt(30)-15;
+			}
+			return offset;
+		}
+	}
+	
+	private int biomeRadius(ThreePoint nodal, Random rand)
+	{
+		String biome = Bukkit.getWorlds().get(0).getBiome(nodal.x, nodal.z).name();
+		int r;
+		if(biome.contains("MOUNTAINS"))
+		{
+			r = rand.nextInt(70);
+		}
+		else if (biome.contains("HILLS"))
+		{
+			r = rand.nextInt(50);
+		}
+		else
+		{
+			r = rand.nextInt(30);
+		}
+		return r;
+	}
+	
+	private ThreePoint[] bezier(ThreePoint start, ThreePoint end,Random rand) 
+	{
+		int vx = end.x - start.x;
+		int vy = end.y - start.y;
+		int vz = end.z - start.z;
+		int divisions = (int)Math.sqrt((vx*vx) + (vy*vy) + (vz*vz)); 
+		divisions =	(int)(((double)divisions)/(2.5*Math.sqrt(divisions)));
+		int x = start.x, y = start.y, z = start.z;
+		int vxr = vx/divisions;
 		int vyr = vy/divisions;
 		int vzr = vz/divisions;
-		int rvg = (int) Math.sqrt(vzr*vzr + vxr*vxr +vyr*vyr);
 		ThreePoint[] Bzs = new ThreePoint[divisions+1];
 		Bzs[0]=start;
 		for(int i=1;i<divisions;i++)
@@ -124,55 +213,28 @@ public class Vein implements Serializable
 			Bzs[i] = new ThreePoint(x,y,z);
 		}
 		Bzs[Bzs.length-1]=end;
-		//DebugLogger.console(" length of Bzs" + Bzs.length);
-		//DebugLogger.console("r   is" + rvg);
-		ThreePoint[] nodal = bezier(Bzs,rvg,rand);
-		for(int k=1;k<nodal.length;k++)
-		{
-			ArrayList<ThreePoint> centers = hammy.returnPoints(nodal[k-1],nodal[k]);
-			Ellipse crossSection = new Ellipse(3,6);
-			double phi, theta;
-			phi = Math.acos(vy/r);
-			theta = Math.atan(vz/((double)vx+0.001));
-			crossSection.rotateX((int)Math.toDegrees(theta));//pitch
-			//and i even have rotation arguments!
-			crossSection.rotateY((int)Math.toDegrees(phi)+90);//rotation around the Y axis//We CAN SPIN IN ALL THE RIGHT
-			crossSection.rotateZ(rand.nextInt(90)-45);//rotation about the axis//DIRECTIONS you spin me right round baby right round!
-			ThreePoint[] littleEllipses = crossSection.points;//now with the
-			//ellipse all spun about, lets get the points it corresponds to
-			for(int i = 0;i<centers.size();i++)//for all the points along the line
-			{
-				if(rand.nextInt(this.bonanza)==0)//a little bonanza surprise for the miners
-				{
-					bonanza(rand, centers.get(i), i);
-				}//then place the normal grade in the ellipse shape
-				crossSectionPlace(littleEllipses,centers.get(i),rand);
-
-			}
-		}
-	}
-	
-	private ThreePoint[] bezier(ThreePoint[] bzs, int r,Random rand) 
-	{
-		ThreePoint[] centers = new ThreePoint[bzs.length];
-		centers[0]= bzs[0];
-		centers[bzs.length-1]= bzs[bzs.length-1];
-		int radius,x,y=128,z;
+		
+		ThreePoint[] centers = new ThreePoint[Bzs.length];
+		centers[0]= Bzs[0];
+		centers[Bzs.length-1]= Bzs[Bzs.length-1];
+		int radius;
+		x=0;y=0;z=0;
 		double phi=0.0, theta=0.0;
-		for(int i =1;i<bzs.length-1;i++)
+		 radius = rand.nextInt(20);
+		for(int i =1;i<Bzs.length-1;i++)
 		{
 			//DebugLogger.console("r is" + r);
-			 radius = rand.nextInt(r+1);
 			 while(y>128)
 			 {
-				 phi = ((double)(rand.nextInt(628)-314))/100;
-				 theta = ((double)rand.nextInt(314)-157)/100;
-				 y = (int)(radius*Math.sin(theta)*Math.cos(phi));
+				 phi = ((double)(rand.nextInt(628)))/100.0;
+				 theta = ((double)(rand.nextInt(314)))/100.0;
+				 y = (int)(radius*Math.cos(theta)) + Bzs[i].y;
 			 }
-			x = (int)(radius*Math.sin(theta)*Math.cos(phi));
-			z = (int)(radius*Math.cos(theta));
+			 x = (int)(radius*Math.sin(theta)*Math.cos(phi));
+			 z = (int)(radius*Math.sin(theta)*Math.sin(phi));
 			//DebugLogger.console("bzs "+ bzs[i].x +" "+ bzs.length + "bzs"+ i);
-			centers[i]= new ThreePoint(x+bzs[i].x,y +bzs[i].y,z+bzs[i].z);
+			centers[i]= new ThreePoint(x+Bzs[i].x,y +Bzs[i].y,z+Bzs[i].z);
+			radius = biomeRadius(centers[i], rand);
 		}
 		int n,count=0;double t=0;
 		ThreePoint[] nodes = new ThreePoint[16];
@@ -196,7 +258,8 @@ public class Vein implements Serializable
 		return nodes;
 	}
 	
-	private int binomialCoefficient(int n, int k) {
+	private int binomialCoefficient(int n, int k) 
+	{
 	    // take the lowest possible k to reduce computing using: n over k = n over (n-k)
 		int top=1,bottom=1;
 	    for(int i=1;i<=k;i++)
@@ -244,7 +307,7 @@ public class Vein implements Serializable
 	
 	private void bonanza(Random rand,ThreePoint nodal, int i)
 	{
-		Bonanza hooray = new Bonanza(rand.nextInt(6)+1,rand.nextInt(6)+1,rand.nextInt(6)+1);
+		Bonanza hooray = new Bonanza(rand.nextInt(3)+1,rand.nextInt(3)+1,rand.nextInt(3)+1);
 		hooray.rotateX(rand.nextInt(180)-90);
 		hooray.rotateY(rand.nextInt(180)-90);
 		hooray.rotateZ(rand.nextInt(180)-90);

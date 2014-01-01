@@ -1,6 +1,7 @@
 package com.icloud.kevinmendoza.OreVeins;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,16 +11,18 @@ import org.bukkit.event.world.ChunkPopulateEvent;
 
 public final class ChunkGenListener implements Listener 
 {
-
 	@EventHandler
 
 	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		Chunk chunk = event.getChunk();//gets the current chunk info from the event
-		removeOres(chunk);//first loops through the chunk gotten and removes all the default ores
-		addOres(chunk);//adds in the custom defined ores, the point of this plugin
-		//removeStone(chunk);//removes all the stone from this chunk for debugging purposes
-		//event.getChunk().getWorld().refreshChunk(event.getChunk().getX(),event.getChunk().getZ());
+		if(event.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName()))
+		{
+			Chunk chunk = event.getChunk();//gets the current chunk info from the event
+			removeOres(chunk);//first loops through the chunk gotten and removes all the default ores
+			addOres(chunk);//adds in the custom defined ores, the point of this plugin
+			//removeStone(chunk);//removes all the stone from this chunk for debugging purposes
+			//event.getChunk().getWorld().refreshChunk(event.getChunk().getX(),event.getChunk().getZ());
+		}
 	}
 	
 	private void addOres(Chunk chunk)
@@ -48,7 +51,7 @@ public final class ChunkGenListener implements Listener
 		//^^ create the string key used to retrieve pertinent chunk information
 		String[][][] theVeins = RWObj.readChunks(key);//<<-this returns any information 
 		//probability percentage that it will generate a vein in this chunk
-		if(rand.nextInt(100) <= 50)//look kevin, i made the probability cleaner! ^_^
+		if(rand.nextInt(100) <= 25)//look kevin, i made the probability cleaner! ^_^
 		{
 			//DebugLogger.console("probability dictates that I will have my vein");
 			String[][][] vein = addNewVein(chunk,rand);//calls the function to create a new vein!
@@ -86,12 +89,12 @@ public final class ChunkGenListener implements Listener
 
 	private String[][][] addNewVein(Chunk chunk, Random rand)
 	{
-		ChunkFinder finder = new ChunkFinder(chunk);//find a nice empty chunk to settle down in 
+		ChunkFinder finder = new ChunkFinder(chunk,rand);//find a nice empty chunk to settle down in 
 		//and have kids (aka for the endpoint of the line)
-		int end = rand.nextInt(10);//the ten is the max chunk length a vein can be
+		int end = rand.nextInt(5)+5;//the ten is the max chunk length a vein can be
 		//later on 10 will be replaced by something a little more meaningful
 		TwoPoint startpoint = new TwoPoint(chunk.getX(),chunk.getZ());//create a twopoint start point
-		TwoPoint endpoint =  finder.findchunk(chunk.getWorld(), end);//get endpoint from the
+		TwoPoint endpoint =  finder.findchunk(end);//get endpoint from the
 		//chunk finder
 		if(endpoint!=null)//if an endpoint could not be found, terminate trying to make a vein
 		{

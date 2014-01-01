@@ -2,35 +2,42 @@ package com.icloud.kevinmendoza.OreVeins;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.World;
 
 public class ChunkFinder 
 {
 	public int x;
 	public int z;
-	public ChunkFinder(Chunk chunk)
+	private Random rand;
+	public ChunkFinder(Chunk chunk, Random rand)
 	{
+		this.rand = rand;
 		this.x = chunk.getX();
 		this.z = chunk.getZ();
 	}
-	public TwoPoint findchunk(World world, int end) 
+	public ChunkFinder(TwoPoint point, Random rand)
 	{
-		Random rand = new Random();
+		this.rand = rand;
+		this.x = point.x;
+		this.z = point.z;
+	}
+	public TwoPoint findchunk(int end) 
+	{
 		int it=0;
 		double theta;
 		int x,z,radius;
 		while(true)
 		{
 			radius = end;
-			theta = ((double)rand.nextInt(628)-314)/100;	
+			theta = ((double)this.rand.nextInt(628)-314.0)/100.0;	
 			x = (int)(radius*Math.cos(theta));
 			z = (int)(radius*Math.sin(theta));
-			if(!world.isChunkLoaded(this.x + x, this.z+ z)) //Not currently loaded
+			if(!Bukkit.getWorlds().get(0).isChunkLoaded(this.x + x, this.z+ z)) //Not currently loaded
 			{
-				if(world.loadChunk(this.x + x, this.z+ z,false))
+				if(Bukkit.getWorlds().get(0).loadChunk(this.x + x, this.z+ z,false))
 				{
-					world.unloadChunk(this.x + x, this.z+ z);
+					Bukkit.getWorlds().get(0).unloadChunk(this.x + x, this.z+ z);
 				}
 				else
 				{

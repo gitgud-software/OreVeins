@@ -25,10 +25,14 @@ public final class OreVeins extends JavaPlugin
 		File Ovein = new File("plugins/OreVeins");
 		File config = new File("plugins/OreVeins/config.yml");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
+		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
+		File StringerInfo = new File("plugins/OreVeins/StringerInfo");
 		try{
 			Ovein.mkdir();
 			config.createNewFile();
 			ChunkInfo.mkdir();
+			VeinInfo.mkdir();
+			StringerInfo.mkdir();
 		}
 		catch (IOException e){ //Hooray for horrible programming practices!
 			DebugLogger.console("Whoopsie! File creation failed!");
