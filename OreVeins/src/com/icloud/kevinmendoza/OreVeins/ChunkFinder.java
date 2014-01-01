@@ -22,31 +22,19 @@ public class ChunkFinder
 		int zneg;
 		Random rand = new Random();
 		int it=0;
+		double phi, theta;
+		int x,z,radius;
 		while(true)
 		{
-			if(rand.nextBoolean())
+			radius = rand.nextInt(end+1);
+			theta = ((double)rand.nextInt(628)-314)/100;	
+			x = (int)(radius*Math.cos(theta));
+			z = (int)(radius*Math.sin(theta));
+			if(!world.isChunkLoaded(this.x + x, this.z+ z)) //Not currently loaded
 			{
-				xneg = 1;
-			}
-			else
-			{
-				xneg = -1;
-			}
-			if(rand.nextBoolean())
-			{
-				zneg = 1;
-			}
-			else
-			{
-				zneg = -1;
-			}
-			zoffset=zneg*(int)(.5*end*rand.nextDouble() +end*.5);
-			xoffset =xneg*(int)Math.sqrt((end*end) - (zoffset*zoffset));
-			if(!world.isChunkLoaded(this.x + zoffset, this.z+ xoffset)) //Not currently loaded
-			{
-				if(world.loadChunk(this.x + zoffset, this.z+ xoffset,false))
+				if(world.loadChunk(this.x + x, this.z+ z,false))
 				{
-					world.unloadChunk(this.x + zoffset, this.z+ xoffset);
+					world.unloadChunk(this.x + x, this.z+ z);
 				}
 				else
 				{
@@ -60,7 +48,7 @@ public class ChunkFinder
 				return null;
 			}
 		}
-		TwoPoint freechunk = new TwoPoint(x+xoffset, z +zoffset);
+		TwoPoint freechunk = new TwoPoint(this.x+x, this.z +z);
 		return freechunk;
 	}
 }

@@ -32,8 +32,10 @@ public class Vein implements Serializable
 	//what ore the vein is made of
 	private ArrayList<ThreePoint> theOres;// an initial list of all the points that need to be placed of the vein,
 	//even the ones not in the current chunk
-	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore, Random rand)
+	//this constructor is for all ores who's base is a line
+	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore, String second, Random rand)
 	{
+		this.contin = 7;
 		this.grade = 10;
 		this.bonanza = 30;
 		this.chunkMap = new HashMap<String,String[][][]>();
@@ -71,7 +73,7 @@ public class Vein implements Serializable
 		}
 		
 	}
-	
+	//this constructor is for conical sections.
 	public Vein(TwoPoint startChunk, Random rand)
 	{
 		this.ore = "DIAMOND";
@@ -98,64 +100,147 @@ public class Vein implements Serializable
 	
 	private void hydroVein(Random rand, BresenHam hammy, ThreePoint start, ThreePoint end)
 	{
-		ArrayList<ThreePoint> nodal = hammy.returnPoints(start,end);
-		Ellipse crossSection = new Ellipse(3,6);
+		
 		//This ellipse class is pretty cool to. Creates an ellipse in the x,y plane with major/minor
 		//axes arguments that are random. 
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
 		double r = Math.sqrt(vx^2 + vy^2 +vz^2);
-		double phi, theta;
-		phi = Math.acos(vy/r);
-		theta = Math.atan(vz/vx);
-		crossSection.rotateX((int)Math.toDegrees(theta));//pitch
-		//and i even have rotation arguments!
-		crossSection.rotateY((int)Math.toDegrees(phi)+90);//rotation around the Y axis//We CAN SPIN IN ALL THE RIGHT
-		//crossSection.rotateZ(rand.nextInt(180)-90);//rotation about the axis//DIRECTIONS you spin me right round baby right round!
-		ThreePoint[] littleEllipses = crossSection.points;//now with the
-		//ellipse all spun about, lets get the points it corresponds to
+		int divisions =  (rand.nextInt(this.contin)+1);
+		int vxr = vx/divisions,x = start.x, y = start.y, z = start.z;
+		int vyr = vy/divisions;
+		int vzr = vz/divisions;
+		int rvg = (int) Math.sqrt(vzr*vzr + vxr*vxr +vyr*vyr);
+		ThreePoint[] Bzs = new ThreePoint[divisions+1];
+		Bzs[0]=start;
+		for(int i=1;i<divisions;i++)
+		{
+			x+=vxr;
+			y+=vyr;
+			z+=vzr;
+			Bzs[i] = new ThreePoint(x,y,z);
+		}
+		Bzs[Bzs.length-1]=end;
+		//DebugLogger.console(" length of Bzs" + Bzs.length);
+		//DebugLogger.console("r   is" + rvg);
+		ThreePoint[] nodal = bezier(Bzs,rvg,rand);
+		for(int k=1;k<nodal.length;k++)
+		{
+			ArrayList<ThreePoint> centers = hammy.returnPoints(nodal[k-1],nodal[k]);
+			Ellipse crossSection = new Ellipse(3,6);
+			double phi, theta;
+			phi = Math.acos(vy/r);
+			theta = Math.atan(vz/((double)vx+0.001));
+			crossSection.rotateX((int)Math.toDegrees(theta));//pitch
+			//and i even have rotation arguments!
+			crossSection.rotateY((int)Math.toDegrees(phi)+90);//rotation around the Y axis//We CAN SPIN IN ALL THE RIGHT
+			crossSection.rotateZ(rand.nextInt(90)-45);//rotation about the axis//DIRECTIONS you spin me right round baby right round!
+			ThreePoint[] littleEllipses = crossSection.points;//now with the
+			//ellipse all spun about, lets get the points it corresponds to
+			for(int i = 0;i<centers.size();i++)//for all the points along the line
+			{
+				if(rand.nextInt(this.bonanza)==0)//a little bonanza surprise for the miners
+				{
+					bonanza(rand, centers.get(i), i);
+				}//then place the normal grade in the ellipse shape
+				crossSectionPlace(littleEllipses,centers.get(i),rand);
+
+			}
+		}
+	}
+	
+	private ThreePoint[] bezier(ThreePoint[] bzs, int r,Random rand) 
+	{
+		ThreePoint[] centers = new ThreePoint[bzs.length];
+		centers[0]= bzs[0];
+		centers[bzs.length-1]= bzs[bzs.length-1];
+		int radius,x,y=128,z;
+		double phi=0.0, theta=0.0;
+		for(int i =1;i<bzs.length-1;i++)
+		{
+			//DebugLogger.console("r is" + r);
+			 radius = rand.nextInt(r+1);
+			 while(y>128)
+			 {
+				 phi = ((double)(rand.nextInt(628)-314))/100;
+				 theta = ((double)rand.nextInt(314)-157)/100;
+				 y = (int)(radius*Math.sin(theta)*Math.cos(phi));
+			 }
+			x = (int)(radius*Math.sin(theta)*Math.cos(phi));
+			z = (int)(radius*Math.cos(theta));
+			//DebugLogger.console("bzs "+ bzs[i].x +" "+ bzs.length + "bzs"+ i);
+			centers[i]= new ThreePoint(x+bzs[i].x,y +bzs[i].y,z+bzs[i].z);
+		}
+		int n,count=0;double t=0;
+		ThreePoint[] nodes = new ThreePoint[16];
+		while(t<=1)
+		{
+			x=0;
+			y=0;
+			z=0;
+			n = centers.length-1;
+			for(int i=0;i<=n;i++)
+			{
+				x+=binomialCoefficient(n,i)*centers[i].x*Math.pow((1-t), n-i) * Math.pow(t, i);
+				y+=binomialCoefficient(n,i)*centers[i].y*Math.pow((1-t), n-i) * Math.pow(t, i);
+				z+=binomialCoefficient(n,i)*centers[i].z*Math.pow((1-t), n-i) * Math.pow(t, i);
+			}
+			//DebugLogger.console(" count "+count + " t "+ t + " iterate by"+ 1/15);
+			nodes[count] = new ThreePoint((int)x,(int)y,(int)z);
+			count++;
+			t=t+1.0/15.0;
+		}
+		return nodes;
+	}
+	
+	private int binomialCoefficient(int n, int k) {
+	    // take the lowest possible k to reduce computing using: n over k = n over (n-k)
+		int top=1,bottom=1;
+	    for(int i=1;i<=k;i++)
+	    {
+	    	 top = top*(n-(k-i));
+	    	 bottom = i*bottom;
+	    }
+	    int result = top/bottom;
+	    return result;
+	}
+	 
+	private void crossSectionPlace(ThreePoint[] crossSection, ThreePoint nodal,Random rand)
+	{
 		ThreePoint point;
 		ThreePoint offset;
-		for(int i = 0;i<nodal.size();i++)//for all the points along the line
+		for(int j =0;j<crossSection.length;j++)//and for all the points in the ellipse object
 		{
-			if(rand.nextInt(this.bonanza)==0)//a little bonanza surprise for the miners
+			if(crossSection[j]!=null)//as long as the point of the ellipse object exists
 			{
-				bonanza(rand, nodal, i);
-			}//then place the normal grade in the ellipse shape
-			for(int j =0;j<littleEllipses.length;j++)//and for all the points in the ellipse object
-			{
-				if(littleEllipses[j]!=null)//as long as the point of the ellipse object exists
+				point = null;
+				point = crossSection[j];
+				offset = null;
+				offset = nodal;
+				//DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
+				//DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
+				//DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
+				ThreePoint point2 = new ThreePoint(offset.x + point.x,offset.y + point.y,offset.z + point.z);
+				//get the point from the ellipse object and add the offset
+				//from the line object
+				if(point2.y>2 && point2.y < 128)
 				{
-					point = null;
-					point = littleEllipses[j];
-					offset = null;
-					offset = nodal.get(i);
-					//DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
-					//DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
-					//DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
-					ThreePoint point2 = new ThreePoint(offset.x + point.x,offset.y + point.y,offset.z + point.z);
-					//get the point from the ellipse object and add the offset
-					//from the line object
-					if(point2.y>2 && point2.y < 128)
+					if(!this.theOres.contains(point2) && rand.nextInt(this.grade)==0)
 					{
-						if(!this.theOres.contains(point2) && rand.nextInt(this.grade)==0)
-						{
-							this.theOres.add(point2);
-						}
+						this.theOres.add(point2);
 					}
 				}
 			}
-
 		}
 	}
-		
+	
 	private void igVein()
 	{
 		
 	}
 	
-	private void bonanza(Random rand,ArrayList<ThreePoint> nodal, int i)
+	private void bonanza(Random rand,ThreePoint nodal, int i)
 	{
 		Bonanza hooray = new Bonanza(rand.nextInt(6)+1,rand.nextInt(6)+1,rand.nextInt(6)+1);
 		hooray.rotateX(rand.nextInt(180)-90);
@@ -170,7 +255,7 @@ public class Vein implements Serializable
 				point = null;
 				point = ellipsoid[j];
 				offset = null;
-				offset = nodal.get(i);
+				offset = nodal;
 				//DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
 				//DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
 				//DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
