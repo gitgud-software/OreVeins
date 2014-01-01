@@ -79,6 +79,7 @@ public final class ChunkGenListener implements Listener
 				}
 			}
 		}
+		RWObj.deleteChunkInfo(key);
 		//DebugLogger.console("adding old veins");
 	return theVeins;//return veins, null or not
 	}
@@ -112,7 +113,7 @@ public final class ChunkGenListener implements Listener
 		}
 	}
 	
-	private void removeStone(Chunk chunk)
+	/*private void removeStone(Chunk chunk)
 	{
 		Block block;
 		for (int x = 0; x < 16; x++)
@@ -134,7 +135,7 @@ public final class ChunkGenListener implements Listener
 				}
 			}
 		}
-	}
+	}*/
 	
 	private void removeOres(Chunk chunk)
 	{

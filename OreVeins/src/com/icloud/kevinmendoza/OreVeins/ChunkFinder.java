@@ -16,13 +16,9 @@ public class ChunkFinder
 	}
 	public TwoPoint findchunk(World world, int end) 
 	{
-		int xoffset;
-		int zoffset;
-		int xneg;
-		int zneg;
 		Random rand = new Random();
 		int it=0;
-		double phi, theta;
+		double theta;
 		int x,z,radius;
 		while(true)
 		{

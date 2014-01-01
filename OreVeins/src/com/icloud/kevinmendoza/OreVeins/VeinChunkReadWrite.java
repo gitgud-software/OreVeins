@@ -11,11 +11,11 @@ import java.io.ObjectOutputStream;
 public class VeinChunkReadWrite 
 {
 	
-	public void deleteChunkInfo(TwoPoint chunk)
+	public void deleteChunkInfo(String key)
 	{
 		try
 		{
-    		File file = new File("plugins/OreVeins/ChunkInfo/"+ chunk.location() +".txt");
+    		File file = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
     		if(file.delete())
     		{
     			DebugLogger.console(file.getName() + " is deleted!");
