@@ -131,6 +131,7 @@ public class VeinChunkReadWrite
 	
 	public void writeStringer(Stringer stringer, String key)
 	{
+		ArrayList<Stringer> stringers = new ArrayList<Stringer>();
 		try 
 		{
 			//DebugLogger.console("Fetching "+ entry);
@@ -139,7 +140,6 @@ public class VeinChunkReadWrite
 			Object obj =  ois.readObject();
 			ois.close();
 			fin.close();
-			ArrayList<Stringer> stringers = new ArrayList<Stringer>();
 			if(obj!=null)
 			{
 				if(stringers.getClass() == obj.getClass())
@@ -147,11 +147,18 @@ public class VeinChunkReadWrite
 					stringers = (ArrayList<Stringer>) obj;
 				}
 			}
-			stringers.add(stringer);
 			deleteStringer(key);
+		}
+		catch (Exception ex)
+		{
+			
+		}
+		try{
+			
+			stringers.add(stringer);
 			File veinFile = new File("plugins/OreVeins/StringerInfo/"+ key +".txt");
 			veinFile.createNewFile();
-			FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/ChunkInfo/"+key+".txt");
+			FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/StringerInfo/"+key+".txt");
 			ObjectOutputStream chunkOut = new ObjectOutputStream(chunkdir);
 			chunkOut.writeObject(stringers);
 			chunkdir.close();
@@ -159,11 +166,11 @@ public class VeinChunkReadWrite
 		}
 		catch (Exception ex)
 		{
-			DebugLogger.console("Couldn't save vein. Dir is missing");
+			DebugLogger.console("Couldn't save vein. Dir is missing" +ex.toString());
 		}
 	}
 
-	private void deleteStringer(String key) 
+	public void deleteStringer(String key) 
 	{
 		try
 		{

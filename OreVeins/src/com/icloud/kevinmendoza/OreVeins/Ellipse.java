@@ -1,11 +1,10 @@
 package com.icloud.kevinmendoza.OreVeins;
 
-import java.io.Serializable;
 
 //this class creates a little chunk of blocks according to the ellipse formula
 //it also uses rotation matrix rules to rotate the formed blocks on three different coordinate axes
 
-public class Ellipse extends Shape implements Serializable
+public class Ellipse extends Shape
 {
 	public Ellipse(int a, int b)
 	{

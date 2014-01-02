@@ -1,7 +1,9 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+import java.io.Serializable;
 
-public class Shape 
+
+public class Shape implements Serializable
 
 {
 	int a;

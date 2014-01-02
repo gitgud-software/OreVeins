@@ -1,9 +1,14 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Bonanza extends Shape
 {
 	public Bonanza(int a, int b, int c)
 	{
+		Random rand = new Random();
+		//bonanza's are ellipsoids
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -30,6 +35,28 @@ public class Bonanza extends Shape
 				}
 			}
 		}
-		
+		rotateX(rand.nextInt(180)-90);
+		rotateY(rand.nextInt(180)-90);
+		rotateZ(rand.nextInt(180)-90);
+		this.points = returnList();
+	}
+	private ThreePoint[] returnList()
+	{
+		ArrayList<ThreePoint> lePoints = new ArrayList<ThreePoint>();
+		for(int i=0;i<this.points.length;i++)
+		{
+			if(this.points[i]!=null)
+			{
+				ThreePoint newPoint = new ThreePoint(this.points[i].x,
+						this.points[i].y,this.points[i].z);
+				lePoints.add(newPoint);
+			}
+		}
+		ThreePoint[] finalReturn = new ThreePoint[lePoints.size()];
+		for(int i=0;i<lePoints.size();i++)
+		{
+			finalReturn[i] = lePoints.get(i);
+		}
+		return  finalReturn;
 	}
 }

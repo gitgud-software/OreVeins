@@ -27,17 +27,20 @@ public class Vein implements Serializable
 	public int bonanza;
 	public int branch;
 	public int contin;
+	public int cross;
 	public ThreePoint startpoint;
 	public ThreePoint endpoint;
 	//what ore the vein is made of
 	private ArrayList<ThreePoint> theOres;// an initial list of all the points that need to be placed of the vein,
 	//even the ones not in the current chunk
 	//this constructor is for all ores who's base is a line
-	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore, String second, Random rand)
+	public Vein(TwoPoint startChunk, TwoPoint endChunk, String ore, String second, Random rand, int grade, int branch, int bonanza, int cross)
 	{
+		this.cross = cross;
+		this.branch = branch;
 		this.contin = 30;
-		this.grade = 10;
-		this.bonanza = 30;
+		this.grade = grade;
+		this.bonanza = bonanza;
 		this.chunkMap = new HashMap<String,String[][][]>();
 		this.theOres = new ArrayList<ThreePoint>();
 		this.ore = ore;
@@ -50,11 +53,11 @@ public class Vein implements Serializable
 			start = new ThreePoint();
 			end = new ThreePoint();
 		}
-		start.x = start.x + startChunk.x*16;
-		start.z = start.z + startChunk.z*16;
-		end.x = end.x + endChunk.x*16;
-		end.z = end.z + endChunk.z*16;
-		if(this.ore.contains("GOLD") || this.ore.contains("Redstone") || this.ore.contains("Iron"))
+		start.x +=startChunk.x*16;
+		start.z +=startChunk.z*16;
+		end.x +=endChunk.x*16;
+		end.z +=endChunk.z*16;
+		if(this.ore.contains("GOLD") || this.ore.contains("REDSTONE") || this.ore.contains("IRON"))
 		{
 			hydroVein(rand, start, end);
 		}
@@ -80,8 +83,18 @@ public class Vein implements Serializable
 	//this constructor is for stringer veins
 	private void hydroStringer(Random rand, ThreePoint start)
 	{
-		
-		
+		String oRe = "REDSTONE";
+		int cRoss = this.cross/2;
+		if (cRoss<1)
+			cRoss = 1;
+		int gRade = this.grade/2;
+		if (gRade<1)
+			gRade = 1;
+		int bOnanza = this.bonanza /2;
+		if(bOnanza<5)
+			bOnanza = 15;
+		int bRanch = this.branch*2;
+		Stringer S = new Stringer(rand, start,oRe,gRade,bOnanza, bRanch,cRoss,3);
 	}
 	
 	private void metaSedBed()
@@ -108,7 +121,7 @@ public class Vein implements Serializable
 				y+=offset.y;
 				z+=offset.z;//move the vein sideways
 			}
-			A = 2*rand.nextInt(this.grade)+2;
+			A = rand.nextInt(this.cross)+2;
 			b = rand.nextInt(A)-1;
 			if(b<1)
 				b=1;
@@ -128,6 +141,10 @@ public class Vein implements Serializable
 				centers.get(i).x+=x;
 				centers.get(i).y+=y;
 				centers.get(i).z+=z;
+				if(rand.nextInt(this.branch)==0)
+				{
+					hydroStringer(rand, centers.get(i));
+				}
 				if(rand.nextInt(this.bonanza)==0)//a little bonanza surprise for the miners
 				{
 					bonanza(rand, centers.get(i), i);
@@ -145,9 +162,9 @@ public class Vein implements Serializable
 		{
 			if(rand.nextInt(150)==0)
 			{
-				offset.x=rand.nextInt(70)-35;
-				offset.y=rand.nextInt(70)-35;
-				offset.z=rand.nextInt(70)-35;
+				offset.x=rand.nextInt(40)-20;
+				offset.y=rand.nextInt(40)-20;
+				offset.z=rand.nextInt(40)-20;
 			}	
 			return offset;
 		}
@@ -155,9 +172,9 @@ public class Vein implements Serializable
 		{
 			if(rand.nextInt(100)==0)
 			{
-				offset.x=rand.nextInt(50)-25;
-				offset.y=rand.nextInt(50)-25;
-				offset.z=rand.nextInt(50)-25;
+				offset.x=rand.nextInt(30)-15;
+				offset.y=rand.nextInt(30)-15;
+				offset.z=rand.nextInt(30)-15;
 			}
 			return offset;
 		}
@@ -165,9 +182,9 @@ public class Vein implements Serializable
 		{
 			if(rand.nextInt(200)==0)
 			{
-				offset.x=rand.nextInt(30)-15;
-				offset.y=rand.nextInt(30)-15;
-				offset.z=rand.nextInt(30)-15;
+				offset.x=rand.nextInt(20)-10;
+				offset.y=rand.nextInt(20)-10;
+				offset.z=rand.nextInt(20)-10;
 			}
 			return offset;
 		}
@@ -197,13 +214,13 @@ public class Vein implements Serializable
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
-		int divisions = (int)Math.sqrt((vx*vx) + (vy*vy) + (vz*vz)); 
-		divisions =	(int)(((double)divisions)/(2.5*Math.sqrt(divisions)));
+		int divisions = (int) Math.sqrt(vx*vx + vy*vy + vz*vz);
+		divisions = divisions/10;
 		int x = start.x, y = start.y, z = start.z;
 		int vxr = vx/divisions;
 		int vyr = vy/divisions;
 		int vzr = vz/divisions;
-		ThreePoint[] Bzs = new ThreePoint[divisions+1];
+		ThreePoint[] Bzs = new ThreePoint[divisions];
 		Bzs[0]=start;
 		for(int i=1;i<divisions;i++)
 		{
@@ -212,8 +229,6 @@ public class Vein implements Serializable
 			z+=vzr;
 			Bzs[i] = new ThreePoint(x,y,z);
 		}
-		Bzs[Bzs.length-1]=end;
-		
 		ThreePoint[] centers = new ThreePoint[Bzs.length];
 		centers[0]= Bzs[0];
 		centers[Bzs.length-1]= Bzs[Bzs.length-1];
@@ -221,7 +236,7 @@ public class Vein implements Serializable
 		x=0;y=0;z=0;
 		double phi=0.0, theta=0.0;
 		 radius = rand.nextInt(20);
-		for(int i =1;i<Bzs.length-1;i++)
+		for(int i =1;i<Bzs.length;i++)
 		{
 			//DebugLogger.console("r is" + r);
 			 while(y>128)
@@ -236,14 +251,15 @@ public class Vein implements Serializable
 			centers[i]= new ThreePoint(x+Bzs[i].x,y +Bzs[i].y,z+Bzs[i].z);
 			radius = biomeRadius(centers[i], rand);
 		}
-		int n,count=0;double t=0;
+		int count=0;double t=0;
+		int n = centers.length-1;
+		
 		ThreePoint[] nodes = new ThreePoint[16];
 		while(t<=1)
 		{
 			x=0;
 			y=0;
 			z=0;
-			n = centers.length-1;
 			for(int i=0;i<=n;i++)
 			{
 				x+=binomialCoefficient(n,i)*centers[i].x*Math.pow((1-t), n-i) * Math.pow(t, i);
@@ -270,6 +286,7 @@ public class Vein implements Serializable
 	    int result = top/bottom;
 	    return result;
 	}
+	
 	 
 	private void crossSectionPlace(ThreePoint[] crossSection, ThreePoint nodal,Random rand)
 	{
@@ -279,16 +296,9 @@ public class Vein implements Serializable
 		{
 			if(crossSection[j]!=null)//as long as the point of the ellipse object exists
 			{
-				point = null;
 				point = crossSection[j];
-				offset = null;
 				offset = nodal;
-				//DebugLogger.console("size of little ellipses is" + littleEllipses.length+ "current iteration is "+ j);
-				//DebugLogger.console("Ellipse is not null, so heres x y and z" + point.x + " " + point.y + " " + point.z);
-				//DebugLogger.console("offset is : "+ offset.x + " "+offset.y + " "+ offset.z);
 				ThreePoint point2 = new ThreePoint(offset.x + point.x,offset.y + point.y,offset.z + point.z);
-				//get the point from the ellipse object and add the offset
-				//from the line object
 				if(point2.y>2 && point2.y < 128)
 				{
 					if(!this.theOres.contains(point2) && rand.nextInt(this.grade)==0)
