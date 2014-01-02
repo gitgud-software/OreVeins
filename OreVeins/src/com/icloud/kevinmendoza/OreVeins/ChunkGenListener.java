@@ -81,7 +81,7 @@ public final class ChunkGenListener implements Listener
 
 	private String[][][] addNewVein(Chunk chunk, Random rand)
 	{
-		int goldProb = 5;
+		int goldProb = 100;
 		ChunkFinder finder = new ChunkFinder(chunk,rand);//find a nice empty chunk to settle down in 
 		//and have kids (aka for the endpoint of the line)
 		int end = 10;//the ten is the max chunk length a vein can be

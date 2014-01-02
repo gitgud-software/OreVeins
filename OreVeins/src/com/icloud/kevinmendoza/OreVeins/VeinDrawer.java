@@ -109,6 +109,7 @@ public class VeinDrawer {
 					offset = stringer.theOres.get(j);
 					if(rand.nextInt(stringer.branch)==0 && stringer.max >0)
 					{
+						//DebugLogger.console("max iterate" +stringer.max);
 						Stringer st = new Stringer(rand, stringer.theOres.get(j),stringer.ore,
 								stringer.grade,stringer.bonanza, stringer.branch, stringer.cross,stringer.max-1);
 					}
@@ -142,7 +143,10 @@ public class VeinDrawer {
 							//DebugLogger.console("the ore is "+stringer.ore);
 							if(stringer.ore.contains("GOLD"))
 							{
-								block.setType(Material.GOLD_ORE);
+								//if(block.getType().compareTo(Material.STONE)==0)
+								//{
+									block.setType(Material.GOLD_ORE);
+								//}
 							}
 							else if(stringer.ore.contains("IRON"))
 							{

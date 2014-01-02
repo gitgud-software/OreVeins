@@ -83,7 +83,7 @@ public class Vein implements Serializable
 	//this constructor is for stringer veins
 	private void hydroStringer(Random rand, ThreePoint start)
 	{
-		String oRe = "REDSTONE";
+		String oRe = "GOLD";
 		int cRoss = this.cross/2;
 		if (cRoss<1)
 			cRoss = 1;
@@ -94,7 +94,7 @@ public class Vein implements Serializable
 		if(bOnanza<5)
 			bOnanza = 15;
 		int bRanch = this.branch*2;
-		Stringer S = new Stringer(rand, start,oRe,gRade,bOnanza, bRanch,cRoss,3);
+		Stringer S = new Stringer(rand, start,oRe,gRade,bOnanza, bRanch,cRoss,rand.nextInt(5));
 	}
 	
 	private void metaSedBed()
