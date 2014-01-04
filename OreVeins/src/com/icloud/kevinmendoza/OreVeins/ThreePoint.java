@@ -7,6 +7,10 @@ import java.util.Random;
 ThreePoint and TwoPoint coordinates are NOT the same! */
 
 public class ThreePoint implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7131069884437564212L;
 	public int x;
 	public int y;
 	public int z;

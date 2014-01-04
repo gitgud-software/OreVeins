@@ -1,21 +1,99 @@
 package com.icloud.kevinmendoza.OreVeins;
 
-import java.io.Serializable;
+import java.util.Random;
 
 
-public class Shape implements Serializable
+public class Shape
 
 {
-	int a;
-	int b;
-	int c;
-	public double Xrot,Yrot,Zrot;
 	public ThreePoint points[];
+	
+	public void ellipse(int a, int b)
+	{
+		if(a<1)
+			a=1;
+		if(b<1)
+			b=1;
+		ThreePoint[] temp;
+		if(b>a)
+			temp = new ThreePoint[4*b*b*b+1];
+		else
+			temp = new ThreePoint[4*a*a*a+1];
+		
+		int bb = b*b, aa=a*a,count=0; double bigX,bigY;
+		for(int x=-a;x<=a;x++)
+		{
+			for(int y=-b;y<=b;y++)
+			{
+				bigX = ((double)(x*x) / (double)aa);
+				bigY = ((double)(y*y) / (double)bb);
+				if(1 >= (bigX+bigY))
+				{
+					ThreePoint point = new ThreePoint(x,y,1);
+					temp[count] = point;
+					count++;
+				}
+			}
+		}
+	concantenate(temp);
+	}
+	
+	public void ellipsoid(int a, int b, int c)
+	{
+		//bonanza's are ellipsoids
+		
+		int aa =a*a, bb=b*b,cc=c*c, count=0;
+		double XX,YY,ZZ;
+		ThreePoint[] temp= new ThreePoint[(a*b*c*8)];
+		//DebugLogger.console("the dimensions are "+a+" "+b+ " "+c+ " "+" the size is then "+(a*b*c)*8);
+		for(int x=-a;x<a;x++)
+		{
+			for(int y=-b;y<b;y++)
+			{
+				for(int z=-c;z<c;z++)
+				{
+					XX = x*x / aa;
+					YY = y*y/bb;
+					ZZ = z*z/cc;
+					if(1>= XX+YY+ZZ)
+					{
+						ThreePoint thepoint = new ThreePoint(x,y,z);
+						//DebugLogger.console(" "+count);
+						temp[count] = thepoint;
+						count++;
+					}
+				}
+			}
+		}
+	concantenate(temp);
+	}
+
+	private void concantenate(ThreePoint[] temp)
+	{
+		int count = 0;
+		for(int i=0;i<temp.length;i++)
+		{
+			if(temp[i]!=null)
+			{
+				count++;
+			}
+		}
+		this.points = new ThreePoint[count+1];
+		int newLength = count;
+		count =0;
+		for(int i=0;i<newLength;i++)
+		{
+			if(temp[i]!=null)
+			{
+				this.points[count] = temp[i];
+				count++;
+			}
+		}
+	}
+	
 	public void rotateX(double theta)
 	{
-		
 		double tau = Math.toRadians(theta);
-		this.Xrot = tau;
 		double yprime; double zprime;
 		for(int i=0;i<this.points.length;i++)
 		{
@@ -34,7 +112,6 @@ public class Shape implements Serializable
 	public void rotateY(double theta)
 	{
 		double tau = Math.toRadians(theta);
-		this.Yrot = tau;
 		double xprime; double zprime;
 		for(int i=0;i<points.length;i++)
 		{
@@ -53,7 +130,6 @@ public class Shape implements Serializable
 	public void rotateZ(double theta)
 	{
 		double tau = Math.toRadians(theta);
-		this.Zrot = tau;
 		double xprime; double yprime;
 		for(int i=0;i<points.length;i++)
 		{
@@ -67,6 +143,13 @@ public class Shape implements Serializable
 				//DebugLogger.console("Z the point is "+points[i].x +" "+ points[i].y + " "+ points[i].z);
 			}
 		}
+	}
+
+	public void rotateRandom(Random rand) 
+	{
+		rotateY(Math.toRadians(rand.nextInt(180)-90));
+		rotateX(Math.toRadians(rand.nextInt(180)-90));
+		rotateZ(Math.toRadians(rand.nextInt(180)-90));
 	}
 
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class VeinChunkReadWrite 
 {
 	
-	public void deleteChunkInfo(String key)
+	public static void deleteChunkInfo(String key)
 	{
 		try
 		{
@@ -32,7 +32,7 @@ public class VeinChunkReadWrite
     	}
 	}
 	
-	public void writeChunkInfo(String key,String[][][] theOtherArray)
+	public static void writeChunkInfo(String key,String[][][] theOtherArray)
 	{
 			try 
 			{
@@ -51,7 +51,7 @@ public class VeinChunkReadWrite
 		
 	}
 
-	public String[][][] readChunks(String entry)
+	public static String[][][] readChunks(String entry)
 	{
 		try 
 		{
@@ -89,65 +89,30 @@ public class VeinChunkReadWrite
 			return null;
 		}
 	}
-	
-	public ArrayList<Stringer> readStringer(String key)
-	{
-		try 
-		{
-			//DebugLogger.console("Fetching "+ entry);
-			FileInputStream fin = new FileInputStream("plugins/OreVeins/StringerInfo/"+ key + ".txt");
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			Object obj =  ois.readObject();
-			ois.close();
-			fin.close();
-			ArrayList<Stringer> str = new ArrayList<Stringer>();
-			if(str.getClass() == obj.getClass() )
-			{
-				try
-				{
-					ArrayList<Stringer> stringers = (ArrayList<Stringer>) obj;
-					//DebugLogger.console("successful fetch!");
-					return stringers;
-				}
-				catch (Exception e)
-				{
-					DebugLogger.console("ERROR!!1");
-					return null;
-				}
 
-			}
-			else
-			{
-				DebugLogger.console("ERROR!!2");
-				return null;
-			}
-		}
-		catch (Exception ex)
-		{
-			//DebugLogger.console("ERROR!!3");
-			return null;
-		}
-	}
-	
-	public void writeStringer(Stringer stringer, String key)
+	public static void writeEndPoint(ThreePoint threePoint, String ore, int grade, int branch, int cross, int bonanza) 
 	{
-		ArrayList<Stringer> stringers = new ArrayList<Stringer>();
+		VeinStartPoint seed = new VeinStartPoint(threePoint,ore,grade,branch,cross,bonanza);// TODO Auto-generated method stub
+		ArrayList<VeinStartPoint> test = new ArrayList<VeinStartPoint>();
+		String chx = new Integer(threePoint.x>>4).toString();
+		String chz = new Integer(threePoint.z>>4).toString();
+		String key = chx + ":" + chz;
 		try 
 		{
 			//DebugLogger.console("Fetching "+ entry);
-			FileInputStream fin = new FileInputStream("plugins/OreVeins/StringerInfo/"+ key + ".txt");
+			FileInputStream fin = new FileInputStream("plugins/OreVeins/VeinInfo/"+ key + ".txt");
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			Object obj =  ois.readObject();
 			ois.close();
 			fin.close();
 			if(obj!=null)
 			{
-				if(stringers.getClass() == obj.getClass())
+				if(test.getClass() == obj.getClass())
 				{
-					stringers = (ArrayList<Stringer>) obj;
+					test = (ArrayList<VeinStartPoint>) obj;
 				}
 			}
-			deleteStringer(key);
+			deletePoints(key);
 		}
 		catch (Exception ex)
 		{
@@ -155,26 +120,61 @@ public class VeinChunkReadWrite
 		}
 		try{
 			
-			stringers.add(stringer);
-			File veinFile = new File("plugins/OreVeins/StringerInfo/"+ key +".txt");
+			test.add(seed);
+			File veinFile = new File("plugins/OreVeins/VeinInfo/"+ key +".txt");
 			veinFile.createNewFile();
-			FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/StringerInfo/"+key+".txt");
+			FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/VeinInfo/"+key+".txt");
 			ObjectOutputStream chunkOut = new ObjectOutputStream(chunkdir);
-			chunkOut.writeObject(stringers);
+			chunkOut.writeObject(test);
 			chunkdir.close();
 			chunkOut.close();
 		}
 		catch (Exception ex)
 		{
-			DebugLogger.console("Couldn't save vein. Dir is missing" +ex.toString());
+			DebugLogger.console("Couldn't save veinseed. Dir is missing" +ex.toString());
 		}
 	}
 
-	public void deleteStringer(String key) 
+	public static ArrayList<VeinStartPoint> readOutPoints(String key)
+	{
+		try 
+		{
+			//DebugLogger.console("Fetching "+ entry);
+			ArrayList<VeinStartPoint> test = new ArrayList<VeinStartPoint>();
+			FileInputStream fin = new FileInputStream("plugins/OreVeins/VeinInfo/"+ key + ".txt");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			Object obj =  ois.readObject();
+			ois.close();
+			fin.close();
+			if(obj!=null)
+			{
+				if(test.getClass() == obj.getClass())
+				{
+					test = (ArrayList<VeinStartPoint>) obj;
+					return test;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception ex)
+		{
+			return null;
+		}
+		
+	}
+	
+	public static void deletePoints(String key) 
 	{
 		try
 		{
-    		File file = new File("plugins/OreVeins/StringerInfo/"+ key +".txt");
+    		File file = new File("plugins/OreVeins/VeinInfo/"+ key +".txt");
     		if(file.delete())
     		{
     			//DebugLogger.console(file.getName() + " is deleted!");

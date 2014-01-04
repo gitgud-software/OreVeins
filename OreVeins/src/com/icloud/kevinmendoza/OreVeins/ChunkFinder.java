@@ -30,7 +30,7 @@ public class ChunkFinder
 		while(true)
 		{
 			radius = end;
-			theta = ((double)this.rand.nextInt(628)-314.0)/100.0;	
+			theta = ((double)this.rand.nextInt(628)-314)/100.0;	
 			x = (int)(radius*Math.cos(theta));
 			z = (int)(radius*Math.sin(theta));
 			if(!Bukkit.getWorlds().get(0).isChunkLoaded(this.x + x, this.z+ z)) //Not currently loaded
