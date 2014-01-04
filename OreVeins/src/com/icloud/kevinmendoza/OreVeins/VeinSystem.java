@@ -34,59 +34,62 @@ public class VeinSystem
 
 	private void createAndAddVein(int newStrike,ThreePoint start,Random rand) 
 	{
-		int A,B,C;
-		A = (int) ((double)this.branch*0.5*Math.pow(rand.nextGaussian(),2));
-		B = (int) ((double)(this.averageGrade)*0.5*Math.pow(rand.nextGaussian(),2));
-		C = (int) ((double)this.bonanza*0.5*Math.pow(rand.nextGaussian(),2));
-		int randomBranch  =  A + this.branch;
-		int randomGrade   =  B + this.averageGrade/2+2;
-		int randomBonanza =  C + this.bonanza;
-		Vein vein = new Vein(start, newStrike, randomBranch, randomGrade, randomBonanza, rand, rand.nextInt(this.averageGrade/7 + 4)+2);
-		DebugLogger.console("making new vein with strike, bonanza, grade" +newStrike+" "+randomBonanza +" "+ randomGrade);
-		ArrayList<ThreePoint> nodes = new ArrayList<ThreePoint>();
-		if(vein.centers!=null)
+		if(newStrike >3 )
 		{
-			int prob = vein.branch;
-			for(int i=0;i<vein.centers.size();i++)
+			int A,B,C;
+			A = (int) ((double)this.branch*0.5*Math.pow(rand.nextGaussian(),2));
+			B = (int) ((double)(this.averageGrade)*0.5*Math.pow(rand.nextGaussian(),2));
+			C = (int) ((double)this.bonanza*0.5*Math.pow(rand.nextGaussian(),2));
+			int randomBranch  =  A + this.branch;
+			int randomGrade   =  B + this.averageGrade/2+2;
+			int randomBonanza =  C + this.bonanza;
+			Vein vein = new Vein(start, newStrike, randomBranch, randomGrade, randomBonanza, rand, rand.nextInt(this.averageGrade/7 + 4)+2);
+			DebugLogger.console("making new vein with strike, bonanza, grade" +newStrike+" "+randomBonanza +" "+ randomGrade);
+			ArrayList<ThreePoint> nodes = new ArrayList<ThreePoint>();
+			if(vein.centers!=null)
 			{
-				
-				//bonanza adding code
-				if(rand.nextInt(vein.bonanza)==0)
+				int prob = vein.branch;
+				for(int i=0;i<vein.centers.size();i++)
 				{
-					Shape shapeObj = new Shape();
-					shapeObj.ellipsoid(rand.nextInt(this.averageGrade/7 + 1)+1,
-					rand.nextInt(this.averageGrade/7 + 1)+1, rand.nextInt(this.averageGrade/7 + 1)+1);
-					shapeObj.rotateRandom(rand);
-					for(int j = 0;j<shapeObj.points.length;j++)
+
+					//bonanza adding code
+					if(rand.nextInt(vein.bonanza)==0)
 					{
-						addInPoints(shapeObj.points[j],vein.centers.get(i));
-					}
-				}
-				else//add in points like normal
-				{
-					for(int j = 0;j<vein.cross.length;j++)
-					{
-						if(rand.nextInt(vein.grade)==0)
+						Shape shapeObj = new Shape();
+						shapeObj.ellipsoid(rand.nextInt(this.averageGrade/7 + 1)+1,
+								rand.nextInt(this.averageGrade/7 + 1)+1, rand.nextInt(this.averageGrade/7 + 1)+1);
+						shapeObj.rotateRandom(rand);
+						for(int j = 0;j<shapeObj.points.length;j++)
 						{
-							addInPoints(vein.cross[j],vein.centers.get(i));
+							addInPoints(shapeObj.points[j],vein.centers.get(i));
 						}
 					}
+					else//add in points like normal
+					{
+						for(int j = 0;j<vein.cross.length;j++)
+						{
+							if(rand.nextInt(vein.grade)==0)
+							{
+								addInPoints(vein.cross[j],vein.centers.get(i));
+							}
+						}
+					}
+					//branching vein code
+					if(rand.nextInt(prob)==0)
+					{
+						nodes.add(vein.centers.get(i));
+					}
 				}
-				//branching vein code
-				if(rand.nextInt(prob)==0)
+				//if more than one node was added, make another vein
+				if(nodes.size()>1)
 				{
-					nodes.add(vein.centers.get(i));
-				}
+					for(int i=0;i<nodes.size();i++)
+					{
+						int randomStrike = rand.nextInt((int)((double)(newStrike)*0.75))+2;
+						createAndAddVein( randomStrike,nodes.get(i),rand);
+					}
+				}	
 			}
-			//if more than one node was added, make another vein
-			if(nodes.size()>1)
-			{
-				for(int i=0;i<nodes.size();i++)
-				{
-					int randomStrike = rand.nextInt((int)((double)(newStrike)*0.75))+2;
-					createAndAddVein( randomStrike,nodes.get(i),rand);
-				}
-			}	
 		}
 	}
 	
