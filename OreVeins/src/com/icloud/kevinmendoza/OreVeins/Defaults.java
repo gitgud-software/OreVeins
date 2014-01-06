@@ -1,6 +1,9 @@
 package com.icloud.kevinmendoza.OreVeins;
 
+import geometryClasses.OreInfo;
+
 import java.util.HashMap;
+
 
 public class Defaults 
 {

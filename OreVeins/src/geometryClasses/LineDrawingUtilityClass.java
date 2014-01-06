@@ -1,9 +1,10 @@
-package com.icloud.kevinmendoza.OreVeins;
+package geometryClasses;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+
 
 public class LineDrawingUtilityClass 
 {

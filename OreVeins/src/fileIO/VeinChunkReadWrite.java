@@ -1,7 +1,12 @@
-package com.icloud.kevinmendoza.OreVeins;
+package fileIO;
 //this is the IO write to file class
 //for some reason, delete doesn't work :/
 //annd yeah, i mean its pretty simple
+import geometryClasses.LineDrawingUtilityClass;
+import geometryClasses.ThreePoint;
+import geometryClasses.TwoPoint;
+import geometryClasses.VeinStartPoint;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
 public class VeinChunkReadWrite 
 {
@@ -250,7 +258,7 @@ public class VeinChunkReadWrite
 		
 	}
 	
-	public static String[][][] parseCenters(TwoPoint chunk, String ore, ArrayList<ThreePoint> centers)
+	public static void parseCenters(TwoPoint chunk, String ore, ArrayList<ThreePoint> centers)
 	{
 		HashMap<String,String[][][]> allPoints    = new HashMap<String,String[][][]>();
 		for(int i =0;i<centers.size();i++)
@@ -281,56 +289,45 @@ public class VeinChunkReadWrite
 				}
 			}
 		}
-		String key = LineDrawingUtilityClass.convertToKey(chunk);
 		for(String entry: allPoints.keySet())
 		{
-			if(!key.contains(entry))
-			{
-				if(isChunkLoaded(entry)==0)
-				{
-					//DebugLogger.console("chunk is loaded" + entry);
-					if(loadedMap==null)
-					{
-						loadedMap = new HashMap<String,String[][][]>();
-					}
-					loadedMap.put(entry, allPoints.get(entry));
-				}
-				else if(isChunkLoaded(entry)==1)
-				{
-					//DebugLogger.console("chunk is not loaded but exists"+entry);
-					writeChunkInfo(entry, allPoints.get(entry),false);
-				}
-				else
-				{
-					//DebugLogger.console("chunk is not loaded and not generated" + entry);
-					writeChunkInfo(entry, allPoints.get(entry),true);
-				}
-			}
+			partitionChunkInfo(entry, allPoints.get(entry));
 		}
-		return allPoints.get(key);
 	}
 	
-	private static int isChunkLoaded(String key)
+	private static void partitionChunkInfo(String key,String[][][] partition)
 	{
 		String delims = "[:]";
 		String[] tokens = key.split(delims);
 		int x = Integer.parseInt(tokens[0]);
 		int z = Integer.parseInt(tokens[1]);
-		if(!Bukkit.getWorlds().get(0).isChunkLoaded(x, z)) //Not currently loaded
+		if(Bukkit.getWorlds().get(0).isChunkLoaded(x, z)) //returns true if loaded
 		{	
-			if(Bukkit.getWorlds().get(0).loadChunk(x,  z,false))
+			Chunk testChunk = Bukkit.getWorlds().get(0).getChunkAt(x,z);
+			if(testChunk.getBlock(1, 1, 1)==null)//is not populated, save to file
 			{
-				Bukkit.getWorlds().get(0).unloadChunk(x,  z);
-				return 1;//chunk is not loaded but exists
+				writeChunkInfo(key, partition,true);
 			}
-			else
+			else//is populated and loaded
 			{
-				return 2;//chunk is not loaded and not generated
+				if(loadedMap==null)
+				{
+					loadedMap = new HashMap<String,String[][][]>();
+				}
+				loadedMap.put(key, partition);
 			}
 		}
-		else
+		else//not loaded
 		{
-			return 0;//chunk is loaded
+			if(Bukkit.getWorlds().get(0).loadChunk(x,z,false))//true, is populated
+			{
+				Bukkit.getWorlds().get(0).unloadChunk(x,z);
+				writeChunkInfo(key, partition,false);
+			}
+			else//false, not populated
+			{
+				writeChunkInfo(key, partition,true);
+			}
 		}
 	}
 }

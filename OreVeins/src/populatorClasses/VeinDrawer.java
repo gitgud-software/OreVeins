@@ -1,8 +1,10 @@
-package com.icloud.kevinmendoza.OreVeins;
+package populatorClasses;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 /*this vein drawer class draws any ores within a 3d string object array
  * such simple, so block, much craft, shine daimond!
  * 

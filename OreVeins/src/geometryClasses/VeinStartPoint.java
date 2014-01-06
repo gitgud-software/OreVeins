@@ -1,6 +1,7 @@
-package com.icloud.kevinmendoza.OreVeins;
+package geometryClasses;
 
 import java.io.Serializable;
+
 
 public class VeinStartPoint implements Serializable{
 	/**

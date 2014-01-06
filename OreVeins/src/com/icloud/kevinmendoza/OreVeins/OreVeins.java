@@ -1,11 +1,10 @@
 package com.icloud.kevinmendoza.OreVeins;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import listeners.ChunkLoadListener;
+import listeners.WorldListener;
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -15,7 +14,6 @@ public final class OreVeins extends JavaPlugin
 		// TODO Insert logic to be performed when the plugin is enabled
 		getLogger().info("onEnable has been invoked!");
 		popFileTree();
-		getServer().getPluginManager().registerEvents(new ChunkGenListener(), this);
 		getServer().getPluginManager().registerEvents(new ChunkLoadListener(), this);
 		getServer().getPluginManager().registerEvents(new WorldListener(),this);
 	}
@@ -34,14 +32,16 @@ public final class OreVeins extends JavaPlugin
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
 		File StringerInfo = new File("plugins/OreVeins/PrevChunkInfo");
-		try{
+		try
+		{
 			Ovein.mkdir();
 			config.createNewFile();
 			ChunkInfo.mkdir();
 			VeinInfo.mkdir();
 			StringerInfo.mkdir();
 		}
-		catch (IOException e){ //Hooray for horrible programming practices!
+		catch (IOException e)
+		{ //Hooray for horrible programming practices!
 			DebugLogger.console("Whoopsie! File creation failed!");
 			e.printStackTrace();
 			onDisable();

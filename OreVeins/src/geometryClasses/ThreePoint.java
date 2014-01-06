@@ -1,4 +1,4 @@
-package com.icloud.kevinmendoza.OreVeins;
+package geometryClasses;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -24,7 +24,7 @@ public class ThreePoint implements Serializable{
 	{
 		Random rand = new Random();
 		this.x =rand.nextInt(16);
-		this.y =rand.nextInt(128);
+		this.y =rand.nextInt(125)+2;
 		this.z =rand.nextInt(16);
 	}
 @Override	

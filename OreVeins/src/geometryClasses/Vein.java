@@ -1,8 +1,11 @@
-package com.icloud.kevinmendoza.OreVeins;
+package geometryClasses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+
+import fileIO.VeinChunkReadWrite;
 
 public class Vein 
 {
@@ -22,7 +25,7 @@ public class Vein
 		this.endPoint = new ThreePoint(startPoint.x+60, 127, startPoint.z+60);
 		ArrayList<ThreePoint> line = LineDrawingUtilityClass.bezierCurve(startPoint,this.endPoint, rand);
 		addCrossSection(line);
-		this.currentstuff = VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
+		VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
 	}
 	
 	private void addCrossSection(ArrayList<ThreePoint> line)
@@ -42,10 +45,6 @@ public class Vein
 				{
 					//DebugLogger.console("adding point!!"+ y);
 					this.centers.add(newPoint);
-				}
-				else
-				{
-					//DebugLogger.console("duplicate?");
 				}
 			}
 		}

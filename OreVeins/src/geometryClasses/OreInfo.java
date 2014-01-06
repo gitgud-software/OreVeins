@@ -1,4 +1,4 @@
-package com.icloud.kevinmendoza.OreVeins;
+package geometryClasses;
 
 public class OreInfo 
 {
