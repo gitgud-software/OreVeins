@@ -8,14 +8,14 @@ public final class ChunkLoadListener implements Listener
 {
 
 	@EventHandler
-	public void onGenerate(ChunkLoadEvent event) 
+	public void onLoad(ChunkLoadEvent event) 
 	{
 		if(!event.isNewChunk())
 		{
 			String[][][] draw =	VeinChunkReadWrite.readChunks(LineDrawingUtilityClass.convertToKey(event.getChunk().getX(), event.getChunk().getZ()), false);
 			if(draw !=null)
 			{
-				DebugLogger.console("Drawing veins in existing chunk");
+				//DebugLogger.console("Drawing veins in existing chunk");
 				VeinDrawer.drawVein(draw, event.getChunk());
 				
 			}

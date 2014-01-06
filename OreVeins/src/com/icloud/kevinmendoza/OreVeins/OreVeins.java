@@ -1,6 +1,11 @@
 package com.icloud.kevinmendoza.OreVeins;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -12,6 +17,7 @@ public final class OreVeins extends JavaPlugin
 		popFileTree();
 		getServer().getPluginManager().registerEvents(new ChunkGenListener(), this);
 		getServer().getPluginManager().registerEvents(new ChunkLoadListener(), this);
+		getServer().getPluginManager().registerEvents(new WorldListener(),this);
 	}
 
 	@Override

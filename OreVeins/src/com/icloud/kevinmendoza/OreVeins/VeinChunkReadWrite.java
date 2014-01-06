@@ -46,6 +46,7 @@ public class VeinChunkReadWrite
 	
 	public static void writeChunkInfo(String key,String[][][] theOtherArray, boolean b)
 	{
+		//DebugLogger.console("writing" + key);
 		String[][][] prevChunks = readChunks(key,b);
 		if(prevChunks !=null)
 		{
@@ -98,6 +99,7 @@ public class VeinChunkReadWrite
 
 	public static String[][][] readChunks(String entry, boolean loaded)
 	{
+		//DebugLogger.console("reading" + entry);
 		try 
 		{
 			//DebugLogger.console("Fetching "+ entry);
@@ -251,8 +253,6 @@ public class VeinChunkReadWrite
 	public static String[][][] parseCenters(TwoPoint chunk, String ore, ArrayList<ThreePoint> centers)
 	{
 		HashMap<String,String[][][]> allPoints    = new HashMap<String,String[][][]>();
-		HashMap<String,String[][][]> alreadyMade  = new HashMap<String,String[][][]>();
-		HashMap<String,String[][][]> loadedPoints = new HashMap<String,String[][][]>();
 		for(int i =0;i<centers.size();i++)
 		{
 			String key = LineDrawingUtilityClass.convertToKey(centers.get(i));
@@ -288,6 +288,7 @@ public class VeinChunkReadWrite
 			{
 				if(isChunkLoaded(entry)==0)
 				{
+					//DebugLogger.console("chunk is loaded" + entry);
 					if(loadedMap==null)
 					{
 						loadedMap = new HashMap<String,String[][][]>();
@@ -296,16 +297,19 @@ public class VeinChunkReadWrite
 				}
 				else if(isChunkLoaded(entry)==1)
 				{
+					//DebugLogger.console("chunk is not loaded but exists"+entry);
 					writeChunkInfo(entry, allPoints.get(entry),false);
 				}
 				else
 				{
+					//DebugLogger.console("chunk is not loaded and not generated" + entry);
 					writeChunkInfo(entry, allPoints.get(entry),true);
 				}
 			}
 		}
 		return allPoints.get(key);
 	}
+	
 	private static int isChunkLoaded(String key)
 	{
 		String delims = "[:]";
@@ -317,16 +321,16 @@ public class VeinChunkReadWrite
 			if(Bukkit.getWorlds().get(0).loadChunk(x,  z,false))
 			{
 				Bukkit.getWorlds().get(0).unloadChunk(x,  z);
-				return 1;
+				return 1;//chunk is not loaded but exists
 			}
 			else
 			{
-				return 2;
+				return 2;//chunk is not loaded and not generated
 			}
 		}
 		else
 		{
-			return 0;
+			return 0;//chunk is loaded
 		}
 	}
 }
