@@ -1,5 +1,6 @@
 package com.icloud.kevinmendoza.OreVeins;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -15,57 +16,84 @@ public final class ChunkGenListener implements Listener
 	@EventHandler
 	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		DebugLogger.console("onGenerate");
 		if(event.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName()))
 		{
 			Chunk chunk = event.getChunk();//gets the current chunk info from the event
 			removeOres(chunk);//first loops through the chunk gotten and removes all the default ores
 			addOres(chunk);//adds in the custom defined ores, the point of this plugin
 		}
+		if(VeinChunkReadWrite.loadedMap!=null)
+		{
+			DebugLogger.console("Drawing veins in loaded chunks");
+			drawOtherOres(VeinChunkReadWrite.loadedMap);
+			VeinChunkReadWrite.loadedMap=null;
+		}
 	}
 	
+	private void drawOtherOres(HashMap<String, String[][][]> loadedMap) 
+	{
+		String delims = "[:]";
+		int x , z;
+		Chunk chunk;
+		for(String entry: loadedMap.keySet())
+		{
+			String[] tokens = entry.split(delims);
+			x = Integer.parseInt(tokens[0]);
+			z = Integer.parseInt(tokens[1]);
+			if(loadedMap.get(entry)!=null)
+			{
+				chunk = Bukkit.getWorlds().get(0).getChunkAt(x, z);
+				VeinDrawer.drawVein(loadedMap.get(entry), chunk);
+			}
+		}
+	}
+
 	private void addOres(Chunk chunk)
 	{
-		DebugLogger.console("addOres");
+		//DebugLogger.console("addOres");
 		//first, get already added veins
 	String[][][] addedOres =getOres(chunk);
 	if(addedOres!=null)
 	{
-		DebugLogger.console("Drawing Veins");
 		VeinDrawer.drawVein(addedOres,chunk);
 	}
-	else
-		DebugLogger.console("isNull");
+
 	}
 	
 	
 	private String[][][] getOres(Chunk chunk)
 	{
-		DebugLogger.console("getOres");
-		String chx = new Integer(chunk.getX()).toString();
-		String chz = new Integer(chunk.getZ()).toString();
-		String currentChunkKey = chx+":"+chz;
-		String[][][] oldOres = VeinChunkReadWrite.readChunks(currentChunkKey);
-		ArrayList<ThreePoint> newVeins = getNewVeins(chunk);
+		String currentChunkKey = LineDrawingUtilityClass.convertToKey(chunk.getX(), chunk.getZ());
+		String[][][] oldOres = VeinChunkReadWrite.readChunks(currentChunkKey,true);
+
+		String[][][] newVeins = getNewVeins(chunk);
+		VeinChunkReadWrite.deleteChunkInfo(currentChunkKey,true);
 		if(newVeins!=null)
 		{
 			if(oldOres!=null)
 			{
-				for(int i=0;i<newVeins.size();i++)
+				for(int x=0;x<16;x++)
 				{
-					ThreePoint testPoint = newVeins.get(i);
-					if(oldOres[testPoint.x][testPoint.y][testPoint.z]==null 
-							|| oldOres[testPoint.x][testPoint.y][testPoint.z].contains("COAL"))
+					for(int z=0;z<16;z++)
 					{
-						oldOres[testPoint.x][testPoint.y][testPoint.z] = "GOLD";
+						for(int y=2;y<128;y++)
+						{
+							if(oldOres[x][y][z]==null 
+									|| oldOres[x][y][z].contains("COAL"))
+							{
+								if(newVeins[x][y][z]!=null)
+								{//DebugLogger.console(" put at "+x+ " "+z);
+									oldOres[x][y][z] = "GOLD";
+								}
+							}
+						}
 					}
-			
 				}
 				return oldOres;
 			}
 			else
 			{
-				return null;
+				return newVeins;
 			}
 		}
 		else
@@ -74,18 +102,18 @@ public final class ChunkGenListener implements Listener
 		}
 	}
 	
-	private ArrayList<ThreePoint> getNewVeins(Chunk chunk) 
+	private String[][][] getNewVeins(Chunk chunk) 
 	{
-		DebugLogger.console("getNewVeins");
 		Random rand = new Random();
 		if(rand.nextInt(10)==0)
 		{
 			ThreePoint start = new ThreePoint();
 			start.x+=16*chunk.getX();
 			start.z+=16*chunk.getZ();
-			VeinSystem newVeinSystem = new VeinSystem("GOLD", start,400/*length of vein*/, 
-					100/* branch*/, 30 /*average grade*/, 100 /*average bonanza*/);
-			return newVeinSystem.orePoints;
+			start.y = 1;
+						
+			Vein newVeinSystem = new Vein(start, 40);
+			return newVeinSystem.currentstuff;
 		}
 		else
 		{
@@ -98,7 +126,7 @@ public final class ChunkGenListener implements Listener
 		Block block;
 		for (int x = 0; x < 16; x++)
 		{
-			for (int y = 0; y < 128; y++)
+			for (int y = 1; y < 128; y++)
 			{
 				for (int z = 0; z < 16; z++)
 				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0

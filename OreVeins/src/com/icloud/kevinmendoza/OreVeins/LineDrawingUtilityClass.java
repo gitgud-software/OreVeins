@@ -116,7 +116,7 @@ public class LineDrawingUtilityClass
 		int vz = end.z - start.z;
 		int dist = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
 		int qui = dist / 30;
-		if(qui <1)
+		if(qui < 1)
 		{
 			qui =1;
 		}
@@ -127,8 +127,8 @@ public class LineDrawingUtilityClass
 		ArrayList<ThreePoint> centers = new ArrayList<ThreePoint>();
 		while (true)//create nodes to offset
 		{
-			ThreePoint first = new ThreePoint(x,y,z);
-			centers.add(first);
+			ThreePoint center = new ThreePoint(x,y,z);
+			centers.add(center);
 			x+=vrx;
 			y+=vry;
 			z+=vrz;
@@ -136,43 +136,48 @@ public class LineDrawingUtilityClass
 			vy = y - start.y;
 			vz = z - start.z;
 			int r = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
-			if(r>=dist)
+			if(r>dist)
 			{
 				break;
 			}
 		}
-		ArrayList<ThreePoint> curvePoints = new ArrayList<ThreePoint>();
-		for(int i=1;i<centers.size()-1;i++)//offset those points
+		int maxStrike = 2*dist / (centers.size()-1);
+		ThreePoint[] offsets = new ThreePoint[centers.size()];
+		offsets[0]= start;
+		offsets[offsets.length-1] = end;
+		for(int i=1;i<offsets.length-1;i++)
 		{
-			curvePoints.add(getEndPoint( centers.get(i) , rand.nextInt((dist/(qui*2))) , rand ) );
+			offsets[i]= getEndPoint(centers.get(i), maxStrike, rand,true);
 		}
 		x=0;y=0;z=0;
-		int n = centers.size()-1;
+		int n = offsets.length-1;
 		double t=0;
 		//DebugLogger.console("centers & qui" + centers.size() + " "+ qui);
-		double step = 1.0/20.0;
-		ArrayList<ThreePoint> points = new ArrayList<ThreePoint>();
+		double step = 1.0/20.0;//divide vein into 20 sections, use the centers to offset.
+		ThreePoint[] points = new ThreePoint[21];
+		int count = 0;
 		while(true)
 		{
 			x=0;y=0;z=0;
 			for(int i=0;i<=n;i++)
 			{
-				x+=binomialCoeff(n,i)*(int)Math.pow(1-t, n-i)*Math.pow(t, i)*centers.get(i).x;
-				y+=binomialCoeff(n,i)*(int)Math.pow(1-t, n-i)*Math.pow(t, i)*centers.get(i).y;
-				z+=binomialCoeff(n,i)*(int)Math.pow(1-t, n-i)*Math.pow(t, i)*centers.get(i).z;
+				x+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].x);
+				y+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].y);
+				z+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].z);
 			}
 			ThreePoint thePoint = new ThreePoint(x,y,z);
-			points.add(thePoint);
+			points[count] = thePoint;
+			count++;
 			if(t >= 1)
 			{
 				break;
 			}
 			t = t + step;
-		}
+		}//connect points with straight lines
 		ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
-		for(int i=1;i<points.size();i++)
+		for(int i=1;i<points.length;i++)
 		{
-			veinPoints.addAll(bresenHamAlgo(points.get(i-1),points.get(i)));
+			veinPoints.addAll(bresenHamAlgo(points[i-1],points[i]));
 		}
 		return veinPoints;
 	}
@@ -191,46 +196,72 @@ public class LineDrawingUtilityClass
 		return coeff;
 	}
 
-	public static ThreePoint getEndPoint(ThreePoint start, int strike, Random rand) 
+	public static ThreePoint getEndPoint(ThreePoint start, int strike, Random rand, Boolean varyRadius) 
 	{
 		if(strike==0)
 			return null;
 		int it=0;
-		double theta;
+		double phi,theta;
 		int x,z,y;
+		int rad = strike;
 		while(true)
 		{
-			while(true)
+			if(varyRadius==true)
 			{
-				//phi = ((double)rand.nextInt(314))/100.0;
-				y = rand.nextInt(256)-128 + start.y;
-				if(y<128 && y>2)
-					break;
+				rad = rand.nextInt(strike);
 			}
-			theta = ((double)rand.nextInt(628))/100.0;
-			x = strike*(int)(Math.cos(theta)) + start.x;
-			z = strike*(int)(Math.sin(theta)) + start.z;
-			if(!Bukkit.getWorlds().get(0).isChunkLoaded(x >>4, z>>4)) //Not currently loaded
-			{	
-				if(Bukkit.getWorlds().get(0).loadChunk(x >>4,  z>>4,false))
-				{
-					Bukkit.getWorlds().get(0).unloadChunk(x >>4,  z>>4);
-				}
-				else
-				{
-					break;
-				}
-			}
-			it++;
-			//DebugLogger.console("tried" + it + " to find good chunk");
-			if(it > 100)
-			{
-				return null;
-			}
+			phi = ((double)rand.nextInt(314))/100.0;
+			y = (int) (rad*Math.cos(phi)) + start.y;
+			if( y <128 && y >2 )
+				break;
 		}
-		ThreePoint freepoint = new ThreePoint(x,y,z);
-		return freepoint;
+		theta = ((double)rand.nextInt(628)/100.0);
+		x = (int)(rad*Math.cos(theta)*Math.sin(phi)) + start.x;
+		z = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.z;
+		ThreePoint test = new ThreePoint(x,y,z);
+		TwoPoint chunkChords = getChunkCoords(test);
+		//DebugLogger.console("tried" + it + " to find good chunk");
+		ThreePoint endpoint = new ThreePoint(x,y,z);
+		return endpoint;
 	}
 	
+	public static TwoPoint getChunkCoords(ThreePoint point)
+	{
+		TwoPoint newPoint = new TwoPoint(point.x>>4,point.z>>4);
+		return newPoint;
+	}
+	
+	public static ThreePoint shiftCoords(ThreePoint point)
+	{
+		//DebugLogger.console("start point" + point.x + " "+ point.y + " " + point.z);
+		ThreePoint newPoint = new ThreePoint(Math.abs(point.x-16*(point.x>>4)), point.y ,Math.abs(point.z-16*(point.z>>4)));
+		//DebugLogger.console("start point" + newPoint.x + " "+  newPoint.y + " " +  newPoint.z);
+		return newPoint;
+	}
+
+	public static String convertToKey(int x, int z)
+	{
+		String chx = new Integer(x).toString();
+		String chz = new Integer(z).toString();
+		String key = chx +":" + chz;
+		return key;
+	}
+
+	public static String convertToKey(ThreePoint point)
+	{
+		String chx = new Integer(point.x>>4).toString();
+		String chz = new Integer(point.z>>4).toString();
+		String key = chx +":" + chz;
+		return key;
+	}
+	
+	public static String convertToKey(TwoPoint chunk)
+	{
+
+		String chx = new Integer(chunk.x).toString();
+		String chz = new Integer(chunk.z).toString();
+		String key = chx +":" + chz;
+		return key;
+	}
 	
 }

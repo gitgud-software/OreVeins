@@ -11,6 +11,7 @@ public final class OreVeins extends JavaPlugin
 		getLogger().info("onEnable has been invoked!");
 		popFileTree();
 		getServer().getPluginManager().registerEvents(new ChunkGenListener(), this);
+		getServer().getPluginManager().registerEvents(new ChunkLoadListener(), this);
 	}
 
 	@Override
@@ -26,7 +27,7 @@ public final class OreVeins extends JavaPlugin
 		File config = new File("plugins/OreVeins/config.yml");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
-		File StringerInfo = new File("plugins/OreVeins/StringerInfo");
+		File StringerInfo = new File("plugins/OreVeins/PrevChunkInfo");
 		try{
 			Ovein.mkdir();
 			config.createNewFile();

@@ -6,9 +6,9 @@ import java.util.Random;
 public class Shape
 
 {
-	public ThreePoint points[];
+	public ThreePoint[] points;
 	
-	public void ellipse(int a, int b)
+	public Shape(int a, int b)
 	{
 		if(a<1)
 			a=1;
@@ -38,7 +38,7 @@ public class Shape
 	concantenate(temp);
 	}
 	
-	public void ellipsoid(int a, int b, int c)
+	public Shape(int a, int b, int c)
 	{
 		//bonanza's are ellipsoids
 		
@@ -78,10 +78,9 @@ public class Shape
 				count++;
 			}
 		}
-		this.points = new ThreePoint[count+1];
-		int newLength = count;
+		this.points = new ThreePoint[count];
 		count =0;
-		for(int i=0;i<newLength;i++)
+		for(int i=0;i<temp.length;i++)
 		{
 			if(temp[i]!=null)
 			{
@@ -152,4 +151,17 @@ public class Shape
 		rotateZ(Math.toRadians(rand.nextInt(180)-90));
 	}
 
+	public void alighnToPoints(ThreePoint start, ThreePoint end)
+	{
+		double vx = end.x - start.x;
+		double vy = end.y - start.y;
+		double vz = end.z - start.z;
+		double r = Math.sqrt( vx*vx + vy*vy + vz*vz);
+		double theta = Math.toDegrees(Math.acos(vy/r)) +90;
+		if(vx==0)
+		{
+			vx=.01;
+		}
+		double phi = Math.toDegrees(Math.atan(vz/vx));
+	}
 }

@@ -1,48 +1,53 @@
 package com.icloud.kevinmendoza.OreVeins;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Vein 
 {
-	public ThreePoint[] cross;
 	public ThreePoint endPoint;
+	public ThreePoint startPoint;
 	public ArrayList<ThreePoint> centers;
+	public String[][][] currentstuff;
 	public int strike;
-	public int branch;
-	public int grade;
-	public int bonanza;
-	
-	public Vein(ThreePoint startPoint, int strike, int branch, int grade, int bonanza, Random rand,int Area)
+	private TwoPoint chunk;
+	public Vein(ThreePoint startPoint, int strike)
 	{
+		this.startPoint = startPoint;
+		Random rand = new Random();
 		this.strike= strike;
-		this.branch = branch;
-		this.grade = grade;
-		this.bonanza = bonanza;
-		this.endPoint = LineDrawingUtilityClass.getEndPoint(startPoint, strike, rand);
-		if(this.endPoint!=null)
+		TwoPoint chunk = LineDrawingUtilityClass.getChunkCoords(startPoint);
+		this.chunk = new TwoPoint(chunk.x,chunk.z);
+		this.endPoint = new ThreePoint(startPoint.x+60, 127, startPoint.z+60);
+		ArrayList<ThreePoint> line = LineDrawingUtilityClass.bezierCurve(startPoint,this.endPoint, rand);
+		addCrossSection(line);
+		this.currentstuff = VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
+	}
+	
+	private void addCrossSection(ArrayList<ThreePoint> line)
+	{
+		this.centers = new ArrayList<ThreePoint>();
+		Shape crossSection = new Shape(1,3);
+		crossSection.alighnToPoints(this.startPoint, this.endPoint);
+		for(int i=0;i<line.size();i++)
 		{
-			this.centers = LineDrawingUtilityClass.bezierCurve(startPoint,endPoint, rand);
-			DebugLogger.console("made Veins");
-			Shape ShapeObj = new Shape();
-			int A = rand.nextInt((int)Math.sqrt(Area)/2 +1)+2;
-			int B = A - rand.nextInt(A-1);
-			ShapeObj.ellipse(A,B);
-			this.cross = ShapeObj.points;
-			int vx = endPoint.x - startPoint.x;
-			int vy = endPoint.y - startPoint.y;
-			int vz= endPoint.z - startPoint.z;
-			int R = (int)Math.sqrt(vx*vx+vy*vy+vz*vz);
-			if(vx==0)
-				vx=1;
-			double theta = Math.acos(vy/R);
-			double phi = Math.atan(vz/vx+90);
-			double zaxis = 6.28*rand.nextDouble();
-			ShapeObj.rotateY(phi);
-			ShapeObj.rotateX(theta);
-			ShapeObj.rotateZ(zaxis);
+			for(int j=0;j<crossSection.points.length;j++)
+			{
+				int y = crossSection.points[j].y + line.get(i).y;
+				ThreePoint newPoint = new ThreePoint(crossSection.points[j].x + line.get(i).x,
+													 y,
+													 crossSection.points[j].z + line.get(i).z);
+				if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+				{
+					//DebugLogger.console("adding point!!"+ y);
+					this.centers.add(newPoint);
+				}
+				else
+				{
+					//DebugLogger.console("duplicate?");
+				}
+			}
 		}
 	}
-
-	
 }

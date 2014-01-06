@@ -8,15 +8,27 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.bukkit.Bukkit;
 
 public class VeinChunkReadWrite 
 {
+	public static HashMap<String,String[][][]> loadedMap;
 	
-	public static void deleteChunkInfo(String key)
+	public static void deleteChunkInfo(String key, boolean b)
 	{
 		try
 		{
-    		File file = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
+			File file;
+			if(b)
+			{
+				file = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
+			}
+			else
+			{
+				file = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
+			}
     		if(file.delete())
     		{
     			//DebugLogger.console(file.getName() + " is deleted!");
@@ -32,31 +44,76 @@ public class VeinChunkReadWrite
     	}
 	}
 	
-	public static void writeChunkInfo(String key,String[][][] theOtherArray)
+	public static void writeChunkInfo(String key,String[][][] theOtherArray, boolean b)
 	{
-			try 
+		String[][][] prevChunks = readChunks(key,b);
+		if(prevChunks !=null)
+		{
+			for(int x =0;x<16;x++)
+			{
+				for(int z=0;z<16;z++)
+				{
+					for(int y=1;y<127;y++)
+					{
+						if(prevChunks[x][y][z]==null 
+								|| prevChunks[x][y][z].contains("COAL"))
+							if(theOtherArray[x][y][z]!=null)
+							{
+								prevChunks[x][y][z] = theOtherArray[x][y][z];
+							}
+					}
+				}
+			}
+		}
+		else
+		{
+			prevChunks = theOtherArray;
+		}
+		try 
+		{
+			FileOutputStream chunkdir;
+			if(b)
 			{
 				File veinFile = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
 				veinFile.createNewFile();
-				FileOutputStream chunkdir = new FileOutputStream("plugins/OreVeins/ChunkInfo/"+key+".txt");
-				ObjectOutputStream chunkOut = new ObjectOutputStream(chunkdir);
-				chunkOut.writeObject(theOtherArray);
-				chunkdir.close();
-				chunkOut.close();
+				 chunkdir = new FileOutputStream("plugins/OreVeins/ChunkInfo/"+key+".txt");
 			}
-			catch (Exception ex)
+			else
 			{
-				DebugLogger.console("Couldn't save vein. Dir is missing");
+				File veinFile = new File("plugins/OreVeins/PrevChunkInfo/"+ key +".txt");
+				veinFile.createNewFile();
+				chunkdir = new FileOutputStream("plugins/OreVeins/PrevChunkInfo/"+key+".txt");
 			}
-		
+			ObjectOutputStream chunkOut = new ObjectOutputStream(chunkdir);
+			chunkOut.writeObject(prevChunks);
+			chunkdir.close();
+			chunkOut.close();
+		}
+		catch (Exception ex)
+		{
+			DebugLogger.console("Couldn't save vein. Dir is missing");
+		}
+
 	}
 
-	public static String[][][] readChunks(String entry)
+	public static String[][][] readChunks(String entry, boolean loaded)
 	{
 		try 
 		{
 			//DebugLogger.console("Fetching "+ entry);
-			FileInputStream fin = new FileInputStream("plugins/OreVeins/ChunkInfo/"+entry + ".txt");
+			FileInputStream fin;
+			if(loaded)
+			{
+				File veinFile = new File("plugins/OreVeins/ChunkInfo/"+ entry +".txt");
+				veinFile.createNewFile();
+				fin = new FileInputStream("plugins/OreVeins/ChunkInfo/"+entry+".txt");
+			}
+			else
+			{
+				File veinFile = new File("plugins/OreVeins/PrevChunkInfo/"+ entry +".txt");
+				veinFile.createNewFile();
+				fin = new FileInputStream("plugins/OreVeins/PrevChunkInfo/"+entry+".txt");
+			}
 			ObjectInputStream ois = new ObjectInputStream(fin);
 			Object obj =  ois.readObject();
 			ois.close();
@@ -85,7 +142,7 @@ public class VeinChunkReadWrite
 		}
 		catch (Exception ex)
 		{
-			//DebugLogger.console("ERROR!!3");
+			//DebugLogger.console("no chunks at coordinate" );
 			return null;
 		}
 	}
@@ -135,7 +192,7 @@ public class VeinChunkReadWrite
 		}
 	}
 
-	public static ArrayList<VeinStartPoint> readOutPoints(String key)
+	public static ArrayList<VeinStartPoint> readOutPoints(String key,Boolean loaded)
 	{
 		try 
 		{
@@ -189,5 +246,87 @@ public class VeinChunkReadWrite
 			DebugLogger.console("Exception Delete operation is failed.");
     	}
 		
+	}
+	
+	public static String[][][] parseCenters(TwoPoint chunk, String ore, ArrayList<ThreePoint> centers)
+	{
+		HashMap<String,String[][][]> allPoints    = new HashMap<String,String[][][]>();
+		HashMap<String,String[][][]> alreadyMade  = new HashMap<String,String[][][]>();
+		HashMap<String,String[][][]> loadedPoints = new HashMap<String,String[][][]>();
+		for(int i =0;i<centers.size();i++)
+		{
+			String key = LineDrawingUtilityClass.convertToKey(centers.get(i));
+			if(centers.get(i).y<127)
+			{
+				if(allPoints.containsKey(key))
+				{
+					String[][][] theMatrix = allPoints.get(key);
+					ThreePoint thepoint = centers.get(i);
+					ThreePoint shift = LineDrawingUtilityClass.shiftCoords(thepoint);
+					//DebugLogger.console("x, y, z" + shift.x + " "+ shift.y + " " + shift.z );
+					if(theMatrix[shift.x][shift.y][shift.z] == null
+							||theMatrix[shift.x][shift.y][shift.z]== "COAL")
+					{
+						theMatrix[shift.x][thepoint.y][shift.z] = ore;
+						allPoints.put(key, theMatrix);
+					}
+				}
+				else
+				{
+					ThreePoint thepoint = centers.get(i);
+					ThreePoint shift = LineDrawingUtilityClass.shiftCoords(thepoint);
+					String[][][] theMatrix = new String[16][128][16];
+					theMatrix[shift.x][shift.y][shift.z] = ore;
+					allPoints.put(key, theMatrix);
+				}
+			}
+		}
+		String key = LineDrawingUtilityClass.convertToKey(chunk);
+		for(String entry: allPoints.keySet())
+		{
+			if(!key.contains(entry))
+			{
+				if(isChunkLoaded(entry)==0)
+				{
+					if(loadedMap==null)
+					{
+						loadedMap = new HashMap<String,String[][][]>();
+					}
+					loadedMap.put(entry, allPoints.get(entry));
+				}
+				else if(isChunkLoaded(entry)==1)
+				{
+					writeChunkInfo(entry, allPoints.get(entry),false);
+				}
+				else
+				{
+					writeChunkInfo(entry, allPoints.get(entry),true);
+				}
+			}
+		}
+		return allPoints.get(key);
+	}
+	private static int isChunkLoaded(String key)
+	{
+		String delims = "[:]";
+		String[] tokens = key.split(delims);
+		int x = Integer.parseInt(tokens[0]);
+		int z = Integer.parseInt(tokens[1]);
+		if(!Bukkit.getWorlds().get(0).isChunkLoaded(x, z)) //Not currently loaded
+		{	
+			if(Bukkit.getWorlds().get(0).loadChunk(x,  z,false))
+			{
+				Bukkit.getWorlds().get(0).unloadChunk(x,  z);
+				return 1;
+			}
+			else
+			{
+				return 2;
+			}
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
