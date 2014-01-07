@@ -35,7 +35,7 @@ public class VeinChunkReadWrite
 			}
 			else
 			{
-				file = new File("plugins/OreVeins/ChunkInfo/"+ key +".txt");
+				file = new File("plugins/OreVeins/PrevChunkInfo/"+ key +".txt");
 			}
     		if(file.delete())
     		{
@@ -306,6 +306,7 @@ public class VeinChunkReadWrite
 			Chunk testChunk = Bukkit.getWorlds().get(0).getChunkAt(x,z);
 			if(testChunk.getBlock(1, 1, 1)==null)//is not populated, save to file
 			{
+				DebugLogger.console("Do I even get called?");
 				writeChunkInfo(key, partition,true);
 			}
 			else//is populated and loaded
