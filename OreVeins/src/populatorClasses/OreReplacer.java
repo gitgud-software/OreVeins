@@ -1,14 +1,18 @@
 package populatorClasses;
 
+import java.util.Random;
+
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.generator.BlockPopulator;
 
-public class OreReplacer
+public class OreReplacer extends BlockPopulator
 {
-
-
-	public static void removeOres(Chunk chunk)
+	
+	@Override
+	public void populate(World world, Random rand, Chunk chunk) 
 	{
 		Block block;
 		for (int x = 0; x < 16; x++)

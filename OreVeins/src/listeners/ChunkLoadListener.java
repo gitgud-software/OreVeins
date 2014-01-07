@@ -1,11 +1,9 @@
 package listeners;
 
-import java.util.HashMap;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 
-import populatorClasses.VeinDrawer;
 
 
 import fileIO.VeinChunkReadWrite;
@@ -17,15 +15,16 @@ public final class ChunkLoadListener implements Listener
 	@EventHandler
 	public void onLoad(ChunkLoadEvent event) 
 	{
-		if(!event.isNewChunk())//load blocks into already populated chunk
+		String key = LineDrawingUtilityClass.convertToKey(event.getChunk().getX(),event.getChunk().getZ());
+		if(VeinChunkReadWrite.populatedList.get(key)!=null)//load blocks into already populated chunk
 		{
-			String[][][] draw =	VeinChunkReadWrite.readChunks(LineDrawingUtilityClass.convertToKey(event.getChunk().getX(), event.getChunk().getZ()), false);
+			String[][][] draw =	VeinChunkReadWrite.readChunks(key, false);
 			if(draw !=null)
 			{
 				//DebugLogger.console("Drawing veins in existing chunk");
 				VeinDrawer.drawVein(draw, event.getChunk());
 			}
-			VeinChunkReadWrite.deleteChunkInfo(LineDrawingUtilityClass.convertToKey(event.getChunk().getX(), event.getChunk().getZ()), false);
+			VeinChunkReadWrite.deleteChunkInfo(key, false);
 		}
 	}
 }

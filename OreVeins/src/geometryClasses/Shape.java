@@ -164,5 +164,9 @@ public class Shape
 			vx=.01;
 		}
 		double phi = Math.toDegrees(Math.atan(vz/vx));
+		rotateX(phi);
+		rotateY(theta);
+		Random rand = new Random();
+		rotateZ(rand.nextInt(360));
 	}
 }

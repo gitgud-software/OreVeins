@@ -1,35 +1,42 @@
-package populatorClasses;
+package listeners;
 
 import java.util.HashMap;
 import java.util.Random;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkPopulateEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.generator.BlockPopulator;
 import fileIO.VeinChunkReadWrite;
 import geometryClasses.LineDrawingUtilityClass;
 
-public class OrePopulator extends BlockPopulator
+public class OrePopulator implements Listener
 {
-	@Override
-	public void populate(World world, Random rand, Chunk chunk) 
+	@EventHandler
+	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		OreReplacer.removeOres(chunk);
 		//go populate unpopulated chunk
+		Chunk chunk = event.getChunk();
 		OreGenerator.getOresFromChunk(chunk);
+		String key = LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ());
 		if(VeinChunkReadWrite.loadedMap!=null)
 		{
 			drawOtherOres(VeinChunkReadWrite.loadedMap);
 			VeinChunkReadWrite.loadedMap=null;
 		}
-		String[][][] oldOres = VeinChunkReadWrite.readChunks(LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ()),true);
+		String[][][] oldOres = VeinChunkReadWrite.readChunks(key,true);
 		if(oldOres !=null)
 		{
 			//DebugLogger.console("Drawing veins in existing chunk");
 			VeinDrawer.drawVein(oldOres, chunk);
 		}
-		VeinChunkReadWrite.deleteChunkInfo(LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ()),true);
+		VeinChunkReadWrite.deleteChunkInfo(key,true);
+		VeinChunkReadWrite.populatedList.put(key, true);
 	}
 	
 	private void drawOtherOres(HashMap<String, String[][][]> loadedMap) 

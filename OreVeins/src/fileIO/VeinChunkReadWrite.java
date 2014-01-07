@@ -23,6 +23,7 @@ import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 public class VeinChunkReadWrite 
 {
 	public static HashMap<String,String[][][]> loadedMap;
+	public static HashMap<String,Boolean> populatedList;
 	
 	public static void deleteChunkInfo(String key, boolean b)
 	{
@@ -237,6 +238,79 @@ public class VeinChunkReadWrite
 		
 	}
 	
+	public static void loadPopulatedList()
+	{
+		try 
+		{
+			//DebugLogger.console("Fetching "+ entry);
+			HashMap<String,Boolean> test = new HashMap<String,Boolean>();
+			FileInputStream fin = new FileInputStream("plugins/OreVeins/popList.txt");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			Object obj =  ois.readObject();
+			ois.close();
+			fin.close();
+			if(obj!=null)
+			{
+				if(test.getClass() == obj.getClass())
+				{
+					populatedList = (HashMap<String,Boolean>) obj;
+				}
+				else
+				{
+					populatedList = new HashMap<String,Boolean>();
+				}
+			}
+			else
+			{
+				populatedList = new HashMap<String,Boolean>();
+			}
+		}
+		catch (Exception ex)
+		{
+			populatedList = new HashMap<String,Boolean>();
+		}
+		
+	}
+	
+	public static void savePopulatedList()
+	{
+		try 
+		{
+			//DebugLogger.console("Fetching "+ entry);
+			deletePopList();
+			FileOutputStream fin = new FileOutputStream("plugins/OreVeins/popList.txt");
+			ObjectOutputStream ois = new ObjectOutputStream(fin);
+			ois.writeObject(populatedList);
+			ois.close();
+			fin.close();
+		}
+		catch (Exception ex)
+		{
+			
+		}
+		
+	}
+	
+	private static void deletePopList()
+	{
+		try
+		{
+    		File file = new File("plugins/OreVeins/popList.txt");
+    		if(file.delete())
+    		{
+    			//DebugLogger.console(file.getName() + " is deleted!");
+    		}
+    		else
+    		{
+    			//DebugLogger.console("Delete operation is failed.");
+    		}
+    	}
+		catch(Exception e)
+		{
+			DebugLogger.console("Exception Delete operation is failed.");
+    	}
+	}
+	
 	public static void deletePoints(String key) 
 	{
 		try
@@ -303,14 +377,15 @@ public class VeinChunkReadWrite
 		int z = Integer.parseInt(tokens[1]);
 		if(Bukkit.getWorlds().get(0).isChunkLoaded(x, z)) //returns true if loaded
 		{	
-			Chunk testChunk = Bukkit.getWorlds().get(0).getChunkAt(x,z);
-			if(testChunk.getBlock(1, 1, 1)==null)//is not populated, save to file
+			
+			if(populatedList.get(key)==null)//is not populated, save to file
 			{
-				DebugLogger.console("Do I even get called?");
+				//DebugLogger.console("1");
 				writeChunkInfo(key, partition,true);
 			}
 			else//is populated and loaded
 			{
+				//DebugLogger.console("2");
 				if(loadedMap==null)
 				{
 					loadedMap = new HashMap<String,String[][][]>();
@@ -320,14 +395,15 @@ public class VeinChunkReadWrite
 		}
 		else//not loaded
 		{
-			if(Bukkit.getWorlds().get(0).loadChunk(x,z,false))//true, is populated
+			if(populatedList.get(key)==null)//not populated
 			{
-				Bukkit.getWorlds().get(0).unloadChunk(x,z);
-				writeChunkInfo(key, partition,false);
-			}
-			else//false, not populated
-			{
+				//DebugLogger.console("3");
 				writeChunkInfo(key, partition,true);
+			}
+			else//populated but not loaded
+			{
+				//DebugLogger.console("4");
+				writeChunkInfo(key, partition,false);
 			}
 		}
 	}

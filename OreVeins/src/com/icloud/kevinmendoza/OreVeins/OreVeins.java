@@ -1,9 +1,12 @@
 package com.icloud.kevinmendoza.OreVeins;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fileIO.VeinChunkReadWrite;
+
 import java.io.*;
 
 import listeners.ChunkLoadListener;
+import listeners.OrePopulator;
 import listeners.WorldListener;
 
 public final class OreVeins extends JavaPlugin 
@@ -16,6 +19,8 @@ public final class OreVeins extends JavaPlugin
 		popFileTree();
 		getServer().getPluginManager().registerEvents(new ChunkLoadListener(), this);
 		getServer().getPluginManager().registerEvents(new WorldListener(),this);
+		getServer().getPluginManager().registerEvents(new OrePopulator(),this);
+		VeinChunkReadWrite.loadPopulatedList();
 	}
 
 	@Override
@@ -23,18 +28,21 @@ public final class OreVeins extends JavaPlugin
 	{
 		// TODO Insert logic to be performed when the plugin is disabled
 		getLogger().info("onDisable has been invoked!");
+		VeinChunkReadWrite.savePopulatedList();
 	}
 	
 	private void popFileTree()
 	{
 		File Ovein = new File("plugins/OreVeins");
 		File config = new File("plugins/OreVeins/config.yml");
+		File popList = new File("plugins/OreVeins/popList.txt");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
 		File StringerInfo = new File("plugins/OreVeins/PrevChunkInfo");
 		try
 		{
 			Ovein.mkdir();
+			popList.createNewFile();
 			config.createNewFile();
 			ChunkInfo.mkdir();
 			VeinInfo.mkdir();
