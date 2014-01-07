@@ -5,6 +5,8 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+
 
 public class LineDrawingUtilityClass 
 {
@@ -116,10 +118,11 @@ public class LineDrawingUtilityClass
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
 		int dist = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
-		int qui = dist / 30;
-		if(qui < 1)
+
+		int qui = (int)Math.log(dist);
+		if(qui < 2)
 		{
-			qui =1;
+			return bresenHamAlgo(start,end);
 		}
 		int vrx = vx/qui, vry = vy/qui, vrz = vz/qui;
 		int x = start.x;
@@ -142,7 +145,7 @@ public class LineDrawingUtilityClass
 				break;
 			}
 		}
-		int maxStrike = 2*dist / (centers.size()-1);
+		int maxStrike = dist / (centers.size()-1);
 		ThreePoint[] offsets = new ThreePoint[centers.size()];
 		offsets[0]= start;
 		offsets[offsets.length-1] = end;
@@ -169,6 +172,7 @@ public class LineDrawingUtilityClass
 			ThreePoint thePoint = new ThreePoint(x,y,z);
 			points[count] = thePoint;
 			count++;
+
 			if(t >= 1)
 			{
 				break;
@@ -176,8 +180,11 @@ public class LineDrawingUtilityClass
 			t = t + step;
 		}//connect points with straight lines
 		ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
-		for(int i=1;i<points.length;i++)
+		for(int i=1;i<count;i++)
 		{
+			
+			//DebugLogger.console( "startpoint" + points[i-1].x +" "+ points[i-1].y +" "+ points[i-1].z);
+			//DebugLogger.console( "endPoint" + points[i].x +" "+ points[i].y +" "+ points[i].z);
 			veinPoints.addAll(bresenHamAlgo(points[i-1],points[i]));
 		}
 		return veinPoints;
@@ -209,11 +216,13 @@ public class LineDrawingUtilityClass
 		{
 			if(varyRadius==true)
 			{
-				rad = rand.nextInt(strike);
+				rad = rand.nextInt(strike)+3;
 			}
 			phi = ((double)rand.nextInt(314))/100.0;
 			y = (int) (rad*Math.cos(phi)) + start.y;
 			if( y <128 && y >2 )
+				break;
+			if(start.y-strike > 125)
 				break;
 		}
 		theta = ((double)rand.nextInt(628)/100.0);
