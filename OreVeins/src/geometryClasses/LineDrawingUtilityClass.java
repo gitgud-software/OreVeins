@@ -10,7 +10,7 @@ import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
 public class LineDrawingUtilityClass 
 {
-	
+
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
 	{
 		ArrayList<ThreePoint> thePoints = new ArrayList<ThreePoint>();
@@ -114,82 +114,118 @@ public class LineDrawingUtilityClass
 	
 	public static ArrayList<ThreePoint> bezierCurve(ThreePoint start, ThreePoint end,Random rand)
 	{
+		return bresenHamAlgo(start,end);
+		/* 
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
 		int dist = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
-
-		int qui = (int)Math.log(dist);
-		if(qui < 2)
-		{
-			return bresenHamAlgo(start,end);
-		}
-		int vrx = vx/qui, vry = vy/qui, vrz = vz/qui;
 		int x = start.x;
 		int y = start.y;
 		int z = start.z;
-		ArrayList<ThreePoint> centers = new ArrayList<ThreePoint>();
-		while (true)//create nodes to offset
+		double step;
+		ThreePoint[] offsets;
+		if(dist<15)
 		{
-			ThreePoint center = new ThreePoint(x,y,z);
-			centers.add(center);
-			x+=vrx;
-			y+=vry;
-			z+=vrz;
-			vx = x - start.x;
-			vy = y - start.y;
-			vz = z - start.z;
-			int r = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
-			if(r>dist)
-			{
-				break;
-			}
+			offsets =new ThreePoint[2];
+			step = 1.0;
 		}
-		int maxStrike = dist / (centers.size()-1);
-		ThreePoint[] offsets = new ThreePoint[centers.size()];
-		offsets[0]= start;
+		else if(dist>=15 && dist < 30)
+		{
+			offsets =new ThreePoint[3];
+			ThreePoint mid = new ThreePoint(x+vx/2, y+vy/2,z+vz/2);
+			offsets[1] = getEndPoint(mid, dist/3, rand, true);
+			step = 1.0/4;
+		}
+		else if(dist>=30 && dist < 60)
+		{
+			offsets =new ThreePoint[4];
+			ThreePoint midone = new ThreePoint(x+vx/3, y+vy/3,z+vz/3);
+			offsets[1] = getEndPoint(midone, dist/4, rand, true);
+			ThreePoint midtwo = new ThreePoint(x+(2*vx/3), y+(2*vy/3),z+(2*vz/3));
+			offsets[2] = getEndPoint(midtwo, dist/4, rand, true);
+			step = 1.0/6;
+		}
+		else if(dist>=60 && dist < 120)
+		{
+			offsets =new ThreePoint[5];
+			ThreePoint midone = new ThreePoint(x+vx/4, y+vy/4,z+vz/4);
+			offsets[1] = getEndPoint(midone, dist/6, rand, true);
+			ThreePoint midtwo = new ThreePoint(x+(2*vx/4), y+(2*vy/4),z+(2*vz/4));
+			offsets[2] = getEndPoint(midtwo, dist/6, rand, true);
+			ThreePoint midthree = new ThreePoint(x+(3*vx/4), y+(3*vy/4),z+(3*vz/4));
+			offsets[3] = getEndPoint(midthree, dist/6, rand, true);
+			step = 1.0/7;
+		}
+		else if(dist>=120 && dist <240)
+		{
+			offsets =new ThreePoint[6];
+			ThreePoint midone = new ThreePoint(x+(vx/5), y+(vy/5),z+(vz/5));
+			offsets[1] = getEndPoint(midone, dist/7, rand, true);
+			ThreePoint midtwo = new ThreePoint(x+(2*vx/5), y+(2*vy/5),z+(2*vz/5));
+			offsets[2] = getEndPoint(midtwo, dist/7, rand, true);
+			ThreePoint midthree = new ThreePoint(x+(3*vx/5), y+(3*vy/5),z+(3*vz/5));
+			offsets[3] = getEndPoint(midthree, dist/7, rand, true);
+			ThreePoint midfour = new ThreePoint(x+(4*vx/5), y+(4*vy/5),z+(4*vz/5));
+			offsets[4] = getEndPoint(midfour, dist/7, rand, true);
+			step = 1.0/14;
+		}
+		else
+		{
+			offsets =new ThreePoint[7];
+			ThreePoint midone = new ThreePoint(x+(vx/6), y+(vy/6),z+(vz/6));
+			offsets[1] = getEndPoint(midone, dist/8, rand, true);
+			ThreePoint midtwo = new ThreePoint(x+(2*vx/6), y+(2*vy/6),z+(2*vz/6));
+			offsets[2] = getEndPoint(midtwo, dist/8, rand, true);
+			ThreePoint midthree = new ThreePoint(x+(3*vx/6), y+(3*vy/6),z+(3*vz/6));
+			offsets[3] = getEndPoint(midthree, dist/8, rand, true);
+			ThreePoint midfour = new ThreePoint(x+(4*vx/6), y+(4*vy/6),z+(4*vz/6));
+			offsets[4] = getEndPoint(midfour, dist/8, rand, true);
+			ThreePoint midfive = new ThreePoint(x+(5*vx/6), y+(5*vy/6),z+(5*vz/6));
+			offsets[5] = getEndPoint(midfive, dist/8, rand, true);
+			step = 1.0/20;
+			//DebugLogger.console("21");
+		}
+		offsets[0] = start;
 		offsets[offsets.length-1] = end;
-		for(int i=1;i<offsets.length-1;i++)
-		{
-			offsets[i]= getEndPoint(centers.get(i), maxStrike, rand,true);
-		}
-		x=0;y=0;z=0;
 		int n = offsets.length-1;
 		double t=0;
-		//DebugLogger.console("centers & qui" + centers.size() + " "+ qui);
-		double step = 1.0/20.0;//divide vein into 20 sections, use the centers to offset.
-		ThreePoint[] points = new ThreePoint[21];
-		int count = 0;
+		ThreePoint prev = start;
+		ThreePoint next;
+		//DebugLogger.console("entering loop1");
+		ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
 		while(true)
 		{
-			x=0;y=0;z=0;
+			x=0;
+			y=0;
+			z=0;
 			for(int i=0;i<=n;i++)
 			{
-				x+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].x);
-				y+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].y);
-				z+=(int)(binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i)*offsets[i].z);
+				x+=(int)(doubleOps(i,n,t)*(double)offsets[i].x);
+				y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
+				z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
 			}
-			ThreePoint thePoint = new ThreePoint(x,y,z);
-			points[count] = thePoint;
-			count++;
-
-			if(t >= 1)
+			DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
+			next = new ThreePoint(x,y,z);
+			veinPoints.addAll(bresenHamAlgo(prev,next));
+			
+			if(t >.999)
 			{
 				break;
 			}
+			prev = next;
 			t = t + step;
 		}//connect points with straight lines
-		ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
-		for(int i=1;i<count;i++)
-		{
-			
-			//DebugLogger.console( "startpoint" + points[i-1].x +" "+ points[i-1].y +" "+ points[i-1].z);
-			//DebugLogger.console( "endPoint" + points[i].x +" "+ points[i].y +" "+ points[i].z);
-			veinPoints.addAll(bresenHamAlgo(points[i-1],points[i]));
-		}
-		return veinPoints;
+		//DebugLogger.console("entering loop2");
+		DebugLogger.console("size of array" + veinPoints.size());
+		return veinPoints;*/
 	}
 
+	private static double doubleOps(int i, int n, double t)
+	{
+		return binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i);
+	}
+	
 	public static int binomialCoeff(int n, int k)
 	{
 		int coeff = 1;
@@ -207,7 +243,7 @@ public class LineDrawingUtilityClass
 	public static ThreePoint getEndPoint(ThreePoint start, int strike, Random rand, Boolean varyRadius) 
 	{
 		if(strike==0)
-			return null;
+			return start;
 		int it=0;
 		double phi,theta;
 		int x,z,y;
@@ -216,7 +252,7 @@ public class LineDrawingUtilityClass
 		{
 			if(varyRadius==true)
 			{
-				rad = rand.nextInt(strike)+3;
+				rad = (int)(rad*rand.nextGaussian()) +rad +4;
 			}
 			phi = ((double)rand.nextInt(314))/100.0;
 			y = (int) (rad*Math.cos(phi)) + start.y;
@@ -224,12 +260,13 @@ public class LineDrawingUtilityClass
 				break;
 			if(start.y-strike > 125)
 				break;
+			it++;
+			if(it>50)
+				return start;
 		}
 		theta = ((double)rand.nextInt(628)/100.0);
 		x = (int)(rad*Math.cos(theta)*Math.sin(phi)) + start.x;
 		z = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.z;
-		ThreePoint test = new ThreePoint(x,y,z);
-		TwoPoint chunkChords = getChunkCoords(test);
 		//DebugLogger.console("tried" + it + " to find good chunk");
 		ThreePoint endpoint = new ThreePoint(x,y,z);
 		return endpoint;

@@ -23,12 +23,12 @@ public class OreGenerator
 		chunkPoint.x = chunkPoint.x*16;
 		chunkPoint.z = chunkPoint.z*16;
 
-		if(rand.nextInt(20)==0)
+		if(rand.nextInt(5)==0)
 		{
 			ThreePoint start = new ThreePoint();
 			start.x+=chunkPoint.x;
 			start.z+=chunkPoint.z;
-			Vein vein = new Vein(start, 200,70);
+			Vein vein = new Vein(start, 200,100);
 		}
 	}
 

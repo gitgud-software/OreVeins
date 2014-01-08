@@ -19,16 +19,15 @@ public class Vein
 	private int branch;
 	public Vein(ThreePoint startPoint, int strike, int branch)
 	{
-		if(strike>10)
+		Random rand = new Random();
+		this.endPoint = LineDrawingUtilityClass.getEndPoint(startPoint, strike,rand, true);
+		double r = Math.sqrt((startPoint.x -endPoint.x)*(startPoint.x -endPoint.x) + 
+				(startPoint.y-endPoint.y)*(startPoint.y-endPoint.y)
+				+ (startPoint.z-endPoint.z)*(startPoint.z-endPoint.z));
+		if(!this.endPoint.equals(startPoint) && r >10)
 		{
-			Random rand = new Random();
-			//DebugLogger.console("1");
 			TwoPoint chunk = LineDrawingUtilityClass.getChunkCoords(startPoint);
-			//DebugLogger.console("2");
 			this.chunk = new TwoPoint(chunk.x,chunk.z);
-			//DebugLogger.console("3");
-			this.endPoint = LineDrawingUtilityClass.getEndPoint(startPoint, strike,rand, true);
-			//DebugLogger.console("4");
 			this.startPoint = startPoint;
 			this.strike= strike;
 			this.branch = branch;
@@ -40,9 +39,11 @@ public class Vein
 			ArrayList<ThreePoint> nodes = addCrossSection(line, rand);
 			//DebugLogger.console("7");
 			line = null;
+			DebugLogger.console("entering loop4");
 			VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
 			//DebugLogger.console("8");
 			this.centers = null;
+			DebugLogger.console("entering loop5");
 			if(nodes.size()>1)
 			{
 				for(int i=0;i<nodes.size();i++)
@@ -61,6 +62,7 @@ public class Vein
 		Shape crossSection = new Shape(1,3);
 		ArrayList<ThreePoint> nodes = new ArrayList<ThreePoint>();
 		crossSection.alighnToPoints(this.startPoint, this.endPoint);
+		DebugLogger.console("entering loop3");
 		for(int i=0;i<line.size();i++)
 		{
 			if(rand.nextInt(this.branch)==0)
