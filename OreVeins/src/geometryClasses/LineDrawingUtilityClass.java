@@ -114,8 +114,7 @@ public class LineDrawingUtilityClass
 	
 	public static ArrayList<ThreePoint> bezierCurve(ThreePoint start, ThreePoint end,Random rand)
 	{
-		return bresenHamAlgo(start,end);
-		/* 
+		
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
@@ -130,14 +129,14 @@ public class LineDrawingUtilityClass
 			offsets =new ThreePoint[2];
 			step = 1.0;
 		}
-		else if(dist>=15 && dist < 30)
+		else if(dist>=15 && dist < 60)
 		{
 			offsets =new ThreePoint[3];
 			ThreePoint mid = new ThreePoint(x+vx/2, y+vy/2,z+vz/2);
 			offsets[1] = getEndPoint(mid, dist/3, rand, true);
 			step = 1.0/4;
 		}
-		else if(dist>=30 && dist < 60)
+		else if(dist>=60 && dist < 120)
 		{
 			offsets =new ThreePoint[4];
 			ThreePoint midone = new ThreePoint(x+vx/3, y+vy/3,z+vz/3);
@@ -146,44 +145,16 @@ public class LineDrawingUtilityClass
 			offsets[2] = getEndPoint(midtwo, dist/4, rand, true);
 			step = 1.0/6;
 		}
-		else if(dist>=60 && dist < 120)
+		else
 		{
 			offsets =new ThreePoint[5];
-			ThreePoint midone = new ThreePoint(x+vx/4, y+vy/4,z+vz/4);
+			ThreePoint midone = new ThreePoint(x+(vx/4), y+(vy/4),z+(vz/4));
 			offsets[1] = getEndPoint(midone, dist/6, rand, true);
 			ThreePoint midtwo = new ThreePoint(x+(2*vx/4), y+(2*vy/4),z+(2*vz/4));
 			offsets[2] = getEndPoint(midtwo, dist/6, rand, true);
 			ThreePoint midthree = new ThreePoint(x+(3*vx/4), y+(3*vy/4),z+(3*vz/4));
 			offsets[3] = getEndPoint(midthree, dist/6, rand, true);
-			step = 1.0/7;
-		}
-		else if(dist>=120 && dist <240)
-		{
-			offsets =new ThreePoint[6];
-			ThreePoint midone = new ThreePoint(x+(vx/5), y+(vy/5),z+(vz/5));
-			offsets[1] = getEndPoint(midone, dist/7, rand, true);
-			ThreePoint midtwo = new ThreePoint(x+(2*vx/5), y+(2*vy/5),z+(2*vz/5));
-			offsets[2] = getEndPoint(midtwo, dist/7, rand, true);
-			ThreePoint midthree = new ThreePoint(x+(3*vx/5), y+(3*vy/5),z+(3*vz/5));
-			offsets[3] = getEndPoint(midthree, dist/7, rand, true);
-			ThreePoint midfour = new ThreePoint(x+(4*vx/5), y+(4*vy/5),z+(4*vz/5));
-			offsets[4] = getEndPoint(midfour, dist/7, rand, true);
-			step = 1.0/14;
-		}
-		else
-		{
-			offsets =new ThreePoint[7];
-			ThreePoint midone = new ThreePoint(x+(vx/6), y+(vy/6),z+(vz/6));
-			offsets[1] = getEndPoint(midone, dist/8, rand, true);
-			ThreePoint midtwo = new ThreePoint(x+(2*vx/6), y+(2*vy/6),z+(2*vz/6));
-			offsets[2] = getEndPoint(midtwo, dist/8, rand, true);
-			ThreePoint midthree = new ThreePoint(x+(3*vx/6), y+(3*vy/6),z+(3*vz/6));
-			offsets[3] = getEndPoint(midthree, dist/8, rand, true);
-			ThreePoint midfour = new ThreePoint(x+(4*vx/6), y+(4*vy/6),z+(4*vz/6));
-			offsets[4] = getEndPoint(midfour, dist/8, rand, true);
-			ThreePoint midfive = new ThreePoint(x+(5*vx/6), y+(5*vy/6),z+(5*vz/6));
-			offsets[5] = getEndPoint(midfive, dist/8, rand, true);
-			step = 1.0/20;
+			step = 1.0/15;
 			//DebugLogger.console("21");
 		}
 		offsets[0] = start;
@@ -205,7 +176,7 @@ public class LineDrawingUtilityClass
 				y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
 				z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
 			}
-			DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
+			//DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
 			next = new ThreePoint(x,y,z);
 			veinPoints.addAll(bresenHamAlgo(prev,next));
 			
@@ -217,8 +188,8 @@ public class LineDrawingUtilityClass
 			t = t + step;
 		}//connect points with straight lines
 		//DebugLogger.console("entering loop2");
-		DebugLogger.console("size of array" + veinPoints.size());
-		return veinPoints;*/
+		//DebugLogger.console("size of array" + veinPoints.size());
+		return veinPoints;
 	}
 
 	private static double doubleOps(int i, int n, double t)
