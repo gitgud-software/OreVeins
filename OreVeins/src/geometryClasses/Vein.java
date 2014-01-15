@@ -39,11 +39,11 @@ public class Vein
 			ArrayList<ThreePoint> nodes = addCrossSection(line, rand);
 			//DebugLogger.console("7");
 			line = null;
-			DebugLogger.console("entering loop4");
+			//DebugLogger.console("entering loop4");
 			VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
 			//DebugLogger.console("8");
 			this.centers = null;
-			DebugLogger.console("entering loop5");
+			//DebugLogger.console("entering loop5");
 			if(nodes.size()>1)
 			{
 				for(int i=0;i<nodes.size();i++)
@@ -62,7 +62,7 @@ public class Vein
 		Shape crossSection = new Shape(1,3);
 		ArrayList<ThreePoint> nodes = new ArrayList<ThreePoint>();
 		crossSection.alighnToPoints(this.startPoint, this.endPoint);
-		DebugLogger.console("entering loop3");
+		//DebugLogger.console("entering loop3");
 		for(int i=0;i<line.size();i++)
 		{
 			if(rand.nextInt(this.branch)==0)

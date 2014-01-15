@@ -23,7 +23,7 @@ public class OreGenerator
 		chunkPoint.x = chunkPoint.x*16;
 		chunkPoint.z = chunkPoint.z*16;
 
-		if(rand.nextInt(5)==0)
+		if(rand.nextInt(15)==0)
 		{
 			ThreePoint start = new ThreePoint();
 			start.x+=chunkPoint.x;

@@ -154,7 +154,7 @@ public class LineDrawingUtilityClass
 			offsets[2] = getEndPoint(midtwo, dist/6, rand, true);
 			ThreePoint midthree = new ThreePoint(x+(3*vx/4), y+(3*vy/4),z+(3*vz/4));
 			offsets[3] = getEndPoint(midthree, dist/6, rand, true);
-			step = 1.0/15;
+			step = 1.0/10;
 			//DebugLogger.console("21");
 		}
 		offsets[0] = start;
