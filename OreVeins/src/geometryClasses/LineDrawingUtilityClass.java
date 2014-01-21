@@ -118,12 +118,14 @@ public class LineDrawingUtilityClass
 		int vx = end.x - start.x;
 		int vy = end.y - start.y;
 		int vz = end.z - start.z;
-		int dist = (int)Math.sqrt(vx*vx + vy*vy + vz*vz);
+		int dist = (int)Math.sqrt(vx*vx + vy*vy + vz*vz); //Distance between start and end points
 		int x = start.x;
 		int y = start.y;
 		int z = start.z;
 		double step;
 		ThreePoint[] offsets;
+        //We figure out how many random points to disperse in the middle of the line, based off of
+        //the distance between the endpoints.
 		if(dist<15)
 		{
 			offsets =new ThreePoint[2];
@@ -157,33 +159,33 @@ public class LineDrawingUtilityClass
 			step = 1.0/10;
 			//DebugLogger.console("21");
 		}
+        //Offsets now contains the offset points (NOT THE OFFSET DISTANCE!!) for the middle
+        //sections. Set beginning and endpts.
+    	int n = offsets.length-1;
 		offsets[0] = start;
-		offsets[offsets.length-1] = end;
-		int n = offsets.length-1;
+		offsets[n] = end;
 		double t=0;
 		ThreePoint prev = start;
 		ThreePoint next;
 		//DebugLogger.console("entering loop1");
 		ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
-		while(true)
+		while(t < 1.0 + step)
 		{
 			x=0;
 			y=0;
 			z=0;
 			for(int i=0;i<=n;i++)
 			{
+                //These lines perform the summation needed for a Bezier curve
 				x+=(int)(doubleOps(i,n,t)*(double)offsets[i].x);
 				y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
 				z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
 			}
 			//DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
 			next = new ThreePoint(x,y,z);
+            s
 			veinPoints.addAll(bresenHamAlgo(prev,next));
-			
-			if(t >.999)
-			{
-				break;
-			}
+
 			prev = next;
 			t = t + step;
 		}//connect points with straight lines
@@ -197,7 +199,7 @@ public class LineDrawingUtilityClass
 		return binomialCoeff(n,i)*Math.pow(1-t, n-i)*Math.pow(t, i);
 	}
 	
-	public static int binomialCoeff(int n, int k)
+	public static int binomialCoeff(int n, int k) //N choose K or (\frac{n}{k})
 	{
 		int coeff = 1;
 		for (int i = n - k + 1; i <= n; i++) 
