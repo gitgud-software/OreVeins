@@ -41,21 +41,21 @@ public class LineDrawingUtilityClass
 		int dz2 = Dz*2;
 		if(Dx >= Dy && Dx >= Dz)
 		{
-			int ERRXY = dy2 - Dx;
+			int ERRYX = dy2 - Dx;
 			int ERRXZ = dz2 - Dx;
 			for(int i =0;i<Dx;i++)
 			{
-				if(ERRXY >0)
+				if(ERRYX >0)
 				{
 					y +=ymult;
-					ERRXY -=dx2;
+					ERRYX -=dx2;
 				}
 				if(ERRXZ >0)
 				{
 					z +=zmult;
 					ERRXZ -=dx2;
 				}
-				ERRXY +=dy2;
+				ERRYX +=dy2;
 				ERRXZ +=dz2;
 				x+=xmult;
 				ThreePoint point = new ThreePoint(x,y,z);
@@ -181,11 +181,11 @@ public class LineDrawingUtilityClass
 				y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
 				z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
 			}
-			//DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
 			next = new ThreePoint(x,y,z);
-            s
+   
 			veinPoints.addAll(bresenHamAlgo(prev,next));
-
+			DebugLogger.console("prev.x:" + prev.x+"prev.y"+ prev.y + "prev.z"+ prev.z);
+			DebugLogger.console("next.x:" + next.x+"next.y"+ next.y + "next.z"+ next.z);
 			prev = next;
 			t = t + step;
 		}//connect points with straight lines
