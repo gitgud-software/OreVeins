@@ -10,7 +10,24 @@ import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
 public class LineDrawingUtilityClass 
 {
-
+	public static void main(String[] args){
+        ArrayList<ThreePoint> tester;
+        ThreePoint zero = new ThreePoint(0,0,0);
+        ThreePoint endpoint = new ThreePoint(100,100,100);
+        Random rand = new Random(); //fuck this syntax
+        tester = bezierCurve(zero, endpoint, rand);
+        
+        String output = "";
+        StringBuilder sb = new StringBuilder();
+        
+        for (ThreePoint pt : tester){
+            sb.append(pt.toString());
+            sb.append("\n");
+        }
+        
+        System.out.println(sb.toString());
+        
+    }
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
 	{
 		ArrayList<ThreePoint> thePoints = new ArrayList<ThreePoint>();
@@ -164,7 +181,7 @@ public class LineDrawingUtilityClass
     	int n = offsets.length-1;
 		offsets[0] = start;
 		offsets[n] = end;
-		double t=0;
+		double t=step;
 		ThreePoint prev = start;
 		ThreePoint next;
 		//DebugLogger.console("entering loop1");
@@ -182,10 +199,10 @@ public class LineDrawingUtilityClass
 				z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
 			}
 			next = new ThreePoint(x,y,z);
-   
+			System.out.println("node " + next.toString());
 			veinPoints.addAll(bresenHamAlgo(prev,next));
-			DebugLogger.console("prev.x:" + prev.x+"prev.y"+ prev.y + "prev.z"+ prev.z);
-			DebugLogger.console("next.x:" + next.x+"next.y"+ next.y + "next.z"+ next.z);
+			//DebugLogger.console("prev.x:" + prev.x+"prev.y"+ prev.y + "prev.z"+ prev.z);
+			//DebugLogger.console("next.x:" + next.x+"next.y"+ next.y + "next.z"+ next.z);
 			prev = next;
 			t = t + step;
 		}//connect points with straight lines
