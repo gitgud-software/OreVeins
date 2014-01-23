@@ -12,6 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.generator.BlockPopulator;
+
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+
 import fileIO.VeinChunkReadWrite;
 import geometryClasses.LineDrawingUtilityClass;
 
@@ -26,24 +29,26 @@ public class OrePopulator implements Listener
 		String key = LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ());
 		if(VeinChunkReadWrite.loadedMap!=null)
 		{
+			DebugLogger.console("Drawing veins in loaded & existing chunk");
 			drawOtherOres(VeinChunkReadWrite.loadedMap);
 			VeinChunkReadWrite.loadedMap=null;
 		}
 		String[][][] oldOres = VeinChunkReadWrite.readChunks(key,true);
 		if(oldOres !=null)
 		{
-			//DebugLogger.console("Drawing veins in existing chunk");
+			DebugLogger.console("Drawing veins in existing chunk");
 			VeinDrawer.drawVein(oldOres, chunk);
 		}
 		VeinChunkReadWrite.deleteChunkInfo(key,true);
 		VeinChunkReadWrite.populatedList.put(key, true);
 	}
 	
-	private void drawOtherOres(HashMap<String, String[][][]> loadedMap) 
+	private void drawOtherOres(HashMap<String, String[][][]> theMap) 
 	{
 		String delims = "[:]";
 		int x , z;
 		Chunk chunk;
+		HashMap<String, String[][][]> loadedMap = theMap;
 		for(String entry: loadedMap.keySet())
 		{
 			String[] tokens = entry.split(delims);

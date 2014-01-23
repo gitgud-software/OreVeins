@@ -4,6 +4,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+
 
 
 import fileIO.VeinChunkReadWrite;
@@ -21,7 +23,7 @@ public final class ChunkLoadListener implements Listener
 			String[][][] draw =	VeinChunkReadWrite.readChunks(key, false);
 			if(draw !=null)
 			{
-				//DebugLogger.console("Drawing veins in existing chunk");
+				DebugLogger.console("Drawing veins in existing chunk");
 				VeinDrawer.drawVein(draw, event.getChunk());
 			}
 			VeinChunkReadWrite.deleteChunkInfo(key, false);

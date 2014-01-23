@@ -13,7 +13,7 @@ public class VeinDrawer {
 
 	public static void drawVein(String[][][] vein, Chunk chunk) 
 	{
-		DebugLogger.console("drawingOres");
+		//DebugLogger.console("drawingOres");
 		Block block;
 		for(int x=0;x<16;x++)
 		{

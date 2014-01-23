@@ -14,6 +14,9 @@ public class TwoPoint
 		this.x = x;
 		this.z = z;
 	}
+	public String toString(){
+        return x + "," + z; //CSV format
+    }
 	@Override
 	public boolean equals(Object ob)
 	{

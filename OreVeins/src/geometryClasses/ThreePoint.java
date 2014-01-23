@@ -20,6 +20,11 @@ public class ThreePoint implements Serializable{
 		this.y = y;
 		this.z = z;
 	}
+	public ThreePoint(ThreePoint other){
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+	}
 	public ThreePoint()
 	{
 		Random rand = new Random();
@@ -27,6 +32,9 @@ public class ThreePoint implements Serializable{
 		this.y =rand.nextInt(125)+2;
 		this.z =rand.nextInt(16);
 	}
+	public String toString(){
+        return x + "," + y + "," + z; //CSV format
+    }
 @Override	
 public boolean equals(Object ob)
 	{
