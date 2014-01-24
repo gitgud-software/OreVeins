@@ -17,8 +17,10 @@ public class Vein
 	public int strike;
 	private TwoPoint chunk;
 	private int branch;
-	public Vein(ThreePoint startPoint, int strike, int branch)
+	private String ore;
+	public Vein(ThreePoint startPoint, int strike, int branch,String ore)
 	{
+		this.ore = ore;
 		Random rand = new Random();
 		this.startPoint = startPoint;
 		this.endPoint = LineDrawingUtilityClass.getEndPoint(startPoint, strike,rand, true);
@@ -34,19 +36,14 @@ public class Vein
 			this.strike= strike;
 			this.branch = branch;
 			ArrayList<ThreePoint> line = LineDrawingUtilityClass.bezierCurve(startPoint,this.endPoint, rand);
-			//DebugLogger.console("6");
 			ArrayList<ThreePoint> nodes = addCrossSection(line, rand);
-			//DebugLogger.console("7");
 			line = null;
-			//DebugLogger.console("entering loop4");
-			//DebugLogger.console("8");
-			//DebugLogger.console("entering loop5");
 			if(nodes.size()>1)
 			{
 				for(int i=0;i<nodes.size();i++)
 				{
 					//DebugLogger.console("making vein");
-					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.1), (int) (this.branch*.5));
+					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.1), (int) (this.branch*.5),this.ore);
 				}
 			}
 			VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);

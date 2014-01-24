@@ -1,4 +1,6 @@
 package com.icloud.kevinmendoza.OreVeins;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fileIO.VeinChunkReadWrite;
@@ -11,6 +13,8 @@ import listeners.WorldListener;
 
 public final class OreVeins extends JavaPlugin 
 {
+	File config;
+	FileConfiguration newConfigs;
 	@Override
 	public void onEnable()
 	{
@@ -21,6 +25,9 @@ public final class OreVeins extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new WorldListener(),this);
 		getServer().getPluginManager().registerEvents(new OrePopulator(),this);
 		VeinChunkReadWrite.loadPopulatedList();
+		newConfigs = YamlConfiguration.loadConfiguration(config);
+		Defaults.popAndReadDefaults(newConfigs);
+		saveNewConfig();
 	}
 
 	@Override
@@ -34,7 +41,7 @@ public final class OreVeins extends JavaPlugin
 	private void popFileTree()
 	{
 		File Ovein = new File("plugins/OreVeins");
-		File config = new File("plugins/OreVeins/config.yml");
+		config = new File("plugins/OreVeins/config.yml");
 		File popList = new File("plugins/OreVeins/popList.txt");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
@@ -55,5 +62,15 @@ public final class OreVeins extends JavaPlugin
 			onDisable();
 			//Also, fuck you checked exceptions!
 		}		
+	}
+	public void saveNewConfig()
+	{
+		try
+		{
+			newConfigs.save(config);
+		}
+		catch(Exception e)
+		{
+		}
 	}
 }
