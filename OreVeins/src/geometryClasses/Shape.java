@@ -53,7 +53,7 @@ public class Shape
 			{
 				for(int z=-c;z<c;z++)
 				{
-					XX = x*x / aa;
+					XX = x*x/aa;
 					YY = y*y/bb;
 					ZZ = z*z/cc;
 					if(1>= XX+YY+ZZ)
@@ -118,7 +118,7 @@ public class Shape
 			if(points[i]!=null)
 			{
 				ThreePoint point = points[i];
-				xprime = (double)(point.x)*Math.cos(tau)+ (double)(point.x)*Math.sin(tau);
+				xprime = (double)(point.x)*Math.cos(tau)+ (double)(point.z)*Math.sin(tau);
 				zprime = -(double)(point.x)*Math.sin(tau) + (double)(point.z)*Math.cos(tau);
 				points[i].x = (int)xprime;
 				points[i].z = (int)zprime;
@@ -152,21 +152,24 @@ public class Shape
 		rotateZ(Math.toRadians(rand.nextInt(180)-90));
 	}
 
-	public void alighnToPoints(ThreePoint start, ThreePoint end)
+	public void alighnToPoints(ThreePoint start, ThreePoint end, Random rand)
 	{
+		rotateZ(rand.nextInt(360));
 		double vx = end.x - start.x;
 		double vy = end.y - start.y;
 		double vz = end.z - start.z;
 		double r = Math.sqrt( vx*vx + vy*vy + vz*vz);
-		double theta = Math.toDegrees(Math.acos(vy/r)) +90;
 		if(vx==0)
 		{
-			vx=.01;
+			vx=1;
 		}
-		double phi = Math.toDegrees(Math.atan(vz/vx));
+		if(vy==0)
+		{
+			vy=1;
+		}
+		double phi = Math.toDegrees(Math.atan((vx*vx +vz*vz)/vy));
+		double theta = Math.toDegrees(Math.atan(vz/vx)+90);
 		rotateX(phi);
 		rotateY(theta);
-		Random rand = new Random();
-		rotateZ(rand.nextInt(360));
 	}
 }

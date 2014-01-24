@@ -20,6 +20,7 @@ public class Vein
 	public Vein(ThreePoint startPoint, int strike, int branch)
 	{
 		Random rand = new Random();
+		this.startPoint = startPoint;
 		this.endPoint = LineDrawingUtilityClass.getEndPoint(startPoint, strike,rand, true);
 		double r = Math.sqrt((startPoint.x -endPoint.x)*(startPoint.x -endPoint.x) + 
 				(startPoint.y-endPoint.y)*(startPoint.y-endPoint.y)
@@ -45,7 +46,7 @@ public class Vein
 				for(int i=0;i<nodes.size();i++)
 				{
 					//DebugLogger.console("making vein");
-					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.5), (int) (this.branch*1.5));
+					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.1), (int) (this.branch*.5));
 				}
 			}
 			VeinChunkReadWrite.parseCenters(this.chunk, "GOLD", this.centers);
@@ -57,33 +58,48 @@ public class Vein
 	private ArrayList<ThreePoint> addCrossSection(ArrayList<ThreePoint> line,Random rand)
 	{
 		this.centers = new ArrayList<ThreePoint>();
-		Shape crossSection = new Shape(1,3);
+		Shape crossSection = new Shape(3,7);
+		
 		ArrayList<ThreePoint> nodes = new ArrayList<ThreePoint>();
-		crossSection.alighnToPoints(this.startPoint, this.endPoint);
+		crossSection.alighnToPoints(this.startPoint, this.endPoint, rand);
 		//DebugLogger.console("entering loop3");
 		for(int i=0;i<line.size();i++)
 		{
-			if(rand.nextInt(this.branch)==0)
-			{
+			if(rand.nextInt(this.branch)==0)//branch freq
+			{//adding in branching
 				nodes.add(line.get(i));
 			}
-			if(line.get(i).y > 1)
-			{
-				this.centers.add(line.get(i));
-			}
-			/*
-			for(int j=0;j<crossSection.points.length;j++)
-			{
-				int y = crossSection.points[j].y + line.get(i).y;
-				ThreePoint newPoint = new ThreePoint(crossSection.points[j].x + line.get(i).x,
-													 y,
-													 crossSection.points[j].z + line.get(i).z);
-				if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+			if(rand.nextInt(100)==0)//bonanza freq
+			{//bonanzas
+				Shape bonanza = new Shape(rand.nextInt(5)+1,rand.nextInt(5)+1, rand.nextInt(5)+1);
+				bonanza.rotateRandom(rand);
+				for(int j=0;j<bonanza.points.length;j++)
 				{
-					//DebugLogger.console("adding point!!"+ y);
-					this.centers.add(newPoint);
+					int y = bonanza.points[j].y + line.get(i).y;
+					ThreePoint newPoint = new ThreePoint(bonanza.points[j].x + line.get(i).x,y,
+							bonanza.points[j].z + line.get(i).z);
+					if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+					{
+						//DebugLogger.console("adding point!!"+ y);
+						this.centers.add(newPoint);
+					}
 				}
-			}*/
+			}
+			else
+			{//grade
+				for(int j=0;j<crossSection.points.length;j++)
+				{
+					int y = crossSection.points[j].y + line.get(i).y;
+					ThreePoint newPoint = new ThreePoint(crossSection.points[j].x + line.get(i).x,y,
+							crossSection.points[j].z + line.get(i).z);
+					if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+					{
+						//DebugLogger.console("adding point!!"+ y);
+						//if(rand.nextInt(15)==0)//grade code
+							this.centers.add(newPoint);
+					}
+				}
+			}
 		}
 		return nodes;
 	}

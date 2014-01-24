@@ -10,14 +10,19 @@ import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
 public class LineDrawingUtilityClass 
 {
-	public static void main(String[] args){
+	/*public static void main(String[] args){
         ArrayList<ThreePoint> tester;
         ThreePoint zero = new ThreePoint(0,0,0);
-        ThreePoint endpoint = new ThreePoint(0,0,100);
-        Random rand = new Random(); //fuck this syntax
-        tester = bezierCurve(zero, endpoint, rand);
-        
-        String output = "";
+        Random rand = new Random();
+        ThreePoint endpoint = new ThreePoint(rand.nextInt(200),rand.nextInt(200),rand.nextInt(200));
+        //fuck this syntax
+        System.out.println("Working");
+        for(int i=0;i<1000000;i++)
+        {
+        	tester = bezierCurve(zero, endpoint, rand);
+        }
+        System.out.println("Done");
+        /*String output = "";
         StringBuilder sb = new StringBuilder();
         
         for (ThreePoint pt : tester){
@@ -27,7 +32,7 @@ public class LineDrawingUtilityClass
         
         System.out.println(sb.toString());
         
-    }
+    }*/
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
     {
         ArrayList<ThreePoint> thePoints = new ArrayList<ThreePoint>();
@@ -77,6 +82,7 @@ public class LineDrawingUtilityClass
                 ERRXZ +=dz2;
                 x+=xmult;
                 ThreePoint point = new ThreePoint(x,y,z);
+                //System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -100,6 +106,7 @@ public class LineDrawingUtilityClass
                 errzy+=dz2;
                 y+=ymult;
                 ThreePoint point = new ThreePoint(x,y,z);
+               // System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -121,8 +128,9 @@ public class LineDrawingUtilityClass
                 }
                 erryz+=dy2;
                 errxz+=dx2;
-                z+=ymult;
+                z+=zmult;
                 ThreePoint point = new ThreePoint(x,y,z);
+               // System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -180,29 +188,31 @@ public class LineDrawingUtilityClass
         int n = offsets.length-1;
         offsets[0] = start;
         offsets[n] = end;
-        double t=0;
+        double t=step;
         ThreePoint prev = start;
         ThreePoint next;
         //DebugLogger.console("entering loop1");
         ArrayList<ThreePoint> veinPoints = new ArrayList<ThreePoint>();
+       // System.out.print("The line is start:" +offsets[0].toString() + " end:"+offsets[n].toString());
         while(t < 1.0 + step)
         {
-            x=0;
-            y=0;
-            z=0;
-            for(int i=0;i<=n;i++)
-            {
-                //These lines perform the summation needed for a Bezier curve
-                x+=(int)(doubleOps(i,n,t)*(double)offsets[i].x);
-                y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
-                z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
-            }
-            //DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
-            next = new ThreePoint(x,y,z);
-            veinPoints.addAll(bresenHamAlgo(prev,next));
-
-            prev = next;
-            t = t + step;
+        	x=0;
+        	y=0;
+        	z=0;
+        	for(int i=0;i<=n;i++)
+        	{
+        		//These lines perform the summation needed for a Bezier curve
+        		x+=(int)(doubleOps(i,n,t)*(double)offsets[i].x);
+        		y+=(int)(doubleOps(i,n,t)*(double)offsets[i].y);
+        		z+=(int)(doubleOps(i,n,t)*(double)offsets[i].z);
+        	}
+        	//DebugLogger.console("t is x:" + x+" y:"+ y + " z:"+ z);
+        	next = new ThreePoint(x,y,z);
+        	//System.out.println("nodes are start:" + prev.toString());
+        	veinPoints.addAll(bresenHamAlgo(prev,next));
+        	//System.out.println("nodes and ends:" + next.toString());
+        	prev = next;
+        	t = t + step;
         }//connect points with straight lines
         //DebugLogger.console("entering loop2");
         //DebugLogger.console("size of array" + veinPoints.size());
@@ -240,8 +250,10 @@ public class LineDrawingUtilityClass
 		{
 			if(varyRadius==true)
 			{
-				rad = (int)(rad*rand.nextGaussian()) +rad +4;
+				rad = (int)((rad*.75)*rand.nextGaussian()) +rad;
 			}
+			if(rad < 5)
+				rad = 5;
 			phi = ((double)rand.nextInt(314))/100.0;
 			y = (int) (rad*Math.cos(phi)) + start.y;
 			if( y <128 && y >2 )
