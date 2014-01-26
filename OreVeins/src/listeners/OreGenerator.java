@@ -18,17 +18,16 @@ import com.icloud.kevinmendoza.OreVeins.Defaults;
  */
 public class OreGenerator 
 {
-
 	public static void getOresFromChunk(Chunk chunk) 
 	{
 		Random rand = new Random();
 		TwoPoint chunkPoint = new TwoPoint(chunk.getX(),chunk.getZ());
 		chunkPoint.x = chunkPoint.x*16;
 		chunkPoint.z = chunkPoint.z*16;
-
+		//GOOOOLLLLDD vein system first nucleates out of the ethers here
 		if(rand.nextInt(Defaults.gold.probability)==0)
 		{
-			DebugLogger.console("Drawing new ores");
+			DebugLogger.console("gold vein system nucleating");
 			ThreePoint start = new ThreePoint();
 			start.x+=chunkPoint.x;
 			start.z+=chunkPoint.z;

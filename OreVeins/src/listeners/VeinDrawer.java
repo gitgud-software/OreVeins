@@ -28,9 +28,7 @@ public class VeinDrawer {
 						//{
 							if(vein[x][y][z].contains("GOLD"))
 							{
-
 								block.setType(Material.GOLD_ORE);
-								//DebugLogger.console("makin gold");
 							}
 							else if (vein[x][y][z].contains("IRON"))
 							{

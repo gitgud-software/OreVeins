@@ -8,12 +8,15 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+
 public class OreReplacer extends BlockPopulator
 {
 	
 	@Override
 	public void populate(World world, Random rand, Chunk chunk) 
 	{
+		//DebugLogger.console("deleting chunk at X:" + chunk.getX()+" Z:"+chunk.getZ());
 		Block block;
 		for (int x = 0; x < 16; x++)
 		{

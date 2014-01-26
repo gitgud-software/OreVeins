@@ -1,10 +1,8 @@
 package com.icloud.kevinmendoza.OreVeins;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.bukkit.configuration.file.FileConfiguration;
+
 
 public class Defaults 
 {
@@ -17,8 +15,6 @@ public class Defaults
 	public static OreInfo redstone;
 	public static OreInfo emerald;
 	public static OreInfo diamond;
-	String[] listOne = { "one", "two", "three", "four" };
-    static List<String> listTwo = new ArrayList<String>();
 	
 	public static void popAndReadDefaults(FileConfiguration configs)
 	{
@@ -26,6 +22,7 @@ public class Defaults
 	}
 	private static void addGoldDefaults(FileConfiguration config) 
 	{
+		gold = new OreInfo();
 		if(!config.contains("GoldVeinSystem.Strike"))
 		{
 			config.set("GoldVeinSystem.Strike", 200);

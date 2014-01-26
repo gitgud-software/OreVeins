@@ -23,10 +23,10 @@ public final class ChunkLoadListener implements Listener
 			String[][][] draw =	VeinChunkReadWrite.readChunks(key, false);
 			if(draw !=null)
 			{
-				DebugLogger.console("Drawing veins in existing chunk");
+				//DebugLogger.console("Drawing veins in existing chunk");
 				VeinDrawer.drawVein(draw, event.getChunk());
+				VeinChunkReadWrite.deleteChunkInfo(key, false);
 			}
-			VeinChunkReadWrite.deleteChunkInfo(key, false);
 		}
 	}
 }

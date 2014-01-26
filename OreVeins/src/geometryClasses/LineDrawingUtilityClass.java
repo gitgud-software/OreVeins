@@ -10,29 +10,6 @@ import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
 public class LineDrawingUtilityClass 
 {
-	/*public static void main(String[] args){
-        ArrayList<ThreePoint> tester;
-        ThreePoint zero = new ThreePoint(0,0,0);
-        Random rand = new Random();
-        ThreePoint endpoint = new ThreePoint(rand.nextInt(200),rand.nextInt(200),rand.nextInt(200));
-        //fuck this syntax
-        System.out.println("Working");
-        for(int i=0;i<1000000;i++)
-        {
-        	tester = bezierCurve(zero, endpoint, rand);
-        }
-        System.out.println("Done");
-        /*String output = "";
-        StringBuilder sb = new StringBuilder();
-        
-        for (ThreePoint pt : tester){
-            sb.append(pt.toString());
-            sb.append("\n");
-        }
-        
-        System.out.println(sb.toString());
-        
-    }*/
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
     {
         ArrayList<ThreePoint> thePoints = new ArrayList<ThreePoint>();
@@ -153,7 +130,7 @@ public class LineDrawingUtilityClass
         if(dist<15)
         {
             offsets =new ThreePoint[2];
-            step = 1.0;
+            return bresenHamAlgo(start,end);
         }
         else if(dist>=15 && dist < 60)
         {
@@ -281,7 +258,7 @@ public class LineDrawingUtilityClass
 	public static ThreePoint shiftCoords(ThreePoint point)
 	{
 		//DebugLogger.console("start point" + point.x + " "+ point.y + " " + point.z);
-		ThreePoint newPoint = new ThreePoint(Math.abs(point.x-16*(point.x>>4)), point.y ,Math.abs(point.z-16*(point.z>>4)));
+		ThreePoint newPoint = new ThreePoint((point.x%16+16)%16, point.y ,(point.z%16+16)%16);
 		//DebugLogger.console("start point" + newPoint.x + " "+  newPoint.y + " " +  newPoint.z);
 		return newPoint;
 	}
