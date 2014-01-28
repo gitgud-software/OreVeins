@@ -10,6 +10,10 @@ import org.bukkit.generator.BlockPopulator;
 
 import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 
+import fileIO.LoadAndUnload;
+import fileIO.VeinChunkReadWrite;
+import geometryClasses.LineDrawingUtilityClass;
+
 public class OreReplacer extends BlockPopulator
 {
 	
@@ -38,5 +42,7 @@ public class OreReplacer extends BlockPopulator
 				}
 			}
 		}
+		String key = LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ());
+		LoadAndUnload.populatedList.put(key, true);
 	}
 }
