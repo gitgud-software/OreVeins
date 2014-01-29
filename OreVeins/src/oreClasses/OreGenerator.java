@@ -25,7 +25,7 @@ public class OreGenerator
 			ThreePoint start = new ThreePoint();
 			start.x+=chunkPoint.x;
 			start.z+=chunkPoint.z;
-			Vein vein = new Vein(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
+			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
 		}
 	}
 

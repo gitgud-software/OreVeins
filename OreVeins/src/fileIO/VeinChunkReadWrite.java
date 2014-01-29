@@ -99,6 +99,7 @@ public class VeinChunkReadWrite
 				{
 					String[][][] points = (String[][][] ) obj;
 					//DebugLogger.console("successful fetch!");
+					delete("plugins/OreVeins/ChunkInfo/"+key+".txt");
 					return points;
 				}
 				catch (Exception e)
