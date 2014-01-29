@@ -1,13 +1,16 @@
-package geometryClasses;
+package oreClasses;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.Random;
 
 import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
 
-import fileIO.VeinChunkReadWrite;
+import geometryClasses.LineDrawingUtilityClass;
+import geometryClasses.Shape;
+import geometryClasses.ThreePoint;
 
 public class Vein 
 {
@@ -37,18 +40,17 @@ public class Vein
 			//DebugLogger.console("adding section");
 			ArrayList<ThreePoint> nodes = addCrossSection(line, rand);
 			line = null;
-
 			if(nodes.size()>1)
 			{
 				DebugLogger.console("Branching:"+nodes.size());
 				for(int i=0;i<nodes.size();i++)
 				{
 					//DebugLogger.console("making vein");
-					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.3), (int) (this.branch*.75),this.ore);
+					Vein vein = new Vein(nodes.get(i), (int)(this.strike*.3), (int) (this.branch*.75),"REDSTONE");
 				}
 			}
 		//	DebugLogger.console("parsing");
-			VeinChunkReadWrite.parseCenters(LineDrawingUtilityClass.getChunkCoords(startPoint), "GOLD", this.centers);
+			PointMapping.addArrayToPoints(this.centers, this.ore);
 			this.centers = null;
 			nodes = null;
 		}
@@ -80,7 +82,7 @@ public class Vein
 					{
 						ThreePoint newPoint = new ThreePoint(bonanza.points[j].x + line.get(i).x,y,
 								bonanza.points[j].z + line.get(i).z);
-						if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+						if(!this.centers.contains(newPoint))
 						{
 							this.centers.add(newPoint);
 						}
@@ -99,7 +101,7 @@ public class Vein
 					{
 						ThreePoint newPoint = new ThreePoint(crossSection.points[j].x + line.get(i).x,y,
 								crossSection.points[j].z + line.get(i).z);
-						if(!this.centers.contains(newPoint) && y > 2 && y < 127)
+						if(!this.centers.contains(newPoint))
 						{
 							//if(rand.nextInt(15)==0)//grade code
 							this.centers.add(newPoint);

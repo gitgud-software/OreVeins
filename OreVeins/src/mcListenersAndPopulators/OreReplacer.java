@@ -1,4 +1,4 @@
-package populatorClasses;
+package mcListenersAndPopulators;
 
 import java.util.Random;
 
@@ -8,11 +8,9 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
-import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
-import fileIO.LoadAndUnload;
-import fileIO.VeinChunkReadWrite;
-import geometryClasses.LineDrawingUtilityClass;
+import geometryClasses.TwoPoint;
 
 public class OreReplacer extends BlockPopulator
 {
@@ -42,7 +40,7 @@ public class OreReplacer extends BlockPopulator
 				}
 			}
 		}
-		String key = LineDrawingUtilityClass.convertToKey(chunk.getX(),chunk.getZ());
-		LoadAndUnload.populatedList.put(key, true);
+		TwoPoint theChunk = new TwoPoint(chunk.getX(),chunk.getZ());
+		PointMapping.addToPopList(theChunk);
 	}
 }

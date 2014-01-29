@@ -1,16 +1,12 @@
 package geometryClasses;
 
-import java.io.Serializable;
 import java.util.Random;
 
 /*ThreePoint is coord within chunk, TwoPoint is coord of chunk
 ThreePoint and TwoPoint coordinates are NOT the same! */
 
-public class ThreePoint implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7131069884437564212L;
+public class ThreePoint extends Point
+{
 	public int x;
 	public int y;
 	public int z;
@@ -32,11 +28,30 @@ public class ThreePoint implements Serializable{
 		this.y =rand.nextInt(125)+2;
 		this.z =rand.nextInt(16);
 	}
-	public String toString(){
-        return x + "," + y + "," + z; //CSV format
-    }
-@Override	
-public boolean equals(Object ob)
+	public void shiftCoords()
+	{
+		this.x = (x%16+16)%16;
+		this.z = (z%16+16)%16;
+	}
+	@Override
+	public String toString()
+	{
+		return x +","+ y +","+ z;
+	}
+
+	@Override
+	public TwoPoint toChunkCoordPoint() 
+	{
+		TwoPoint chunkC = new TwoPoint(x>>4,z>>4);
+		return chunkC;
+	}
+	@Override
+	public String toChunkCoord()
+	{
+		return (x>>4) + ":" + (z>>4); 
+	}
+	@Override	
+	public boolean equals(Object ob)
 	{
 		if(ob == null || ob.getClass() != this.getClass())
 		{

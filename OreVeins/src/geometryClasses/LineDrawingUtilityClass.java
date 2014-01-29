@@ -3,11 +3,6 @@ package geometryClasses;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-
-import com.icloud.kevinmendoza.OreVeins.DebugLogger;
-
-
 public class LineDrawingUtilityClass 
 {
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
@@ -247,45 +242,6 @@ public class LineDrawingUtilityClass
 		//DebugLogger.console("tried" + it + " to find good chunk");
 		ThreePoint endpoint = new ThreePoint(x,y,z);
 		return endpoint;
-	}
-	
-	public static TwoPoint getChunkCoords(ThreePoint point)
-	{
-		TwoPoint newPoint = new TwoPoint(point.x>>4,point.z>>4);
-		return newPoint;
-	}
-	
-	public static ThreePoint shiftCoords(ThreePoint point)
-	{
-		//DebugLogger.console("start point" + point.x + " "+ point.y + " " + point.z);
-		ThreePoint newPoint = new ThreePoint((point.x%16+16)%16, point.y ,(point.z%16+16)%16);
-		//DebugLogger.console("start point" + newPoint.x + " "+  newPoint.y + " " +  newPoint.z);
-		return newPoint;
-	}
-
-	public static String convertToKey(int x, int z)
-	{
-		String chx = new Integer(x).toString();
-		String chz = new Integer(z).toString();
-		String key = chx +":" + chz;
-		return key;
-	}
-
-	public static String convertToKey(ThreePoint point)
-	{
-		String chx = new Integer(point.x>>4).toString();
-		String chz = new Integer(point.z>>4).toString();
-		String key = chx +":" + chz;
-		return key;
-	}
-	
-	public static String convertToKey(TwoPoint chunk)
-	{
-
-		String chx = new Integer(chunk.x).toString();
-		String chz = new Integer(chunk.z).toString();
-		String key = chx +":" + chz;
-		return key;
 	}
 	
 }

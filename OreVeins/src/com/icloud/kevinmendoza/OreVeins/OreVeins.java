@@ -3,13 +3,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fileIO.VeinChunkReadWrite;
 
 import java.io.*;
-
-import listeners.ChunkLoadListener;
-import listeners.OrePopulator;
-import listeners.WorldListener;
+import mcListenersAndPopulators.EventListeners;
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -21,10 +17,9 @@ public final class OreVeins extends JavaPlugin
 		// TODO Insert logic to be performed when the plugin is enabled
 		getLogger().info("onEnable has been invoked!");
 		popFileTree();
-		getServer().getPluginManager().registerEvents(new ChunkLoadListener(), this);
-		getServer().getPluginManager().registerEvents(new WorldListener(),this);
-		getServer().getPluginManager().registerEvents(new OrePopulator(),this);
-		VeinChunkReadWrite.loadPopulatedList();
+		getServer().getPluginManager().registerEvents(new EventListeners(), this);
+		PointMapping.initializeMaps();
+		PointMapping.populatePopList();
 		newConfigs = YamlConfiguration.loadConfiguration(config);
 		Defaults.popAndReadDefaults(newConfigs);
 		saveNewConfig();
@@ -35,7 +30,8 @@ public final class OreVeins extends JavaPlugin
 	{
 		// TODO Insert logic to be performed when the plugin is disabled
 		getLogger().info("onDisable has been invoked!");
-		VeinChunkReadWrite.savePopulatedList();
+		PointMapping.savePoints();
+		PointMapping.savePopulatedList();
 	}
 	
 	private void popFileTree()
@@ -44,16 +40,12 @@ public final class OreVeins extends JavaPlugin
 		config = new File("plugins/OreVeins/config.yml");
 		File popList = new File("plugins/OreVeins/popList.txt");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
-		File VeinInfo = new File("plugins/OreVeins/VeinInfo");
-		File StringerInfo = new File("plugins/OreVeins/PrevChunkInfo");
 		try
 		{
 			Ovein.mkdir();
 			popList.createNewFile();
 			config.createNewFile();
 			ChunkInfo.mkdir();
-			VeinInfo.mkdir();
-			StringerInfo.mkdir();
 		}
 		catch (IOException e)
 		{ //Hooray for horrible programming practices!
