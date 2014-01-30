@@ -18,6 +18,7 @@ public class HydroVeinSystem extends OreSuper
 	public int strike;
 	private int branch;
 	private ArrayList<ThreePoint> nodes;
+	private ThreePoint[] crossSection;
 	public HydroVeinSystem(ThreePoint startPoint, int strike, int branch,String ore)
 	{
 		this.ore = ore;
@@ -30,6 +31,9 @@ public class HydroVeinSystem extends OreSuper
 				+ (startPoint.z-endPoint.z)*(startPoint.z-endPoint.z));
 		if(!this.endPoint.equals(startPoint) && r >10 && branch > 5)
 		{
+			Shape section = new Shape(1,4);
+			section.alighnToPoints(this.startPoint, this.endPoint, rand);
+			this.crossSection = section.points;
 			this.nodes = new ArrayList<ThreePoint>();
 			this.startPoint = startPoint;
 			this.strike= strike;
@@ -84,23 +88,21 @@ public class HydroVeinSystem extends OreSuper
 		}
 		else
 		{
-			if(threePoint.y>2 && threePoint.y<256)
-				section.add(threePoint);
-			/*//DebugLogger.console("adding cross seect to point");
-			for(int j=0;j<crossSection.points.length;j++)
+			//DebugLogger.console("adding cross seect to point");
+			for(int j=0;j<crossSection.length;j++)
 			{
-				int y = crossSection.points[j].y + line.get(i).y;
+				int y = crossSection[j].y + threePoint.y;
 				if(y > 2 && y < 127)
 				{
-					ThreePoint newPoint = new ThreePoint(crossSection.points[j].x + line.get(i).x,y,
-							crossSection.points[j].z + line.get(i).z);
-					if(!this.centers.contains(newPoint))
+					ThreePoint newPoint = new ThreePoint(crossSection[j].x + threePoint.x,y,
+							crossSection[j].z + threePoint.z);
+					if(!section.contains(newPoint))
 					{
 						//if(rand.nextInt(15)==0)//grade code
-						this.centers.add(newPoint);
+						section.add(newPoint);
 					}
 				}
-			}*/
+			}
 		}
 		return section;
 	}

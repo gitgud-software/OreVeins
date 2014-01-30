@@ -14,10 +14,13 @@ public abstract class OreSuper
 	protected Random rand;
 	protected  void addPoints(ArrayList<ThreePoint> iterateOverPoints)
 	{
+		this.centers = new ArrayList<ThreePoint>();
 		ArrayList<ThreePoint> section = new ArrayList<ThreePoint>();
 		for(int i=0;i<iterateOverPoints.size();i++)
 		{
-			this.centers.addAll(addSection(iterateOverPoints.get(i),section));
+			section = addSection(iterateOverPoints.get(i),section);
+			if(section!=null)
+				this.centers.addAll(section);
 		}
 	}
 	protected abstract ArrayList<ThreePoint>  addSection(ThreePoint threePoint,ArrayList<ThreePoint> section); 
