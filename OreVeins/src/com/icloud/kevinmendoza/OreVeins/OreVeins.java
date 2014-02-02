@@ -1,8 +1,13 @@
 package com.icloud.kevinmendoza.OreVeins;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
+import geometryClasses.TwoPoint;
 
 import java.io.*;
 import mcListenersAndPopulators.EventListeners;
@@ -18,7 +23,6 @@ public final class OreVeins extends JavaPlugin
 		getLogger().info("onEnable has been invoked!");
 		popFileTree();
 		getServer().getPluginManager().registerEvents(new EventListeners(), this);
-		PointMapping.initializeMaps();
 		PointMapping.populatePopList();
 		newConfigs = YamlConfiguration.loadConfiguration(config);
 		Defaults.popAndReadDefaults(newConfigs);
@@ -64,5 +68,41 @@ public final class OreVeins extends JavaPlugin
 		catch(Exception e)
 		{
 		}
+	}
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		if(cmd.getName().equalsIgnoreCase("testChunk"))
+		{ // If the player typed /basic then do the following...
+			Player thePlayer = (Player)sender;
+			TwoPoint chunk = new 
+					TwoPoint(thePlayer.getLocation().getBlockX(),thePlayer.getLocation().getBlockZ());
+			if(PointMapping.getPop(chunk.toString())!=null)
+			{
+				sender.sendMessage("chunkisPopulated");
+			}
+			else
+			{
+				sender.sendMessage("chunkisNotPopulated");
+			}
+			if(PointMapping.getLoaded(chunk.toString())!=null)
+			{
+				sender.sendMessage("chunkisLoaded");
+			}
+			else
+			{
+				sender.sendMessage("chunkisNotLoaded");
+			}
+			if(PointMapping.getPoints(chunk.toString())!=null)
+			{
+				sender.sendMessage("chunkHasPoints");
+			}
+			else
+			{
+				sender.sendMessage("chunkHasNoPoints");
+			}
+			return true;
+		} //If this has happened the function will return true. 
+	        // If this hasn't happened the a value of false will be returned.
+		return false; 
 	}
 }

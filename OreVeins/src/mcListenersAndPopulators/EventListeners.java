@@ -40,11 +40,7 @@ public final class EventListeners implements Listener
 	@EventHandler
 	public void onInit(WorldInitEvent event) 
 	{
-		OreReplacer pop = new OreReplacer();
-		if(!Bukkit.getWorlds().get(0).getPopulators().contains(pop))
-		{
-			Bukkit.getWorlds().get(0).getPopulators().add(pop);
-		}
+		event.getWorld().getPopulators().add(new OreReplacer());
 	}
 	@EventHandler
 	public void onGenerate(ChunkPopulateEvent event) 

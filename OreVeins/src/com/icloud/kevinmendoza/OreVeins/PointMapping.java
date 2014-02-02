@@ -16,7 +16,7 @@ public class PointMapping
 	private static HashMap<String,Boolean> loadedAndGenerated;
 	//^contains list of all chunks already generated and Loaded?
 	
-	public static void initializeMaps()
+	private static void initializeMaps()
 	{
 		addedPoints = new HashMap<String,String[][][]>();
 		populatedList = new HashMap<String,Boolean>();
@@ -24,6 +24,7 @@ public class PointMapping
 	}
 	public static void populatePopList()
 	{
+		initializeMaps();
 		HashMap<String,Boolean> temp;
 		temp = VeinChunkReadWrite.read();
 		if(temp!=null)
@@ -34,6 +35,7 @@ public class PointMapping
 	
 	public static void addToPopList(TwoPoint chunk)
 	{
+		DebugLogger.console("popping:"+chunk.toString());
 		populatedList.remove(chunk.toString());
 		populatedList.put(chunk.toString(),true);
 	}
@@ -85,6 +87,7 @@ public class PointMapping
 	
 	public static void addToPoints(TwoPoint chunk) 
 	{
+		
 		String[][][] newStringArray = VeinChunkReadWrite.read(chunk.toString());
 		if(newStringArray!=null)
 			mergeStrings(chunk.toString(),newStringArray);
@@ -94,6 +97,8 @@ public class PointMapping
 	{
 		String key;
 		HashMap<String,String[][][]> tempHashMap = new HashMap<String,String[][][]>();
+		ThreePoint thePoint;
+		String[][][] theMatrix;
 		for(int i =0;i<thePoints.size();i++)
 		{
 			key = thePoints.get(i).toChunkCoord();
@@ -101,22 +106,22 @@ public class PointMapping
 			{
 				if(tempHashMap.containsKey(key))
 				{
-					String[][][] theMatrix = tempHashMap.get(key);
-					ThreePoint thePoint = thePoints.get(i);
+					theMatrix = tempHashMap.get(key);
+					thePoint = thePoints.get(i);
 					thePoint.shiftCoords();
-					if(theMatrix[thePoint.x][thePoint.y][thePoint.z] == null
-							|| theMatrix[thePoint.x][thePoint.y][thePoint.z].contains("COAL"))
+					if(theMatrix[thePoint.dx][thePoint.y][thePoint.dz] == null
+							|| theMatrix[thePoint.dx][thePoint.y][thePoint.dz].contains("COAL"))
 					{
-						theMatrix[thePoint.x][thePoint.y][thePoint.z] = blockType;
+						theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
 						tempHashMap.put(key, theMatrix);
 					}
 				}
 				else
 				{
-					ThreePoint thePoint = thePoints.get(i);
+					thePoint = thePoints.get(i);
 					thePoint.shiftCoords();
-					String[][][] theMatrix = new String[16][128][16];
-					theMatrix[thePoint.x][thePoint.y][thePoint.z] = blockType;
+					theMatrix = new String[16][128][16];
+					theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
 					tempHashMap.put(key, theMatrix);
 				}
 			}
@@ -134,12 +139,14 @@ public class PointMapping
 	
 	public static void addToLoaded(TwoPoint chunk) 
 	{
+		DebugLogger.console("Loading:"+chunk.toString());
 		loadedAndGenerated.remove(chunk.toString());
 		loadedAndGenerated.put(chunk.toString(),true);
 	}
 	
 	public static void removeFromLoaded(TwoPoint chunk) 
 	{
+		DebugLogger.console("Unloading:"+chunk.toString());
 		loadedAndGenerated.remove(chunk.toString());
 	}
 	
@@ -184,6 +191,18 @@ public class PointMapping
 		{
 			addedPoints.put(entry,VeinChunkReadWrite.read(entry));
 		}
+	}
+	public static Object getPop(String string) 
+	{
+		return populatedList.get(string);
+	}
+	public static Object getLoaded(String string) 
+	{
+		return loadedAndGenerated.get(string);
+	}
+	public static Object getPoints(String string) 
+	{
+		return addedPoints.get(string);
 	}
 
 }

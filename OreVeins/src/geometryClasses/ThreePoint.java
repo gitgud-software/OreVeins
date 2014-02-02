@@ -8,6 +8,8 @@ ThreePoint and TwoPoint coordinates are NOT the same! */
 public class ThreePoint extends Point
 {
 	public int x;
+	public int dx;
+	public int dz;
 	public int y;
 	public int z;
 	public ThreePoint(int x, int y, int z)
@@ -30,8 +32,8 @@ public class ThreePoint extends Point
 	}
 	public void shiftCoords()
 	{
-		this.x = (x%16+16)%16;
-		this.z = (z%16+16)%16;
+		this.dx = (x%16+16)%16;
+		this.dz = (z%16+16)%16;
 	}
 	@Override
 	public String toString()
