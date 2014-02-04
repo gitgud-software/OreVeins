@@ -7,21 +7,19 @@ import geometryClasses.ThreePoint;
 
 public abstract class OreSuper 
 {
-	protected ThreePoint startPoint;
-	protected ArrayList<ThreePoint> centers;
+	protected ThreePoint startPoint;//starting point of the vein
+	protected ArrayList<ThreePoint> centers;//all the points that will be drawn by the vein
 	protected String ore;
 	protected int grade;
 	protected Random rand;
-	protected  void addPoints(ArrayList<ThreePoint> iterateOverPoints)
+	protected ThreePoint[] crossSection;
+	protected void addPoints(ArrayList<ThreePoint> iterateOverPoints)
 	{
 		this.centers = new ArrayList<ThreePoint>();
-		ArrayList<ThreePoint> section = new ArrayList<ThreePoint>();
 		for(int i=0;i<iterateOverPoints.size();i++)
 		{
-			section = addSection(iterateOverPoints.get(i),section);
-			if(section!=null)
-				this.centers.addAll(section);
+			addSection(iterateOverPoints.get(i));
 		}
 	}
-	protected abstract ArrayList<ThreePoint>  addSection(ThreePoint threePoint,ArrayList<ThreePoint> section); 
+	protected abstract void  addSection(ThreePoint centerPoint); 
 }

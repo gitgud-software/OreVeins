@@ -22,6 +22,7 @@ public class PointMapping
 		populatedList = new HashMap<String,Boolean>();
 		loadedAndGenerated = new HashMap<String,Boolean>();
 	}
+	
 	public static void populatePopList()
 	{
 		initializeMaps();
@@ -35,7 +36,6 @@ public class PointMapping
 	
 	public static void addToPopList(TwoPoint chunk)
 	{
-		DebugLogger.console("popping:"+chunk.toString());
 		populatedList.remove(chunk.toString());
 		populatedList.put(chunk.toString(),true);
 	}
@@ -53,25 +53,14 @@ public class PointMapping
 				{
 					for(int y=1;y<128;y++)
 					{
-						oldOre = newStringArray[x][y][z];
-						newOre = oldOreArray[x][y][z];
-						if(newOre !=null) 
+						newOre = newStringArray[x][y][z];
+						oldOre = oldOreArray[x][y][z];
+						if(newOre!=null)
 						{
-							if(oldOre !=null) 
+							if(oldOre==null || oldOre.contains("COAL"))
 							{
-								if(!newOre.contains("COAL"))
-								{
-									oldOreArray[x][y][z] = newOre;
-								}
+								oldOreArray[x][y][x] = newOre;
 							}
-							else
-							{
-								oldOreArray[x][y][z] = newOre;
-							}
-						}
-						else
-						{
-							oldOreArray[x][y][z] = newOre;
 						}
 					}
 				}
@@ -102,19 +91,15 @@ public class PointMapping
 		for(int i =0;i<thePoints.size();i++)
 		{
 			key = thePoints.get(i).toChunkCoord();
-			if(thePoints.get(i).y<127)
+			if(thePoints.get(i).y<127 && thePoints.get(i).y > 1)
 			{
 				if(tempHashMap.containsKey(key))
 				{
 					theMatrix = tempHashMap.get(key);
 					thePoint = thePoints.get(i);
 					thePoint.shiftCoords();
-					if(theMatrix[thePoint.dx][thePoint.y][thePoint.dz] == null
-							|| theMatrix[thePoint.dx][thePoint.y][thePoint.dz].contains("COAL"))
-					{
-						theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
-						tempHashMap.put(key, theMatrix);
-					}
+					theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
+					tempHashMap.put(key, theMatrix);
 				}
 				else
 				{
@@ -139,14 +124,12 @@ public class PointMapping
 	
 	public static void addToLoaded(TwoPoint chunk) 
 	{
-		DebugLogger.console("Loading:"+chunk.toString());
 		loadedAndGenerated.remove(chunk.toString());
 		loadedAndGenerated.put(chunk.toString(),true);
 	}
 	
 	public static void removeFromLoaded(TwoPoint chunk) 
 	{
-		DebugLogger.console("Unloading:"+chunk.toString());
 		loadedAndGenerated.remove(chunk.toString());
 	}
 	
@@ -192,15 +175,15 @@ public class PointMapping
 			addedPoints.put(entry,VeinChunkReadWrite.read(entry));
 		}
 	}
-	public static Object getPop(String string) 
+	public static Boolean getPop(String string) 
 	{
 		return populatedList.get(string);
 	}
-	public static Object getLoaded(String string) 
+	public static Boolean getLoaded(String string) 
 	{
 		return loadedAndGenerated.get(string);
 	}
-	public static Object getPoints(String string) 
+	public static String[][][] getPoints(String string) 
 	{
 		return addedPoints.get(string);
 	}

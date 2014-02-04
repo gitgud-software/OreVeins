@@ -34,8 +34,8 @@ public class Defaults
 		}
 		if(!config.contains("GoldVeinSystem.Branch"))
 		{
-			config.set("GoldVeinSystem.Branch", 70);
-			gold.branch = 70;
+			config.set("GoldVeinSystem.Branch", 50);
+			gold.branch = 50;
 		}
 		else
 		{

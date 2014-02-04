@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class ContactMetaDeposits extends OreSuper {
 
 	@Override
-	protected ArrayList<ThreePoint> addSection(ThreePoint threePoint,
-			ArrayList<ThreePoint> section) {
+	protected void addSection(ThreePoint centerPoint) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
+	
 }

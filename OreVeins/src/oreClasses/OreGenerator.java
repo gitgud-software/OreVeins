@@ -15,7 +15,7 @@ public class OreGenerator
 	public static void GenerateOres(TwoPoint chunk) 
 	{
 		Random rand = new Random();
-		TwoPoint chunkPoint = new TwoPoint(chunk.x,chunk.z);
+		/*TwoPoint chunkPoint = new TwoPoint(chunk.x,chunk.z,true);
 		chunkPoint.x = chunkPoint.x*16;
 		chunkPoint.z = chunkPoint.z*16;
 		//GOOOOLLLLDD vein system first nucleates out of the ethers here
@@ -26,7 +26,7 @@ public class OreGenerator
 			start.x+=chunkPoint.x;
 			start.z+=chunkPoint.z;
 			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
-		}
+		}*/
 	}
 
 

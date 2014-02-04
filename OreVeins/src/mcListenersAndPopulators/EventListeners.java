@@ -23,7 +23,7 @@ public final class EventListeners implements Listener
 	@EventHandler
 	public void onLoad(ChunkLoadEvent event) 
 	{
-		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ());
+		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ(),true);
 		PointMapping.addToPoints(chunk);
 		if(PointMapping.popMapExists(chunk.toString()))
 		{
@@ -34,7 +34,7 @@ public final class EventListeners implements Listener
 	@EventHandler 
 	public void  onUnload(ChunkUnloadEvent event)
 	{
-		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ());
+		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ(),true);
 		PointMapping.removeFromLoaded(chunk);
 	}
 	@EventHandler
@@ -45,7 +45,7 @@ public final class EventListeners implements Listener
 	@EventHandler
 	public void onGenerate(ChunkPopulateEvent event) 
 	{
-		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ());
+		TwoPoint chunk = new TwoPoint(event.getChunk().getX(),event.getChunk().getZ(),true);
 		OreGenerator.GenerateOres(chunk);
 		PointMapping.addToLoaded(chunk);
 		HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();

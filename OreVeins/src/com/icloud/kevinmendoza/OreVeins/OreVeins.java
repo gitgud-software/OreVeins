@@ -1,4 +1,9 @@
 package com.icloud.kevinmendoza.OreVeins;
+import oreClasses.HydroStringer;
+import oreClasses.HydroVeinSystem;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,10 +12,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
+import geometryClasses.ThreePoint;
 import geometryClasses.TwoPoint;
 
 import java.io.*;
+import java.util.HashMap;
+
 import mcListenersAndPopulators.EventListeners;
+import mcListenersAndPopulators.VeinDrawer;
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -59,6 +68,7 @@ public final class OreVeins extends JavaPlugin
 			//Also, fuck you checked exceptions!
 		}		
 	}
+	
 	public void saveNewConfig()
 	{
 		try
@@ -69,14 +79,16 @@ public final class OreVeins extends JavaPlugin
 		{
 		}
 	}
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if(cmd.getName().equalsIgnoreCase("testChunk"))
 		{ // If the player typed /basic then do the following...
 			Player thePlayer = (Player)sender;
 			TwoPoint chunk = new 
-					TwoPoint(thePlayer.getLocation().getBlockX(),thePlayer.getLocation().getBlockZ());
-			if(PointMapping.getPop(chunk.toString())!=null)
+					TwoPoint(thePlayer.getLocation().getBlockX(),thePlayer.getLocation().getBlockZ(),false);
+			String thechunk = chunk.toChunkCoord();
+			if(PointMapping.getPop(thechunk)!=null)
 			{
 				sender.sendMessage("chunkisPopulated");
 			}
@@ -84,7 +96,7 @@ public final class OreVeins extends JavaPlugin
 			{
 				sender.sendMessage("chunkisNotPopulated");
 			}
-			if(PointMapping.getLoaded(chunk.toString())!=null)
+			if(PointMapping.getLoaded(thechunk)!=null)
 			{
 				sender.sendMessage("chunkisLoaded");
 			}
@@ -92,7 +104,7 @@ public final class OreVeins extends JavaPlugin
 			{
 				sender.sendMessage("chunkisNotLoaded");
 			}
-			if(PointMapping.getPoints(chunk.toString())!=null)
+			if(PointMapping.getPoints(thechunk)!=null)
 			{
 				sender.sendMessage("chunkHasPoints");
 			}
@@ -101,8 +113,34 @@ public final class OreVeins extends JavaPlugin
 				sender.sendMessage("chunkHasNoPoints");
 			}
 			return true;
-		} //If this has happened the function will return true. 
-	        // If this hasn't happened the a value of false will be returned.
-		return false; 
+		}
+		else if(cmd.getName().equalsIgnoreCase("spawnVein"))
+		{ // If the player typed /basic then do the following...
+			DebugLogger.console("spawningVein");
+			Player thePlayer = (Player)sender;
+			int x =thePlayer.getLocation().getBlockX();
+			int y = thePlayer.getLocation().getBlockY();
+			int z = thePlayer.getLocation().getBlockZ();
+			
+			ThreePoint start = new ThreePoint(x,y,z);
+			for(int i = 0; i< 2;i++){
+				HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
+				HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();
+				TwoPoint drawingChunk;
+				Chunk chunkObj;
+				for(String entry: drawableChunks.keySet())
+				{
+					drawingChunk = new TwoPoint(entry);
+					chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
+					VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
+				}
+			}
+			return true;//If this has happened the function will return true. 
+			// If this hasn't happened the a value of false will be returned.
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

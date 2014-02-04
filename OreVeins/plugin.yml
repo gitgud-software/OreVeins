@@ -8,3 +8,8 @@ commands:
       usage: /<testChunk>
       permission: <OreVeins>.basic
       permission-message: You don't have <permission>
+   spawnVein:
+      description: spawns A New Veinlet
+      usage: /<spawnVein>
+      permission: <OreVeins>.spawnVein
+      permission-message: You don't have <permission>

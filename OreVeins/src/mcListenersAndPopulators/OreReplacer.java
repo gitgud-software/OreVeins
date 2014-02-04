@@ -40,7 +40,7 @@ public class OreReplacer extends BlockPopulator
 				}
 			}
 		}
-		TwoPoint theChunk = new TwoPoint(chunk.getX(),chunk.getZ());
+		TwoPoint theChunk = new TwoPoint(chunk.getX(),chunk.getZ(),true);
 		PointMapping.addToPopList(theChunk);
 	}
 }

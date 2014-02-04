@@ -44,7 +44,7 @@ public class ThreePoint extends Point
 	@Override
 	public TwoPoint toChunkCoordPoint() 
 	{
-		TwoPoint chunkC = new TwoPoint(x>>4,z>>4);
+		TwoPoint chunkC = new TwoPoint(x>>4,z>>4,true);
 		return chunkC;
 	}
 	@Override

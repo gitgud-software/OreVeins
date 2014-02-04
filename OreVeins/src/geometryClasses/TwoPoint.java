@@ -9,10 +9,12 @@ public class TwoPoint extends Point
 {
 	public int x;
 	public int z;
-	public TwoPoint(int x, int z)
+	private Boolean isChunk;
+	public TwoPoint(int x, int z,Boolean ch)
 	{
 		this.x = x;
 		this.z = z;
+		this.isChunk = ch;
 	}
 	public TwoPoint(String key)
 	{
@@ -47,7 +49,17 @@ public class TwoPoint extends Point
 	@Override
 	public String toChunkCoord() 
 	{
-		return x + ":" + z;
+		if(this.isChunk)
+		{
+			return x + ":" + z;
+		}
+		else
+		{
+			this.x = this.x>>4;
+			this.z = this.z>>4;
+			return this.x + ":" + this.z;
+		}
+		
 	}
 	@Override
 	public TwoPoint toChunkCoordPoint() 

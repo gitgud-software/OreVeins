@@ -3,7 +3,7 @@ package geometryClasses;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class LineDrawingUtilityClass 
+public class Line 
 {
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
     {
@@ -78,7 +78,7 @@ public class LineDrawingUtilityClass
                 errzy+=dz2;
                 y+=ymult;
                 ThreePoint point = new ThreePoint(x,y,z);
-               // System.out.println("Point is:" +point.toString());
+                //System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -102,7 +102,7 @@ public class LineDrawingUtilityClass
                 errxz+=dx2;
                 z+=zmult;
                 ThreePoint point = new ThreePoint(x,y,z);
-               // System.out.println("Point is:" +point.toString());
+              // System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -214,34 +214,26 @@ public class LineDrawingUtilityClass
 	{
 		if(strike==0)
 			return start;
-		int it=0;
-		double phi,theta;
 		int x,z,y;
+		double phi,theta;
 		int rad = strike;
-		while(true)
+		if(varyRadius==true)
 		{
-			if(varyRadius==true)
-			{
-				rad = (int)((rad*.75)*rand.nextGaussian()) +rad;
-			}
-			if(rad < 5)
-				rad = 5;
-			phi = ((double)rand.nextInt(314))/100.0;
-			y = (int) (rad*Math.cos(phi)) + start.y;
-			if( y <128 && y >2 )
-				break;
-			if(start.y-strike > 125)
-				break;
-			it++;
-			if(it>50)
-				return start;
+			rad = (int)((rad*.75)*rand.nextGaussian()) +rad;
 		}
-		theta = ((double)rand.nextInt(628)/100.0);
-		x = (int)(rad*Math.cos(theta)*Math.sin(phi)) + start.x;
-		z = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.z;
-		//DebugLogger.console("tried" + it + " to find good chunk");
+		if(rad < 5)
+			rad = 5;
+		theta = Math.PI*rand.nextDouble();
+		phi   = Math.PI*2*rand.nextDouble();
+		y = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.y;
+		x = (int)(rad*Math.sin(theta)*Math.cos(phi)) + start.x;
+		z = (int)(rad*Math.cos(theta)) + start.z;
 		ThreePoint endpoint = new ThreePoint(x,y,z);
 		return endpoint;
+	}
+	public static int distance(ThreePoint one, ThreePoint two)
+	{
+		return (int) Math.sqrt(Math.pow(one.x-two.x,2) + Math.pow(one.y-two.y,2) + Math.pow(one.z-two.z,2));
 	}
 	
 }
