@@ -11,7 +11,69 @@ public class Shape
 	
 	public ThreePoint[] points;
 	
-	public Shape(int a, int b)
+	protected void makeEllipsoid(int a, int b, int c)
+	{
+		//bonanza's are ellipsoids
+		
+		int aa =a*a, bb=b*b,cc=c*c, i=1;
+		int abc = aa*bb*cc;
+		double XX,YY,ZZ;
+		ThreePoint[] temp= new ThreePoint[((a+1)*(b+1)*(c+1)*8)+1];
+		temp[0] = new ThreePoint(0,0,0);
+		//DebugLogger.console("the dimensions are "+a+" "+b+ " "+c+ " "+" the size is then "+(a*b*c)*8);
+		for(int x=0;x<=a;x++)
+		{
+			for(int y=0;y<=b;y++)
+			{
+				for(int z=0;z<=c;z++)
+				{
+					XX = x*x*bb*cc;
+					YY = y*y*aa*cc;
+					ZZ = z*z*aa*bb;
+					if(abc >= XX+YY+ZZ)
+					{
+						if(x==0 && y==0 && z ==0)
+						{
+							
+						}
+						if(x==0 && y==0 && z!=0)
+						{
+							temp[i] = new ThreePoint(0,0,z);
+							temp[i+1] = new ThreePoint(0,0,-z);
+							i = i+2;
+
+						}
+						else if(x==0 & z==0 && y!=0)
+						{
+							temp[i] = new ThreePoint(0,y,0);
+							temp[i+1] = new ThreePoint(0,-y,0);
+							i = i+2;
+						}
+						else if(z==0 && y == 0 && x!=0)
+						{
+							temp[i] = new ThreePoint(x,0,0);
+							temp[i+1] = new ThreePoint(-x,0,0);
+							i = i+2;
+						}
+						else
+						{
+							temp[i] = new ThreePoint(x,y,z);
+							temp[i+1] = new ThreePoint(x,y,-z);
+							temp[i+2] = new ThreePoint(x,-y,z);
+							temp[i+3] = new ThreePoint(x,-y,-z);
+							temp[i+4] = new ThreePoint(-x,y,z);
+							temp[i+5] = new ThreePoint(-x,y,-z);
+							temp[i+6] = new ThreePoint(-x,-y,z);
+							temp[i+7] = new ThreePoint(-x,-y,-z);
+							i = i+8;
+						}
+					}
+				}
+			}
+		}
+	concantenate(temp);
+	}
+	protected void makeEllipse(int a, int b)
 	{
 		int i=1;
 		int a2 = a *a;
@@ -84,71 +146,8 @@ public class Shape
 	    }
 		concantenate(temp);
 	}
-
-	public Shape(int a, int b, int c)
-	{
-		//bonanza's are ellipsoids
-		
-		int aa =a*a, bb=b*b,cc=c*c, i=1;
-		int abc = aa*bb*cc;
-		double XX,YY,ZZ;
-		ThreePoint[] temp= new ThreePoint[((a+1)*(b+1)*(c+1)*8)+1];
-		temp[0] = new ThreePoint(0,0,0);
-		//DebugLogger.console("the dimensions are "+a+" "+b+ " "+c+ " "+" the size is then "+(a*b*c)*8);
-		for(int x=0;x<=a;x++)
-		{
-			for(int y=0;y<=b;y++)
-			{
-				for(int z=0;z<=c;z++)
-				{
-					XX = x*x*bb*cc;
-					YY = y*y*aa*cc;
-					ZZ = z*z*aa*bb;
-					if(abc >= XX+YY+ZZ)
-					{
-						if(x==0 && y==0 && z ==0)
-						{
-							
-						}
-						if(x==0 && y==0 && z!=0)
-						{
-							temp[i] = new ThreePoint(0,0,z);
-							temp[i+1] = new ThreePoint(0,0,-z);
-							i = i+2;
-
-						}
-						else if(x==0 & z==0 && y!=0)
-						{
-							temp[i] = new ThreePoint(0,y,0);
-							temp[i+1] = new ThreePoint(0,-y,0);
-							i = i+2;
-						}
-						else if(z==0 && y == 0 && x!=0)
-						{
-							temp[i] = new ThreePoint(x,0,0);
-							temp[i+1] = new ThreePoint(-x,0,0);
-							i = i+2;
-						}
-						else
-						{
-							temp[i] = new ThreePoint(x,y,z);
-							temp[i+1] = new ThreePoint(x,y,-z);
-							temp[i+2] = new ThreePoint(x,-y,z);
-							temp[i+3] = new ThreePoint(x,-y,-z);
-							temp[i+4] = new ThreePoint(-x,y,z);
-							temp[i+5] = new ThreePoint(-x,y,-z);
-							temp[i+6] = new ThreePoint(-x,-y,z);
-							temp[i+7] = new ThreePoint(-x,-y,-z);
-							i = i+8;
-						}
-					}
-				}
-			}
-		}
-	concantenate(temp);
-	}
-
-	private void concantenate(ThreePoint[] temp)
+	
+	protected void concantenate(ThreePoint[] temp)
 	{
 		int count = 0;
 		for(int i=0;i<temp.length;i++)

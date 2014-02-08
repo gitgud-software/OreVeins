@@ -4,6 +4,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+
 /*this vein drawer class draws any ores within a 3d string object array
  * such simple, so block, much craft, shine daimond!
  * 
@@ -31,38 +33,31 @@ public class VeinDrawer {
 							}
 							else if (vein[x][y][z].contains("IRON"))
 							{
-
 								chunk.getBlock(x, y, z).setType(Material.IRON_ORE);
-
 							}
 							else if (vein[x][y][z].contains("COAL"))
 							{
-
 								chunk.getBlock(x, y, z).setType(Material.COAL_ORE);
-
 							}
 							else if (vein[x][y][z].contains("LAPIZ"))
 							{
 								chunk.getBlock(x, y, z).setType(Material.LAPIS_ORE);
-
 							}
 							else if (vein[x][y][z].contains("REDSTONE"))
 							{
-
 								chunk.getBlock(x, y, z).setType(Material.REDSTONE_ORE);
-
 							}
 							else if (vein[x][y][z].contains("EMERALD"))
 							{
-
 								chunk.getBlock(x, y, z).setType(Material.EMERALD_ORE);
-
 							}
 							else if (vein[x][y][z].contains("DIAMOND"))
 							{
-
 								chunk.getBlock(x, y, z).setType(Material.DIAMOND_ORE);
-
+							}
+							else if (vein[x][y][z].contains("AIR"))
+							{
+								chunk.getBlock(x, y, z).setType(Material.AIR);
 							}
 						//}
 					}

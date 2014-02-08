@@ -59,7 +59,7 @@ public class PointMapping
 						{
 							if(oldOre==null || oldOre.contains("COAL"))
 							{
-								oldOreArray[x][y][x] = newOre;
+								oldOreArray[x][y][z] = newOre;
 							}
 						}
 					}
@@ -87,7 +87,7 @@ public class PointMapping
 		String key;
 		HashMap<String,String[][][]> tempHashMap = new HashMap<String,String[][][]>();
 		ThreePoint thePoint;
-		String[][][] theMatrix;
+		String[][][] Matrix;
 		for(int i =0;i<thePoints.size();i++)
 		{
 			key = thePoints.get(i).toChunkCoord();
@@ -95,19 +95,19 @@ public class PointMapping
 			{
 				if(tempHashMap.containsKey(key))
 				{
-					theMatrix = tempHashMap.get(key);
+					Matrix = tempHashMap.get(key);
 					thePoint = thePoints.get(i);
 					thePoint.shiftCoords();
-					theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
-					tempHashMap.put(key, theMatrix);
+					Matrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
+					tempHashMap.put(key, Matrix);
 				}
 				else
 				{
 					thePoint = thePoints.get(i);
 					thePoint.shiftCoords();
-					theMatrix = new String[16][128][16];
-					theMatrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
-					tempHashMap.put(key, theMatrix);
+					Matrix = new String[16][128][16];
+					Matrix[thePoint.dx][thePoint.y][thePoint.dz] = blockType;
+					tempHashMap.put(key, Matrix);
 				}
 			}
 		}

@@ -1,25 +1,20 @@
 package com.icloud.kevinmendoza.OreVeins;
-import oreClasses.HydroStringer;
-import oreClasses.HydroVeinSystem;
+import geometryClasses.ThreePoint;
+import geometryClasses.TwoPoint;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
+import java.io.File;
+import java.io.IOException;
+
+import mcListenersAndPopulators.EventListeners;
+import oreClasses.HydroVeinSystem;
+import oreClasses.PegmatiteSystem;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-
-import geometryClasses.ThreePoint;
-import geometryClasses.TwoPoint;
-
-import java.io.*;
-import java.util.HashMap;
-
-import mcListenersAndPopulators.EventListeners;
-import mcListenersAndPopulators.VeinDrawer;
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -114,29 +109,29 @@ public final class OreVeins extends JavaPlugin
 			}
 			return true;
 		}
-		else if(cmd.getName().equalsIgnoreCase("spawnVein"))
+		else if(cmd.getName().equalsIgnoreCase("spawnGold"))
 		{ // If the player typed /basic then do the following...
-			DebugLogger.console("spawningVein");
+			DebugLogger.console("spawningGold");
 			Player thePlayer = (Player)sender;
 			int x =thePlayer.getLocation().getBlockX();
 			int y = thePlayer.getLocation().getBlockY();
 			int z = thePlayer.getLocation().getBlockZ();
-			
 			ThreePoint start = new ThreePoint(x,y,z);
-			for(int i = 0; i< 2;i++){
-				HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
-				HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();
-				TwoPoint drawingChunk;
-				Chunk chunkObj;
-				for(String entry: drawableChunks.keySet())
-				{
-					drawingChunk = new TwoPoint(entry);
-					chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
-					VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
-				}
-			}
+			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
 			return true;//If this has happened the function will return true. 
 			// If this hasn't happened the a value of false will be returned.
+		}
+		else if(cmd.getName().equalsIgnoreCase("spawnEmerald"))
+		{
+			DebugLogger.console("spawningEmerald");
+			Player thePlayer = (Player)sender;
+			int x =thePlayer.getLocation().getBlockX();
+			int y = thePlayer.getLocation().getBlockY();
+			int z = thePlayer.getLocation().getBlockZ();
+			ThreePoint start = new ThreePoint(x,y,z);
+			PegmatiteSystem peg = new PegmatiteSystem(start, Defaults.emerald.strike, Defaults.emerald.branch, 
+					Defaults.emerald.bonanza, "EMERALD");
+			return true;
 		}
 		else
 		{

@@ -35,10 +35,12 @@ public class HydroStringer extends OreSuper
 			this.centers = new ArrayList<ThreePoint>();
 			addPoints(tempPoints);
 			PointMapping.addArrayToPoints(this.centers, this.ore);
-			/*for(int i=0;i<this.nodes.size();i++)
+			HydroStringer branchVein;
+			drawPoints();
+			for(int i=0;i<this.nodes.size();i++)
 			{
-				HydroVeinSystem newBranches = new HydroVeinSystem(this.nodes.get(i), (int)(this.strike*.5), (int)(this.branch*.75), "REDSTONE");
-			}*/
+				branchVein = new HydroStringer(nodes.get(i), (int)(this.strike*0.5), (int)(this.branch*1.25), this.ore);
+			}
 		}
 	}
 	@Override

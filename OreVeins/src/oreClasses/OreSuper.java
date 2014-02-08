@@ -1,9 +1,19 @@
 package oreClasses;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import mcListenersAndPopulators.VeinDrawer;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+import com.icloud.kevinmendoza.OreVeins.PointMapping;
+
 import geometryClasses.ThreePoint;
+import geometryClasses.TwoPoint;
 
 public abstract class OreSuper 
 {
@@ -19,6 +29,19 @@ public abstract class OreSuper
 		for(int i=0;i<iterateOverPoints.size();i++)
 		{
 			addSection(iterateOverPoints.get(i));
+		}
+	}
+	public void drawPoints()
+	{
+		DebugLogger.console("drawing veins");
+		HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();
+		TwoPoint drawingChunk;
+		Chunk chunkObj;
+		for(String entry: drawableChunks.keySet())
+		{
+			drawingChunk = new TwoPoint(entry);
+			chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
+			VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
 		}
 	}
 	protected abstract void  addSection(ThreePoint centerPoint); 
