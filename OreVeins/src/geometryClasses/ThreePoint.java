@@ -36,6 +36,12 @@ public class ThreePoint extends Point
 		this.dz = (z%16+16)%16;
 		return null;
 	}
+	public void offSet(ThreePoint point)
+	{
+		this.x+=point.x;
+		this.y+=point.y;
+		this.z+=point.z;
+	}
 	@Override
 	public String toString()
 	{

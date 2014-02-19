@@ -266,4 +266,39 @@ public class Shape
 			}
 		}
 	}
+	public void alighnToPoints(ThreePoint start, ThreePoint end)
+	{
+		double vx = end.x - start.x;
+		double vy = end.y - start.y;
+		double vz = end.z - start.z;
+		double r = Math.sqrt( vx*vx + vy*vy + vz*vz);
+		double dotProd = vz/r;
+		if(dotProd < .95)
+		{
+			double cvx, cvy;
+			cvx = vy/r;
+			cvy = -vx/r;
+			double h = (1-dotProd) / (1-(dotProd*dotProd));
+			double a1 = dotProd +h*cvx*cvx;
+			double a2 = h*cvy*cvx;
+			double a3 = cvy;
+			double b1 = h*cvy*cvx;
+			double b2 = dotProd + h*cvy*cvy;
+			double b3 = -cvx;
+			double c1 = -cvy;
+			double c2 = cvx;
+			double c3 = dotProd;
+			int xrot, yrot, zrot;
+			for(int i=0;i<this.points.length;i++)
+			{
+				ThreePoint point = this.points[i];
+				xrot = (int) Math.round((point.x*a1 + point.y*a2 + point.z*a3));
+				yrot = (int) Math.round((point.x*b1 + point.y*b2 + point.z*b3));
+				zrot = (int) Math.round((point.x*c1 + point.y*c2 + point.z*c3));
+				this.points[i].x = xrot;
+				this.points[i].y = yrot;
+				this.points[i].z = zrot;
+			}
+		}
+	}
 }

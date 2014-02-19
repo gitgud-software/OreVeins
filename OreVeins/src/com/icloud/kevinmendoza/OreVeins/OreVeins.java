@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import mcListenersAndPopulators.EventListeners;
-import oreClasses.HydroVeinSystem;
-import oreClasses.PegmatiteSystem;
+import oreClasses.ContactMetaDeposits;
+import oreClasses.SedimentHostedDepositSystem;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +15,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import defaultPackadge.Defaults;
+
 
 public final class OreVeins extends JavaPlugin 
 {
@@ -109,7 +112,7 @@ public final class OreVeins extends JavaPlugin
 			}
 			return true;
 		}
-		else if(cmd.getName().equalsIgnoreCase("spawnGold"))
+		/*else if(cmd.getName().equalsIgnoreCase("spawnGold"))
 		{ // If the player typed /basic then do the following...
 			DebugLogger.console("spawningGold");
 			Player thePlayer = (Player)sender;
@@ -117,7 +120,7 @@ public final class OreVeins extends JavaPlugin
 			int y = thePlayer.getLocation().getBlockY();
 			int z = thePlayer.getLocation().getBlockZ();
 			ThreePoint start = new ThreePoint(x,y,z);
-			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,Defaults.gold.branch,"GOLD");
+			Diatreme volcanic = new Diatreme(start, Defaults.diamond.grade, Defaults.diamond.strike, "DIAMOND");
 			return true;//If this has happened the function will return true. 
 			// If this hasn't happened the a value of false will be returned.
 		}
@@ -130,9 +133,9 @@ public final class OreVeins extends JavaPlugin
 			int z = thePlayer.getLocation().getBlockZ();
 			ThreePoint start = new ThreePoint(x,y,z);
 			PegmatiteSystem peg = new PegmatiteSystem(start, Defaults.emerald.strike, Defaults.emerald.branch, 
-					Defaults.emerald.bonanza, "EMERALD");
+					Defaults.emerald.bonanza, Defaults.emerald.grade ,"EMERALD");
 			return true;
-		}
+		}*/
 		else
 		{
 			return false;

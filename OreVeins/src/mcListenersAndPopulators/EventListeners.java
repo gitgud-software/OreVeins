@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import geometryClasses.TwoPoint;
 
-import oreClasses.OreGenerator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -55,7 +54,10 @@ public final class EventListeners implements Listener
 		{
 			drawingChunk = new TwoPoint(entry);
 			chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
-			VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
+			if(drawableChunks.get(entry)!=null)
+			{
+				VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
+			}
 		}
 	}
 	@EventHandler

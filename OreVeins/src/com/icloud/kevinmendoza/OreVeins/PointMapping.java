@@ -140,8 +140,11 @@ public class PointMapping
 		{
 			if(addedPoints.containsKey(entry))
 			{
-				drawList.put(entry,addedPoints.get(entry));
-				addedPoints.remove(entry);
+				if(addedPoints.get(entry)!=null)
+				{
+					drawList.put(entry,addedPoints.get(entry));
+					addedPoints.remove(entry);
+				}
 			}
 		}
 		return drawList;

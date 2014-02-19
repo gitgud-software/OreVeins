@@ -209,7 +209,27 @@ public class Line
 		}
 		return coeff;
 	}
-
+	
+	public static int returnGaussian(int deviance, int mean, Random rand)
+	{
+		return (int)(deviance*rand.nextGaussian()) +mean;
+	}
+	
+	public static int returnSafeGaussian(int deviance, int mean, Random rand)
+	{
+		int value = (int)(deviance*rand.nextGaussian()) +mean;
+		
+		if(value<1)
+			return 1;
+		else
+			return value;
+	}
+	public static int returnForwardPoisson(int deviance, int base, Random rand)
+	{
+		int value = (int)(deviance*Math.pow(rand.nextGaussian(),2)) +base;
+		return value;
+	}
+	
 	public static ThreePoint getEndPoint(ThreePoint start, int strike, Random rand, Boolean varyRadius) 
 	{
 		if(strike==0)
@@ -219,7 +239,7 @@ public class Line
 		int rad = strike;
 		if(varyRadius==true)
 		{
-			rad = (int)((rad*.75)*rand.nextGaussian()) +rad;
+			rad = returnGaussian((int)(rad*.75), rad, rand);
 		}
 		if(rad < 5)
 			rad = 5;
