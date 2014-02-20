@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import defaultPackadgeHelpers.TruncatedSkewDistribution;
+import defaultPackadgeHelpers.VeinSwitch;
 
 
 public class Redstone
@@ -14,20 +15,20 @@ public class Redstone
 	public TertiaryVein tertiaryVein;
 	public double probToSpawn;
 	public String path = "RedstoneVeinSystem";
-	private TruncatedSkewDistribution chooseType;
+	public VeinSwitch chooseType;
 	
 	public Redstone()
 	{
-		probToSpawn = 0.0;
+		probToSpawn = 0.02;
 		primaryVein = new PrimaryVein(path);
 		secondaryVein = new SecondaryVein(path);
 		tertiaryVein = new TertiaryVein(path);
-		chooseType.bias = 0.0; chooseType.skew = 0.0; chooseType.min = 0; chooseType.max = 4;
-		chooseType.configPath = path + ".VeinTypeInitial";
+		chooseType = new VeinSwitch("RedstoneVeinSystem.VeinTypeInitial");
 	}
 	public void readWriteConfigs(FileConfiguration configs)
 	{
 		setProbs(configs);
+		chooseType.logValues(configs);
 		primaryVein.setDefaults(configs);
 		secondaryVein.setDefaults(configs);
 		tertiaryVein.setDefaults(configs);
@@ -42,24 +43,7 @@ public class Redstone
 		{
 			probToSpawn = config.getInt(path+".SpawnProbability");
 		}
-		chooseType.logValues(config);
+		
 	}
-	
-	public int getType()
-	{
-		Random rand = new Random();
-		double thetype = chooseType.getRVar(rand);
-		if(thetype < 1)
-		{
-			return 1;
-		}
-		else if (thetype < 2)
-		{
-			return 2;
-		}
-		else
-		{
-			return 3;
-		}
-	}
+
 }

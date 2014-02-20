@@ -8,28 +8,32 @@ public class Geode extends Shape
 	public ArrayList<ThreePoint> theShell;
 	public Geode(double a, double b, double c, double h)
 	{
-		int d = (int) a;
-		int e = (int) b;
-		int f = (int) c;
-		int g = (int)h;
-		Random rand = new Random();
+		int d = (int)(a);
+		int e = (int) (b);
+		int f = (int) (c);
+		int g = (int)(h);
 		if(d<e && d<f)
 		{
-			g = rand.nextInt(d-1)+1;
+			if(d<g)
+				g=1;
 		}
-		else if (e<d && e< f)
+		else if(e<d && e<f)
 		{
-			g = rand.nextInt(e-1)+1;
+			if(e<g)
+				g=1;
 		}
 		else
 		{
-			g = rand.nextInt(f-1)+1;
+			if(f<g)
+				g=1;
 		}
-		int dx=d - g;
-		int dy=e - g;
-		int dz=f - g;
+		int dx = d-g;
+		int dy = e-g;
+		int dz = f-g;
+		
 		Ellipsoid shell = new Ellipsoid(d,e,f);
 		Ellipsoid pocket = new Ellipsoid(dx,dy,dz);
+		Random rand = new Random();
 		int x = rand.nextInt(360);
 		int y = rand.nextInt(360);
 		int z = rand.nextInt(360);

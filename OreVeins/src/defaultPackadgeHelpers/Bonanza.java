@@ -28,52 +28,31 @@ public class Bonanza extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.001;
+			this.max = 0.01;
+			this.skew = 1.0;
+			this.bias = -2.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.01;
+			this.max = 0.1;
+			this.skew = 1.0;
+			this.bias = -1.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.005;
+			this.max = 0.02;
+			this.skew = 1.0;
+			this.bias = -2.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
+			this.min = 0.0003;
+			this.max = 0.01;
 			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Diamond"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
-			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = -2.0;
 		}
 	}
 	
@@ -81,52 +60,31 @@ public class Bonanza extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
+			this.min = 0.005;
+			this.max = 0.03;
 			this.skew = 2.0;
-			this.bias = 1.0;
+			this.bias = -1.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.09;
+			this.max = 0.9;
+			this.skew = 3.0;
+			this.bias = -2.0;
 		}
-		else if(ore.contains("Diamond"))
+		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.01;
+			this.max = 0.1;
+			this.skew = 3.0;
+			this.bias = -2.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
+			this.min = 0.0003;
+			this.max = 0.1;
 			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Diamond"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
-			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = -2.0;
 		}
 	}
 	
@@ -134,91 +92,42 @@ public class Bonanza extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
+			this.min = 0.05;
+			this.max = 0.1;
 			this.skew = 2.0;
-			this.bias = 1.0;
+			this.bias = -1.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.9;
+			this.max = 1;
+			this.skew = 1.0;
+			this.bias = -1.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0.1;
+			this.max = 1.0;
+			this.skew = 1.0;
+			this.bias = -0.5;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
+			this.min = 0.003;
+			this.max = 0.3;
 			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = -2.0;
 		}
 	}
 	
 	private void theDefault(String ore)
 	{
-		if(ore.contains("Iron"))
+		 if(ore.contains("Emerald"))
 		{
 			this.min = 0.5;
 			this.max = 5.0;
 			this.skew = 2.0;
 			this.bias = 1.0;
-		}
-		else if(ore.contains("Iron"))
-		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Redstone"))
-		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Emerald"))
-		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
 		}
 		else if(ore.contains("Diamond"))
 		{
@@ -226,13 +135,6 @@ public class Bonanza extends TruncatedSkewDistribution
 			this.max = 2.0;
 			this.skew = 1.0;
 			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
 		}
 	}
 }

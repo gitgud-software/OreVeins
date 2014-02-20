@@ -44,7 +44,7 @@ public class MetamorphicSystem extends OreSuper
 		int a = (int) lapiz.lodedepth.getRVar(rand);
 		int b = (int) lapiz.lodelength.getRVar(rand);
 		int c =  (int) lapiz.lodewidth.getRVar(rand);
-		int grade = (int)(1/lapiz.grade.getRVar(rand));
+		int grade = (int)(100/lapiz.grade.getRVar(rand));
 		Ellipsoid soid = new Ellipsoid(a,b,c);
 		soid.rotateRandom(rand);
 		for(int i=0;i<soid.points.length;i++)

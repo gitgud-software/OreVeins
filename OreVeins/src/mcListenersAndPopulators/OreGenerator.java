@@ -5,6 +5,11 @@ import geometryClasses.TwoPoint;
 
 import java.util.Random;
 
+import oreClasses.MetamorphicSystem;
+import oreClasses.SedimentHostedDepositSystem;
+import oreClasses.VeinSystem;
+import oreClasses.VolcanicSystem;
+
 
 
 import com.icloud.kevinmendoza.OreVeins.DebugLogger;
@@ -16,7 +21,7 @@ public class OreGenerator
 
 	public static void GenerateOres(TwoPoint chunk) 
 	{
-		/*Random rand = new Random();
+		Random rand = new Random();
 		TwoPoint chunkPoint = new TwoPoint(chunk.x,chunk.z,true);
 		chunkPoint.x = chunkPoint.x*16;
 		chunkPoint.z = chunkPoint.z*16;
@@ -24,41 +29,94 @@ public class OreGenerator
 		ThreePoint start = new ThreePoint();
 		start.x+=chunkPoint.x;
 		start.z+=chunkPoint.z;
-		if(rand.nextInt(Defaults.diamond.probability)==0)
+		if(rand.nextInt((int)(100/Defaults.diamond.probToSpawn))==0)
 		{
-			Diatreme pipe = new Diatreme(start, 0, 0, null);
+			VolcanicSystem pipe = new VolcanicSystem(start,"DIAMOND");
 		}
-		else if(rand.nextInt(Defaults.emerald.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.coal.probToSpawn))==0)
 		{
-			PegmatiteSystem sys = new PegmatiteSystem(start, 0, 0, 0, 0, null);
+			SedimentHostedDepositSystem layers = new SedimentHostedDepositSystem(start,"COAL");
 		}
-		else if(rand.nextInt(Defaults.lapiz.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.bif.probToSpawn))==0)
 		{
-			ContactMetaDeposits dep = new ContactMetaDeposits(start, 0, 0, 0, null);
+			SedimentHostedDepositSystem layers = new SedimentHostedDepositSystem(start,"BIF");
 		}
-		else if(rand.nextInt(Defaults.gold.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.lapiz.probToSpawn))==0)
 		{
-			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.gold.strike,
-					Defaults.gold.grade,Defaults.gold.bonanza, Defaults.gold.branch, "GOLD");
+			MetamorphicSystem system = new MetamorphicSystem(start);
 		}
-		else if(rand.nextInt(Defaults.redstone.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.emerald.probToSpawn))==0)
 		{
-			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.redstone.strike,
-					Defaults.redstone.grade,Defaults.redstone.bonanza, Defaults.redstone.branch, "REDSTONE");
+			int branchType=1;
+			double value = Defaults.emerald.chooseType.getRVar(rand);
+			if(value <1)
+			{
+				branchType = 1;
+			}
+			else if(value <2)
+			{
+				value = 2;
+			}
+			else
+			{
+				value = 3;
+			}
+			VeinSystem sed = new VeinSystem("EMERALD",branchType, start, 0);
 		}
-		else if(rand.nextInt(Defaults.iron.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.redstone.probToSpawn))==0)
 		{
-			HydroVeinSystem vein = new HydroVeinSystem(start,Defaults.iron.strike,
-					Defaults.iron.grade,Defaults.iron.bonanza, Defaults.iron.branch, "IRON");
+			int branchType=1;
+			double value = Defaults.redstone.chooseType.getRVar(rand);
+			if(value <1)
+			{
+				branchType = 1;
+			}
+			else if(value <2)
+			{
+				value = 2;
+			}
+			else
+			{
+				value = 3;
+			}
+			VeinSystem sed = new VeinSystem("REDSTONE",branchType, start, 0);
 		}
-		else if(rand.nextInt(Defaults.bIF.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.gold.probToSpawn))==0)
 		{
-			SedimentHostedDepositSystem sed = new SedimentHostedDepositSystem(start, 0, 0, 0, null);
+			int branchType=1;
+			double value = Defaults.gold.chooseType.getRVar(rand);
+			if(value <1)
+			{
+				branchType = 1;
+			}
+			else if(value <2)
+			{
+				value = 2;
+			}
+			else
+			{
+				value = 3;
+			}
+			VeinSystem sed = new VeinSystem("GOLD",branchType, start, 0);
 		}
-		else if(rand.nextInt(Defaults.coal.probability)==0)
+		else if(rand.nextInt((int)(100/Defaults.iron.probToSpawn))==0)
 		{
-			SedimentHostedDepositSystem sed = new SedimentHostedDepositSystem(start, 0, 0, 0, null);
-		}*/
+			int branchType=1;
+			double value = Defaults.iron.chooseType.getRVar(rand);
+			if(value <1)
+			{
+				branchType = 1;
+			}
+			else if(value <2)
+			{
+				value = 2;
+			}
+			else
+			{
+				value = 3;
+			}
+			VeinSystem sed = new VeinSystem("IRON",branchType, start, 0);
+		}
 	}
 
 

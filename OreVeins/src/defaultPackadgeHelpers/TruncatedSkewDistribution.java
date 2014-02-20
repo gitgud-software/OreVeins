@@ -31,13 +31,13 @@ public class TruncatedSkewDistribution
 		{
 			max = config.getInt(configPath+".Max");
 		}
-		if(!config.contains(this.configPath + ".skew"))
+		if(!config.contains(this.configPath + ".Skew"))
 		{
-			config.set(configPath + ".skew", skew);
+			config.set(configPath + ".Skew", skew);
 		}
 		else
 		{
-			skew = config.getInt(configPath + ".skew");
+			skew = config.getInt(configPath + ".Skew");
 		}
 		if(!config.contains(configPath + ".Bias"))
 		{
@@ -52,7 +52,7 @@ public class TruncatedSkewDistribution
 	public double getRVar(Random rand)
 	{	
 	        double range = max - min;
-	        double mid = min + range / 2.0;
+	        double mid = min + ( range / 2.0);
 	        double unitGaussian = rand.nextGaussian();
 	        double biasFactor = Math.exp(bias);
 	        double retval = mid+(range*(biasFactor/(biasFactor+Math.exp(-unitGaussian/skew))-0.5));

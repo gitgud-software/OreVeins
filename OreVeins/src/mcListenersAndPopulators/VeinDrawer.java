@@ -25,8 +25,8 @@ public class VeinDrawer {
 					if(vein[x][y][z]!=null)
 					{
 						block = chunk.getBlock(x, y, z);
-						//if(block.getType().compareTo(Material.STONE)==0)
-						//{
+						if(block.getType().compareTo(Material.STONE)==0)
+						{
 							if(vein[x][y][z].contains("GOLD"))
 							{
 								block.setType(Material.GOLD_ORE);
@@ -59,7 +59,7 @@ public class VeinDrawer {
 							{
 								chunk.getBlock(x, y, z).setType(Material.AIR);
 							}
-						//}
+						}
 					}
 				}
 			}

@@ -2,6 +2,7 @@ package oreClasses;
 
 import java.util.ArrayList;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
 import defaultPackadge.Defaults;
@@ -21,8 +22,7 @@ public class VeinSystem extends OreSuper
 	protected int strike;//number
 	protected int levels;//number
 	protected int bonanza;//frequency to number
-	protected int branch;//frequency to number
-	protected int veinType;//number
+	protected int branch;//frequency to number//number
 	protected VeinSwitch veinSwitch;//frequency to number
 	protected int width;//number
 	protected int height;//number
@@ -35,60 +35,73 @@ public class VeinSystem extends OreSuper
  	public VeinSystem(String ore, int type, ThreePoint start, int iteration)
 	{
 		currentIter = iteration;
-		this.ore = ore;
-		this.type = type;
-		initializeDefaults();
-		end = Line.getEndPoint(start, strike, this.rand, true);
-		if(ore.contains("EMERALD"))
-			air = new ArrayList<ThreePoint>();
-		if(Line.distance(start,end) >= 10)
+		if(currentIter<6)
 		{
-			nodes = new ArrayList<ThreePoint>();
-			veinPoints = new ArrayList<ThreePoint>();
-			centers = new ArrayList<ThreePoint>();	
-			section.alighnToPoints(start, end, rand);
-			crossSection = section.points;
-			addPoints(veinPoints);
-			PointMapping.addArrayToPoints(centers, ore);
-			drawPoints();
+			this.ore = ore;
+			this.type = type;
+			initializeDefaults();
+			//DebugLogger.console(grade+":" +strike+":" +levels+":" +bonanza+":" +
+			//branch+"."+ width+":" +height+":" +type);
+			end = Line.getEndPoint(start, strike, this.rand, true);
 			if(ore.contains("EMERALD"))
+				air = new ArrayList<ThreePoint>();
+			if(Line.distance(start,end) >= 1)
 			{
-				PointMapping.addArrayToPoints(air, "AIR");
+				//DebugLogger.console("passed distance test");
+				//branch prob is 
+				nodes = new ArrayList<ThreePoint>();
+				veinPoints = new ArrayList<ThreePoint>();
+				centers = new ArrayList<ThreePoint>();	
+				section = new Ellipse(width,height);
+				section.alighnToPoints(start, end, rand);
+				crossSection = section.points;
+				veinPoints = Line.bezierCurve(start, end, rand);
+				if(branch>1)
+					branch = veinPoints.size()/branch;
+				addPoints(veinPoints);
+				PointMapping.addArrayToPoints(centers, ore);
 				drawPoints();
-			}
-			VeinSystem branchVein;
-			double newType;
-			int branchType;
-			for(int i=0;i<nodes.size();i++)
-			{
-				newType = veinSwitch.getRVar(rand);
-				if(newType<1)
+				if(ore.contains("EMERALD"))
 				{
-					branchType =1;
+					PointMapping.addArrayToPoints(air, "AIR");
+					drawPoints();
 				}
-				else if( newType <2)
+				VeinSystem branchVein;
+				double newType;
+				int branchType;
+				//DebugLogger.console("branch number:"+nodes.size() + " iterationcurrent:"+currentIter+" veintype:"+ type + "centers"+centers.size());
+				for(int i=0;i<nodes.size();i++)
 				{
-					branchType = 2;
+					newType = veinSwitch.getRVar(rand);
+					if(newType <1)
+					{
+						branchType = 1;
+					}
+					else if(newType <2)
+					{
+						branchType = 2;
+					}
+					else
+					{
+						branchType = 3;
+					}
+					branchVein = new VeinSystem(ore, branchType,nodes.get(i),currentIter+1);
 				}
-				else
-				{
-					branchType =3;
-				}
-				branchVein = new VeinSystem(ore, branchType,nodes.get(i),currentIter++);
 			}
 		}
 	}
 
 	protected void initializeDefaults()
 	{
+		//DebugLogger.console("initializing");
 		
 		if(ore.contains("IRON"))
 		{
-			if(veinType==1)
+			if(type==1)
 			{
 				assignPrimary(iron.primaryVein);
 			}
-			else if(veinType==2)
+			else if(type==2)
 			{
 				assignSecondary(iron.secondaryVein);
 			}
@@ -99,11 +112,11 @@ public class VeinSystem extends OreSuper
 		}
 		else if(ore.contains("GOLD"))
 		{
-			if(veinType==1)
+			if(type==1)
 			{
 				assignPrimary(gold.primaryVein);
 			}
-			else if(veinType==2)
+			else if(type==2)
 			{
 				assignSecondary(gold.secondaryVein);
 			}
@@ -114,11 +127,11 @@ public class VeinSystem extends OreSuper
 		}
 		else if(ore.contains("REDSTONE"))
 		{
-			if(veinType==1)
+			if(type==1)
 			{
 				assignPrimary(redstone.primaryVein);
 			}
-			else if(veinType==2)
+			else if(type==2)
 			{
 				assignSecondary(redstone.secondaryVein);
 			}
@@ -129,11 +142,11 @@ public class VeinSystem extends OreSuper
 		}
 		else if(ore.contains("EMERALD"))
 		{
-			if(veinType==1)
+			if(type==1)
 			{
 				assignPrimary(emerald.primaryVein);
 			}
-			else if(veinType==2)
+			else if(type==2)
 			{
 				assignSecondary(emerald.secondaryVein);
 			}
@@ -144,66 +157,96 @@ public class VeinSystem extends OreSuper
 		}
 		else if(ore.contains("DIAMOND"))
 		{
-			assignPrimary(emerald.primaryVein);
+			assignPrimary(diamond.veinDikes);
 		}
 		 section = new Ellipse(width,height);
 	}
 	
 	protected void assignTertiary(TertiaryVein tertiaryVein) 
 	{
-		grade = (int)(1/tertiaryVein.grade.getRVar(rand));//frequency to number
-		strike = (int)(tertiaryVein.strike.getRVar(rand));//number
-		bonanza= (int)(1/tertiaryVein.bonanza.getRVar(rand));//frequency to number
-		branch=(int)(1/tertiaryVein.branch.getRVar(rand));//frequency to number
+		grade = (int)((100/tertiaryVein.grade.getRVar(rand)));//frequency to number
+		strike = (int)(((tertiaryVein.strike.getRVar(rand))));//number
+		bonanza= (int)(((100/tertiaryVein.bonanza.getRVar(rand))));
+		branch=(int)(((tertiaryVein.branch.getRVar(rand))));
 		veinSwitch=tertiaryVein.vswitch;   //?
-		width = (int)(tertiaryVein.width.getRVar(rand));
-		height = (int)(tertiaryVein.height.getRVar(rand));
-		Ellipse theEllipse = new Ellipse(width,height);
-		crossSection = theEllipse.points;
+		width = (int)(((tertiaryVein.width.getRVar(rand))));
+		height = (int)(((tertiaryVein.height.getRVar(rand))));
 	}
 
 	protected void assignSecondary(SecondaryVein secondaryVein)
 	{
-		grade = (int)(1/secondaryVein.grade.getRVar(rand));//frequency to number
-		strike = (int)(secondaryVein.strike.getRVar(rand));//number
-		bonanza= (int)(1/secondaryVein.bonanza.getRVar(rand));//frequency to number
-		branch=(int)(1/secondaryVein.branch.getRVar(rand));//frequency to number
+		grade = (int)((100/secondaryVein.grade.getRVar(rand)));//frequency to number
+		strike = (int)((secondaryVein.strike.getRVar(rand)));//number
+		bonanza= (int)((100/secondaryVein.bonanza.getRVar(rand)));
+		branch=(int)((secondaryVein.branch.getRVar(rand)));
 		veinSwitch=secondaryVein.vswitch;   //?
-		width = (int)(secondaryVein.width.getRVar(rand));
-		height = (int)(secondaryVein.height.getRVar(rand));
+		width = (int)((secondaryVein.width.getRVar(rand)));
+		height = (int)((secondaryVein.height.getRVar(rand)));
 		
 	}
 
 	protected void assignPrimary(PrimaryVein primaryVein) 
 	{
-		grade = (int)(1/primaryVein.grade.getRVar(rand));//frequency to number
-		strike = (int)(primaryVein.strike.getRVar(rand));//number
-		bonanza= (int)(1/primaryVein.bonanza.getRVar(rand));//frequency to number
-		branch=(int)(1/primaryVein.branch.getRVar(rand));//frequency to number
+		grade = (int)((100/primaryVein.grade.getRVar(rand)));//frequency to number
+		strike = (int)((primaryVein.strike.getRVar(rand)));//number
+		bonanza= (int)((100/primaryVein.bonanza.getRVar(rand)));
+		branch=(int)((primaryVein.branch.getRVar(rand)));
 		veinSwitch=primaryVein.vswitch;   //?
-		width = (int)(primaryVein.width.getRVar(rand));
-		height = (int)(primaryVein.height.getRVar(rand));
+		width = (int)((primaryVein.width.getRVar(rand)));
+		height = (int)((primaryVein.height.getRVar(rand)));
 		
 	}
-
 	
 	@Override
 	protected void addSection(ThreePoint centerPoint) 
 	{
-		for(int i =0;i<crossSection.length;i++)
+		int breaking; int temp;
+		ArrayList<Integer> chosen = new ArrayList<Integer>();
+		if(crossSection.length/grade>0)
 		{
-			if(rand.nextInt(grade)==0)
+			for(int i =0;i<crossSection.length/grade;i++)
 			{
-				ThreePoint newPoint = new ThreePoint(crossSection[i]);
-				newPoint.offSet(centerPoint);
-				centers.add(newPoint);
+				breaking=0;
+				ThreePoint tempPoint = new ThreePoint(centerPoint);
+				while(true)
+				{
+					temp = rand.nextInt(crossSection.length);
+					if(!chosen.contains(temp))
+					{
+						chosen.add(temp);
+						break;
+					}
+					if(breaking>crossSection.length*1.5)
+						break;
+					breaking++;
+				}
+				tempPoint.offSet(crossSection[temp]);
+				if(tempPoint.y>2 && tempPoint.y<128)
+					centers.add(tempPoint);
+			}
+			chosen = null;
+		}
+		else
+		{
+			for(int i =0;i<crossSection.length;i++)
+			{
+				if(rand.nextInt(grade)==0)
+				{
+					ThreePoint tempPoint = new ThreePoint(centerPoint);
+					tempPoint.offSet(crossSection[i]);
+					if(tempPoint.y>2 && tempPoint.y<128)
+						centers.add(tempPoint);
+				}
 			}
 		}
-		if(rand.nextInt(branch)==0)
+		if(branch>1)
 		{
-			ThreePoint newPoint = new ThreePoint(centerPoint);
-			newPoint.offSet(crossSection[rand.nextInt(crossSection.length)]);
-			nodes.add(newPoint);
+			if(rand.nextInt(branch)==0)
+			{
+				ThreePoint newPoint = new ThreePoint(centerPoint);
+				newPoint.offSet(crossSection[rand.nextInt(crossSection.length)]);
+				nodes.add(newPoint);
+			}
 		}
 		if(rand.nextInt(bonanza)==0)
 		{
@@ -218,7 +261,8 @@ public class VeinSystem extends OreSuper
 	{
 		if(!ore.contains("EMERALD"))
 		{
-			Ellipsoid bon = new Ellipsoid(1, 2, 3);
+			Ellipsoid bon = new Ellipsoid(rand.nextInt(3)+1, rand.nextInt(3)+1, rand.nextInt(3)+1);
+			bon.rotateRandom(rand);
 			for(int i=0;i<bon.points.length;i++)
 			{
 				ThreePoint newPoint = new ThreePoint(center);

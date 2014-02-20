@@ -4,10 +4,13 @@ import geometryClasses.TwoPoint;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import mcListenersAndPopulators.EventListeners;
-import oreClasses.ContactMetaDeposits;
+import oreClasses.MetamorphicSystem;
 import oreClasses.SedimentHostedDepositSystem;
+import oreClasses.VeinSystem;
+import oreClasses.VolcanicSystem;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -112,18 +115,32 @@ public final class OreVeins extends JavaPlugin
 			}
 			return true;
 		}
-		/*else if(cmd.getName().equalsIgnoreCase("spawnGold"))
+		else if(cmd.getName().equalsIgnoreCase("spawnGold"))
 		{ // If the player typed /basic then do the following...
 			DebugLogger.console("spawningGold");
 			Player thePlayer = (Player)sender;
 			int x =thePlayer.getLocation().getBlockX();
 			int y = thePlayer.getLocation().getBlockY();
-			int z = thePlayer.getLocation().getBlockZ();
+			int z = thePlayer.getLocation().getBlockZ(); int branchType=1;
 			ThreePoint start = new ThreePoint(x,y,z);
-			Diatreme volcanic = new Diatreme(start, Defaults.diamond.grade, Defaults.diamond.strike, "DIAMOND");
+			Random rand = new Random();
+			double value = Defaults.iron.chooseType.getRVar(rand);
+			if(value <1)
+			{
+				branchType = 1;
+			}
+			else if(value <2)
+			{
+				value = 2;
+			}
+			else
+			{
+				value = 3;
+			}
+			VeinSystem sed = new VeinSystem("EMERALD",branchType, start, 0);
 			return true;//If this has happened the function will return true. 
 			// If this hasn't happened the a value of false will be returned.
-		}
+		}/*
 		else if(cmd.getName().equalsIgnoreCase("spawnEmerald"))
 		{
 			DebugLogger.console("spawningEmerald");

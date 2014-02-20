@@ -15,25 +15,28 @@ public class BIF
 	public Strike strike;
 	public Width width;
 	public Height height;
-	public Branch Levels;
+	public Branch levels;
 	public String string;
 	public BIF() 
 	{
 		string = "BandedIronFormations";
-		probToSpawn = 0.0;
+		probToSpawn = 0.01;
 		grade        = new Grade(string);
 		strike       = new Strike(string);
 		width        = new Width(string);
 		height       = new Height(string);
+		levels 		 = new Branch(string);
 	}
 
 	public void setDefaults(FileConfiguration config)
 	{
 		setProbs(config);
 		grade.logValues(config);
+		levels.logValues(config);
 		strike.logValues(config);
 		width.logValues(config);
 		height.logValues(config);
+		
 	}
 	
 	private void setProbs(FileConfiguration config)

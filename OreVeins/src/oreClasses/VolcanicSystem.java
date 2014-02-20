@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
 import geometryClasses.Paraboloid;
@@ -16,11 +17,15 @@ public class VolcanicSystem extends OreSuper
 	public TwoPoint offset;
 	public int grade;
 	public int branch;
+	public double branchfreq;
 	
-	public VolcanicSystem(String ore,ThreePoint start)
+	public VolcanicSystem(ThreePoint start,String ore)
 	{
+		start.y=2;
+		initializeDefaults();
 		int height = Bukkit.getServer().getWorld("world").getHighestBlockAt(start.x, start.z).getY();
 		centers = new ArrayList<ThreePoint>();
+		branchfreq = 1/(double)(branch);
 		Paraboloid shape = new Paraboloid(change, offset,height);
 		for(int i=0;i<shape.centers.size();i++)
 		{
@@ -47,7 +52,7 @@ public class VolcanicSystem extends OreSuper
 				, (int)(diamond.diatreme.offsety.getRVar(rand)), false);
 		change = new TwoPoint((int)(diamond.diatreme.changex.getRVar(rand))
 				, (int)(diamond.diatreme.changey.getRVar(rand)), false);
-		grade = (int)(1/diamond.diatreme.grade.getRVar(rand));
+		grade = (int)(100/(diamond.diatreme.grade.getRVar(rand)));
 		branch = (int)(diamond.veinDikes.branch.getRVar(rand));
 	}
 

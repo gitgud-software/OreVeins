@@ -28,13 +28,20 @@ public class Lapiz
 	public Lapiz() 
 	{
 		string = "LapizLazuliDeposit";
-		probToSpawn = 0.0;//probability that a spawned chunk will make a lapiz deposit
-		lodewidth.bias = 0.0; lodewidth.skew = 0.0; lodewidth.min =0.0; lodewidth.max = 0.0;
-		lodelength.bias = 0.0; lodelength.skew = 0.0; lodelength.min =0.0; lodelength.max = 0.0;
-		lodedepth.bias = 0.0; lodedepth.skew = 0.0; lodedepth.min =0.0; lodedepth.max = 0.0;
-		mineralizationwidth.bias = 0.0; mineralizationwidth.skew = 0.0; mineralizationwidth.min =0.0; mineralizationwidth.max = 0.0;
-		mineralizationlength.bias = 0.0; mineralizationlength.skew = 0.0; mineralizationlength.min =0.0; mineralizationlength.max = 0.0;
-		mineralizationdepth.bias = 0.0; mineralizationdepth.skew = 0.0; mineralizationdepth.min =0.0; mineralizationdepth.max = 0.0;
+		
+		probToSpawn = 0.03;//probability that a spawned chunk will make a lapiz deposit
+		lodewidth = new TruncatedSkewDistribution();
+		lodelength = new TruncatedSkewDistribution();
+		lodedepth = new TruncatedSkewDistribution();
+		mineralizationwidth = new TruncatedSkewDistribution();
+		mineralizationlength = new TruncatedSkewDistribution();
+		mineralizationdepth = new TruncatedSkewDistribution();
+		lodewidth.bias = -2.0; lodewidth.skew = 2.0; lodewidth.min =2.0; lodewidth.max = 25.0;
+		lodelength.bias = -1.0; lodelength.skew = 2.0; lodelength.min =5.0; lodelength.max = 25.0;
+		lodedepth.bias = 1.0; lodedepth.skew = 2.0; lodedepth.min =10.0; lodedepth.max = 25.0;
+		mineralizationwidth.bias = 0.0; mineralizationwidth.skew = 1.0; mineralizationwidth.min =10.0; mineralizationwidth.max = 50.0;
+		mineralizationlength.bias = 0.0; mineralizationlength.skew = 1.0; mineralizationlength.min =30.0; mineralizationlength.max = 80.0;
+		mineralizationdepth.bias = -0.5; mineralizationdepth.skew = 1.0; mineralizationdepth.min =20.0; mineralizationdepth.max = 100.0;
 		lodewidth.configPath = string + ".Lodewidth";
 		lodedepth.configPath = string + ".Lodedepth";
 		lodelength.configPath = string + ".Lodelength";

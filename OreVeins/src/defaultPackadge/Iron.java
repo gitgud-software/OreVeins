@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import defaultPackadgeHelpers.TruncatedSkewDistribution;
+import defaultPackadgeHelpers.VeinSwitch;
 
 
 public class Iron 
@@ -14,20 +15,20 @@ public class Iron
 	public TertiaryVein tertiaryVein;
 	public double probToSpawn;
 	public String path = "IronVeinSystem";
-	private TruncatedSkewDistribution chooseType;
+	public VeinSwitch chooseType;
 	
 	public Iron()
 	{
-		probToSpawn = 0.0;
+		probToSpawn = 0.05;
 		primaryVein = new PrimaryVein("IronVeinSystem");
 		secondaryVein = new SecondaryVein("IronVeinSystem");
 		tertiaryVein = new TertiaryVein("IronVeinSystem");
-		chooseType.bias = 0.0; chooseType.skew = 0.0; chooseType.min = 0; chooseType.max = 4;
-		chooseType.configPath = path + ".VeinTypeInitial";
+		chooseType = new VeinSwitch("IronVeinSystem.VeinTypeInitial");
 	}
 	public void readWriteConfigs(FileConfiguration configs)
 	{
 		setProbs(configs);
+		chooseType.logValues(configs);
 		primaryVein.setDefaults(configs);
 		secondaryVein.setDefaults(configs);
 		tertiaryVein.setDefaults(configs);
@@ -42,24 +43,6 @@ public class Iron
 		{
 			probToSpawn = config.getInt(path+".SpawnProbability");
 		}
-		chooseType.logValues(config);
 	}
-	
-	public int getType()
-	{
-		Random rand = new Random();
-		double thetype = chooseType.getRVar(rand);
-		if(thetype < 1)
-		{
-			return 1;
-		}
-		else if (thetype < 2)
-		{
-			return 2;
-		}
-		else
-		{
-			return 3;
-		}
-	}
+
 }

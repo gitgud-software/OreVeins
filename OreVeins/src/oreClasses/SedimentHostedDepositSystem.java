@@ -5,6 +5,8 @@ import geometryClasses.Line;
 import geometryClasses.ThreePoint;
 
 import java.util.ArrayList;
+
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
 public class SedimentHostedDepositSystem extends OreSuper 
@@ -14,29 +16,55 @@ public class SedimentHostedDepositSystem extends OreSuper
 	private int height;
 	private int grade;
 	private int levels;
+	private ArrayList<ThreePoint> levelOffset;
 	public SedimentHostedDepositSystem(ThreePoint start, String ore)
 	{
 		this.ore = ore;
+		this.start = start;
 		initializeDefaults();
-		ThreePoint base = new ThreePoint(0,0,0);
-		ThreePoint end = Line.getEndPoint(base, strike/4, rand,true);
-		if(Line.distance(start, end)/levels > 2)
+		getPerpVector();
+		if(Line.distance(start, end) > 2)
 		{
-			ArrayList<ThreePoint> levelOffset = Line.bresenHamAlgo(start,end);
-			end = Line.getEndPoint(start, strike, rand, false);
-			nodes = Line.bezierCurve(start, end, rand);
-			int max = levelOffset.size();
-			int randindex;
-			ThreePoint offset;
-			for(int i=0;i<levels;i++)
-			{
-				randindex = rand.nextInt(max);
-				offset = levelOffset.get(randindex);
-				addSection(offset);
-				PointMapping.addArrayToPoints(centers, ore);
-			}
+			this.end = Line.getEndPoint(start, strike, rand, false);
+			makeSystem();
+		}
+	}
+	
+	private void getPerpVector()
+	{
+		//returned a point that is perpendicular to the current point. offset both startpoint and endpoint
+		//by start
+		ThreePoint base = new ThreePoint(0,0,0);
+		end = Line.getEndPoint(base, strike*2, rand,false);
+		levelOffset = Line.bresenHamAlgo(base,end);
+		if(end.x==0)
+			end.x =1;
+		if(end.z==0)
+			end.z=1;
+		if(end.y==0)
+			end.y=1;
+		levelOffset = Line.bresenHamAlgo(base,end);
+	}
+	
+	private void makeSystem()
+	{
+		nodes = Line.bezierCurve(start, end, rand);
+		int max = levelOffset.size();
+		ThreePoint offset;
+		Ellipse newEllipse = new Ellipse(height,width);
+		newEllipse.rotateRandom(rand);
+		newEllipse.alighnToPoints(start,end);
+		crossSection = newEllipse.points;
+		//DebugLogger.console(":"+levels+ "max:"+max +"strike:"+ strike);
+		for(int randindex=0;randindex<max;randindex+=max/levels)
+		{
+			offset = levelOffset.get(randindex);
+			//DebugLogger.console(offset.toString());
+			addSection(offset);
+			PointMapping.addArrayToPoints(centers, this.ore);
 			drawPoints();
 		}
+		
 	}
 	
 	protected void initializeDefaults()
@@ -46,8 +74,8 @@ public class SedimentHostedDepositSystem extends OreSuper
 			strike = (int) bif.strike.getRVar(rand);
 			width = (int) bif.width.getRVar(rand);
 			height = (int) bif.height.getRVar(rand);
-			grade = (int) (1/bif.grade.getRVar(rand));
-			levels = (int) bif.Levels.getRVar(rand);
+			grade = (int) (100/(bif.grade.getRVar(rand)));
+			levels = (int) bif.levels.getRVar(rand);
 			ore = "IRON";
 		}
 		else if(ore.contains("COAL"))
@@ -55,29 +83,50 @@ public class SedimentHostedDepositSystem extends OreSuper
 			strike = (int) coal.strike.getRVar(rand);
 			width = (int) coal.width.getRVar(rand);
 			height = (int) coal.height.getRVar(rand);
-			grade = (int) (1/coal.grade.getRVar(rand));
-			levels = (int) coal.Levels.getRVar(rand);
+			grade = (int) (100/(coal.grade.getRVar(rand)));
+			levels = (int) coal.levels.getRVar(rand);
 		}
-		Ellipse newEllipse = new Ellipse(width,height);
-		crossSection = newEllipse.points;
+		if(strike<50 && levels > 3)
+		{
+			levels =3;
+		}
+		if(strike>75 && levels > 5)
+			levels=4;
 	}
 
 	@Override
 	protected void addSection(ThreePoint centerPoint) 
 	{
 		ThreePoint tempPoint;
+		int length = crossSection.length;
+		int temp;
+		int breaking;
+		ArrayList<Integer> chosen = new ArrayList<Integer>();
 		for(int i=0;i<nodes.size();i++)
 		{
-			for(int j=0;j<crossSection.length;j++)
+			//DebugLogger.console(nodes.get(i).toString());
+			for(int j=0;j<length/grade;j++)
 			{
-				if(rand.nextInt(grade)==0)
+				breaking=0;
+				tempPoint = new ThreePoint(centerPoint);
+				while(true)
 				{
-					tempPoint = new ThreePoint(centerPoint);
-					tempPoint.offSet(crossSection[j]);
-					tempPoint.offSet(nodes.get(i));
-					centers.add(tempPoint);
+					temp = rand.nextInt(length);
+					if(!chosen.contains(temp))
+					{
+						chosen.add(temp);
+						break;
+					}
+					if(breaking>length*1.5)
+						break;
+					breaking++;
 				}
+				tempPoint.offSet(crossSection[temp]);
+				tempPoint.offSet(nodes.get(i));
+				if(tempPoint.y>2 && tempPoint.y<128)
+					centers.add(tempPoint);
 			}
+			chosen.clear();
 		}
 	}
 

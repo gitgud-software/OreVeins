@@ -32,8 +32,8 @@ public class Paraboloid
 		ThreePoint two = new ThreePoint(0,1,0);
 		for(int y = 2;y<this.maxheight;y++)
 		{
-			a = (int) (Math.exp(maxheight*expa)+ offset.x);
-			b = (int) (Math.exp(maxheight*expb)+ offset.z);
+			a = (int) (Math.exp(y*expa)+ offset.x);
+			b = (int) (Math.exp(y*expb)+ offset.z);
 			Ellipse cross = new Ellipse(a,b);
 			cross.alighnToPoints(one,two);
 			cross.rotateY(yrot);

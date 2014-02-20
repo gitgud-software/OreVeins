@@ -28,52 +28,31 @@ public class Branch extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 3;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
-		else if(ore.contains("Gold"))
+		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 3;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 3;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Diamond"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
+			this.min = 0;
+			this.max = 3;
 			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = 0.0;
 		}
 	}
 	
@@ -81,158 +60,99 @@ public class Branch extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 4;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 4;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 4;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Diamond"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
+			this.min = 0;
+			this.max = 4;
 			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = 0.0;
 		}
 	}
 	
 	private void tertiary(String ore)
 	{
-		if(ore.contains("Redstone"))
+		if(ore.contains("Gold"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 6;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 6;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 0;
+			this.max = 6;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Coal"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
-		}
-		else if(ore.contains("Diamond"))
-		{
-			this.min = 0.0125;
-			this.max = 2.0;
+			this.min = 0;
+			this.max = 6;
 			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = 0.0;
 		}
 	}
 	
 	private void theDefault(String ore)
 	{
-		if(ore.contains("Gold"))
+		 if(ore.contains("BandedIronFormation"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
-		}
-		else if(ore.contains("Iron"))
-		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			String newPath = configPath + "Levels";
+			configPath = newPath;
+			this.min = 1.0;
+			this.max =8.0;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Lapiz"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
-			this.bias = 1.0;
+			this.min = 5;
+			this.max = 20;
+			this.skew = 0.5;
+			this.bias = .25;
 		}
-		else if(ore.contains("Emerald"))
+		else if(ore.contains("Coal"))
 		{
-			this.min = 0.5;
-			this.max = 5.0;
-			this.skew = 2.0;
+			String newPath = configPath + "Levels";
+			configPath = newPath;
+			this.min = 1;
+			this.max = 8;
+			this.skew = 1.0;
 			this.bias = 1.0;
-		}
-		else if(ore.contains("Emerald"))
-		{
-			this.min = 3.0;
-			this.max = 15.0;
-			this.skew = 8.0;
-			this.bias = 4.0;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 0.0125;
-			this.max = 2.0;
+			this.min = 10;
+			this.max = 20;
 			this.skew = 1.0;
-			this.bias = 0.5;
-		}
-		else if(ore.contains("Lapiz"))
-		{
-			this.min = 1.25;
-			this.max = 3.0;
-			this.skew = 1.6;
-			this.bias = 0.2;
+			this.bias = 0.0;
 		}
 	}
 }

@@ -42,8 +42,8 @@ public abstract class OreSuper
 	protected String ore;
 	protected ThreePoint start;//starting point of the vein
 	protected ThreePoint end;
-	protected ArrayList<ThreePoint> nodes;//branch points
-	protected ArrayList<ThreePoint> centers;//all the points that will be drawn by the vein
+	protected ArrayList<ThreePoint> nodes= new ArrayList<ThreePoint>();;//branch points
+	protected ArrayList<ThreePoint> centers = new ArrayList<ThreePoint>();//all the points that will be drawn by the vein
 	protected ThreePoint[] crossSection;//cross section of the vein
 	protected Random rand = new Random();
 	protected Coal coal = Defaults.coal;
@@ -72,7 +72,7 @@ public abstract class OreSuper
 	
 	public void drawPoints()
 	{
-		DebugLogger.console("drawing veins");
+		//DebugLogger.console("drawing veins");
 		HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();
 		TwoPoint drawingChunk;
 		Chunk chunkObj;

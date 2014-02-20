@@ -11,10 +11,14 @@ public class GeodeDef
 	public GeodeDef(String path)
 	{
 		String newPath = path + ".Geode";
-		width.max =4;width.min=3;width.bias = 4;width.skew=4;
-		height.max =4;height.min=3;height.bias = 4;height.skew=4;
-		depth.max =4;depth.min=3;depth.bias = 4;depth.skew=4;
-		thickness.max =4;thickness.min=3;thickness.bias = 4;thickness.skew=4;
+		width = new TruncatedSkewDistribution();
+		height= new TruncatedSkewDistribution();
+		depth= new TruncatedSkewDistribution();
+		thickness= new TruncatedSkewDistribution();
+		width.max =10;width.min=1;width.bias = -2;width.skew=2;
+		height.max =10;height.min=1;height.bias = -2;height.skew=2;
+		depth.max =10;depth.min=1;depth.bias = -2;depth.skew=2;
+		thickness.max =4;thickness.min=1;thickness.bias = -2;thickness.skew=2;
 		width.configPath = newPath + ".Width";
 		height.configPath = newPath + ".Height";
 		depth.configPath = newPath + ".Depth";
