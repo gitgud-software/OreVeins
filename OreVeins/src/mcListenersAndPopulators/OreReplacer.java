@@ -1,6 +1,7 @@
-package populatorClasses;
+package mcListenersAndPopulators;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -9,10 +10,13 @@ import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
 import com.icloud.kevinmendoza.OreVeins.DebugLogger;
+import com.icloud.kevinmendoza.OreVeins.PointMapping;
+
+import geometryClasses.TwoPoint;
 
 public class OreReplacer extends BlockPopulator
 {
-	
+
 	@Override
 	public void populate(World world, Random rand, Chunk chunk) 
 	{
@@ -23,7 +27,7 @@ public class OreReplacer extends BlockPopulator
 			for (int y = 1; y < 128; y++)
 			{
 				for (int z = 0; z < 16; z++)
-				{//getBlock(x, y, z).getType().compareTo(Material.STONE)==0
+				{
 					block = chunk.getBlock(x, y, z);
 					if (block.getType().compareTo(Material.COAL_ORE)==0 
 							|| block.getType().compareTo(Material.IRON_ORE)==0 
@@ -33,10 +37,13 @@ public class OreReplacer extends BlockPopulator
 							|| block.getType().compareTo(Material.DIAMOND_ORE)==0 
 							|| block.getType().compareTo(Material.EMERALD_ORE)==0)
 					{
-						block.setType(Material.STONE);
+
+						chunk.getBlock(x, y, z).setType(Material.STONE);
 					}
 				}
 			}
 		}
+		TwoPoint theChunk = new TwoPoint(chunk.getX(),chunk.getZ(),true);
+		PointMapping.addToPopList(theChunk);
 	}
 }

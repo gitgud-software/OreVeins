@@ -3,12 +3,7 @@ package geometryClasses;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-
-import com.icloud.kevinmendoza.OreVeins.DebugLogger;
-
-
-public class LineDrawingUtilityClass 
+public class Line 
 {
 	public static ArrayList<ThreePoint> bresenHamAlgo(ThreePoint start, ThreePoint end)
     {
@@ -83,7 +78,7 @@ public class LineDrawingUtilityClass
                 errzy+=dz2;
                 y+=ymult;
                 ThreePoint point = new ThreePoint(x,y,z);
-               // System.out.println("Point is:" +point.toString());
+                //System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -107,7 +102,7 @@ public class LineDrawingUtilityClass
                 errxz+=dx2;
                 z+=zmult;
                 ThreePoint point = new ThreePoint(x,y,z);
-               // System.out.println("Point is:" +point.toString());
+              // System.out.println("Point is:" +point.toString());
                 thePoints.add(point);
             }
         }
@@ -214,78 +209,51 @@ public class LineDrawingUtilityClass
 		}
 		return coeff;
 	}
-
+	
+	public static int returnGaussian(int deviance, int mean, Random rand)
+	{
+		return (int)(deviance*rand.nextGaussian()) +mean;
+	}
+	
+	public static int returnSafeGaussian(int deviance, int mean, Random rand)
+	{
+		int value = (int)(deviance*rand.nextGaussian()) +mean;
+		
+		if(value<1)
+			return 1;
+		else
+			return value;
+	}
+	public static int returnForwardPoisson(int deviance, int base, Random rand)
+	{
+		int value = (int)(deviance*Math.pow(rand.nextGaussian(),2)) +base;
+		return value;
+	}
+	
 	public static ThreePoint getEndPoint(ThreePoint start, int strike, Random rand, Boolean varyRadius) 
 	{
 		if(strike==0)
 			return start;
-		int it=0;
-		double phi,theta;
 		int x,z,y;
+		double phi,theta;
 		int rad = strike;
-		while(true)
+		if(varyRadius==true)
 		{
-			if(varyRadius==true)
-			{
-				rad = (int)((rad*.75)*rand.nextGaussian()) +rad;
-			}
-			if(rad < 5)
-				rad = 5;
-			phi = ((double)rand.nextInt(314))/100.0;
-			y = (int) (rad*Math.cos(phi)) + start.y;
-			if( y <128 && y >2 )
-				break;
-			if(start.y-strike > 125)
-				break;
-			it++;
-			if(it>50)
-				return start;
+			rad = returnGaussian((int)(rad*.75), rad, rand);
 		}
-		theta = ((double)rand.nextInt(628)/100.0);
-		x = (int)(rad*Math.cos(theta)*Math.sin(phi)) + start.x;
-		z = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.z;
-		//DebugLogger.console("tried" + it + " to find good chunk");
+		if(rad < 5)
+			rad = 5;
+		theta = Math.PI*rand.nextDouble();
+		phi   = Math.PI*2*rand.nextDouble();
+		y = (int)(rad*Math.sin(theta)*Math.sin(phi)) + start.y;
+		x = (int)(rad*Math.sin(theta)*Math.cos(phi)) + start.x;
+		z = (int)(rad*Math.cos(theta)) + start.z;
 		ThreePoint endpoint = new ThreePoint(x,y,z);
 		return endpoint;
 	}
-	
-	public static TwoPoint getChunkCoords(ThreePoint point)
+	public static int distance(ThreePoint one, ThreePoint two)
 	{
-		TwoPoint newPoint = new TwoPoint(point.x>>4,point.z>>4);
-		return newPoint;
-	}
-	
-	public static ThreePoint shiftCoords(ThreePoint point)
-	{
-		//DebugLogger.console("start point" + point.x + " "+ point.y + " " + point.z);
-		ThreePoint newPoint = new ThreePoint((point.x%16+16)%16, point.y ,(point.z%16+16)%16);
-		//DebugLogger.console("start point" + newPoint.x + " "+  newPoint.y + " " +  newPoint.z);
-		return newPoint;
-	}
-
-	public static String convertToKey(int x, int z)
-	{
-		String chx = new Integer(x).toString();
-		String chz = new Integer(z).toString();
-		String key = chx +":" + chz;
-		return key;
-	}
-
-	public static String convertToKey(ThreePoint point)
-	{
-		String chx = new Integer(point.x>>4).toString();
-		String chz = new Integer(point.z>>4).toString();
-		String key = chx +":" + chz;
-		return key;
-	}
-	
-	public static String convertToKey(TwoPoint chunk)
-	{
-
-		String chx = new Integer(chunk.x).toString();
-		String chz = new Integer(chunk.z).toString();
-		String key = chx +":" + chz;
-		return key;
+		return (int) Math.sqrt(Math.pow(one.x-two.x,2) + Math.pow(one.y-two.y,2) + Math.pow(one.z-two.z,2));
 	}
 	
 }
