@@ -18,7 +18,7 @@ public class Diamond
 	private int type =1;
 	public Diamond()
 	{
-		probToSpawn = 0.001;
+		probToSpawn = 0.1;
 		veinDikes = new PrimaryVein(path);
 		diatreme = new Diatreme(path);
 	}

@@ -29,7 +29,7 @@ public class VeinDrawer {
 						{
 							if(vein[x][y][z].contains("GOLD"))
 							{
-								block.setType(Material.GOLD_ORE);
+								chunk.getBlock(x, y, z).setType(Material.GOLD_ORE);
 							}
 							else if (vein[x][y][z].contains("IRON"))
 							{
@@ -64,6 +64,7 @@ public class VeinDrawer {
 				}
 			}
 		}
+		chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
 	}
 	
 }

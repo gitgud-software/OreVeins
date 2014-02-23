@@ -28,31 +28,31 @@ public class Grade extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = .5;
-			this.max = 2.0;
+			this.min = 1;
+			this.max = 3.5;
 			this.skew = 1.0;
-			this.bias = -1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
 			this.min = 1;
-			this.max = 3.0;
+			this.max = 5.0;
 			this.skew = 1.0;
-			this.bias = -1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = .5;
-			this.max = 3;
+			this.min = .75;
+			this.max = 4;
 			this.skew = 1.0;
-			this.bias = -1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.2;
+			this.min = 0.75;
 			this.max = 3.0;
-			this.skew = 0.5;
-			this.bias = -1.0;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 	}
 	
@@ -60,38 +60,38 @@ public class Grade extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 0.75;
-			this.max = 2.0;
-			this.skew = 2.0;
-			this.bias = -2.0;
+			this.min = 1.0;
+			this.max = 7.0;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 0.5;
-			this.max = 4.0;
+			this.min = 1.0;
+			this.max = 7.0;
 			this.skew = 1.0;
-			this.bias = -1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.5;
-			this.max = 3;
+			this.min = 1.0;
+			this.max = 7.0;
 			this.skew = 1.0;
-			this.bias = -1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.2;
-			this.max = 6.0;
-			this.skew = 0.5;
-			this.bias = -1.0;
+			this.min = 1.0;
+			this.max = 7.0;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 0.2;
-			this.max = 1.0;
-			this.skew = 0.5;
-			this.bias = -1.0;
+			this.min = 0.75;
+			this.max = 7.0;
+			this.skew = 1.0;
+			this.bias = 0.0;
 		}
 	}
 	
@@ -99,35 +99,35 @@ public class Grade extends TruncatedSkewDistribution
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 1.0;
+			this.min = 3.0;
 			this.max = 10.0;
 			this.skew = 2.0;
-			this.bias = -2.0;
+			this.bias = 0.5;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = .5;
-			this.max = 7.0;
-			this.skew = 1.0;
-			this.bias = -1.0;
+			this.min = 3.0;
+			this.max = 10.0;
+			this.skew = 2.0;
+			this.bias = 0.5;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 0.1;
-			this.max = 9.0;
-			this.skew = 1.0;
-			this.bias = -2.0;
+			this.min = 3.0;
+			this.max = 10.0;
+			this.skew = 2.0;
+			this.bias = 0.5;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 0.1;
-			this.max = 5.0;
-			this.skew = 1.0;
-			this.bias = 0.0;
+			this.min = 3.0;
+			this.max = 10.0;
+			this.skew = 2.0;
+			this.bias = 0.5;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 0.0125;
+			this.min = 0.04;
 			this.max = 2.0;
 			this.skew = 1.0;
 			this.bias = 0.5;
@@ -140,12 +140,12 @@ public class Grade extends TruncatedSkewDistribution
 		{
 			this.min = 1.0;
 			this.max =15.0;
-			this.skew = 2.0;
+			this.skew = 1.0;
 			this.bias = 0;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 0.15;
+			this.min = 0.5;
 			this.max = 5.0;
 			this.skew = 2.0;
 			this.bias = 1.0;
@@ -154,7 +154,7 @@ public class Grade extends TruncatedSkewDistribution
 		{
 			this.min = 2.0;
 			this.max = 10.0;
-			this.skew = 2.5;
+			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Lapiz"))

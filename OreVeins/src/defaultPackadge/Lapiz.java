@@ -29,7 +29,7 @@ public class Lapiz
 	{
 		string = "LapizLazuliDeposit";
 		
-		probToSpawn = 0.03;//probability that a spawned chunk will make a lapiz deposit
+		probToSpawn = 0.8;//probability that a spawned chunk will make a lapiz deposit
 		lodewidth = new TruncatedSkewDistribution();
 		lodelength = new TruncatedSkewDistribution();
 		lodedepth = new TruncatedSkewDistribution();

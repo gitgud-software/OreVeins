@@ -1,20 +1,10 @@
 name: OreVeins
 main: com.icloud.kevinmendoza.OreVeins.OreVeins
 version: 1.0A
-load: startup
+load: STARTUP
 commands:
    testChunk:
       description: Shows you OreVein Mapping info
       usage: /<testChunk>
       permission: <OreVeins>.basic
-      permission-message: You don't have <permission>
-   spawnGold:
-      description: spawns A New Veinlet
-      usage: /<spawnGold>
-      permission: <OreVeins>.spawnGold
-      permission-message: You don't have <permission>
-   spawnEmerald:
-      description: spawns A New Veinlet
-      usage: /<spawnEmerald>
-      permission: <OreVeins>.spawnEmerald
       permission-message: You don't have <permission>

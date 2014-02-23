@@ -28,36 +28,36 @@ public class Height extends TruncatedSkewDistribution {
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 5;
-			this.max =10;
+			this.min = 3;
+			this.max =6;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 5;
-			this.max =10;
+			this.min = 3;
+			this.max =6;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 5;
-			this.max =10;
+			this.min = 3;
+			this.max =6;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 2;
-			this.max =8;
+			this.min = 3;
+			this.max =6;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 5;
-			this.max =15;
+			this.min = 3;
+			this.max =6;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
@@ -67,36 +67,36 @@ public class Height extends TruncatedSkewDistribution {
 	{
 		if(ore.contains("Gold"))
 		{
-			this.min = 4;
-			this.max =8;
+			this.min = 2;
+			this.max =5;
 			this.skew = 1.0;
 			this.bias = -0.5;
 		}
 		else if(ore.contains("Iron"))
 		{
-			this.min = 4;
-			this.max =8;
+			this.min = 2;
+			this.max =5;
 			this.skew = 1.0;
 			this.bias = -0.5;
 		}
 		else if(ore.contains("Redstone"))
 		{
-			this.min = 4;
-			this.max =8;
+			this.min = 2;
+			this.max =5;
 			this.skew = 1.0;
 			this.bias = -0.5;
 		}
 		else if(ore.contains("Emerald"))
 		{
-			this.min = 1;
-			this.max =8;
+			this.min = 2;
+			this.max =5;
 			this.skew = 1.0;
 			this.bias = -0.5;
 		}
 		else if(ore.contains("Diamond"))
 		{
-			this.min = 4;
-			this.max =8;
+			this.min = 2;
+			this.max =5;
 			this.skew = 1.0;
 			this.bias = -0.5;
 		}

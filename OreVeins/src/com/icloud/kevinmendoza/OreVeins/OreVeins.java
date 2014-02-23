@@ -115,6 +115,7 @@ public final class OreVeins extends JavaPlugin
 			}
 			return true;
 		}
+		/*
 		else if(cmd.getName().equalsIgnoreCase("spawnGold"))
 		{ // If the player typed /basic then do the following...
 			DebugLogger.console("spawningGold");
@@ -152,7 +153,28 @@ public final class OreVeins extends JavaPlugin
 			PegmatiteSystem peg = new PegmatiteSystem(start, Defaults.emerald.strike, Defaults.emerald.branch, 
 					Defaults.emerald.bonanza, Defaults.emerald.grade ,"EMERALD");
 			return true;
-		}*/
+		}
+		else
+		{
+			return false;
+		}
+		commands:
+   testChunk:
+      description: Shows you OreVein Mapping info
+      usage: /<testChunk>
+      permission: <OreVeins>.basic
+      permission-message: You don't have <permission>
+   spawnGold:
+      description: spawns A New Veinlet
+      usage: /<spawnGold>
+      permission: <OreVeins>.spawnGold
+      permission-message: You don't have <permission>
+   spawnEmerald:
+      description: spawns A New Veinlet
+      usage: /<spawnEmerald>
+      permission: <OreVeins>.spawnEmerald
+      permission-message: You don't have <permission>
+	}*/
 		else
 		{
 			return false;

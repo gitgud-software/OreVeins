@@ -19,7 +19,7 @@ public class Iron
 	
 	public Iron()
 	{
-		probToSpawn = 0.05;
+		probToSpawn = 1.0;
 		primaryVein = new PrimaryVein("IronVeinSystem");
 		secondaryVein = new SecondaryVein("IronVeinSystem");
 		tertiaryVein = new TertiaryVein("IronVeinSystem");

@@ -31,22 +31,27 @@ public class OreGenerator
 		start.z+=chunkPoint.z;
 		if(rand.nextInt((int)(100/Defaults.diamond.probToSpawn))==0)
 		{
+			DebugLogger.console("made diamond at"+start.toString());
 			VolcanicSystem pipe = new VolcanicSystem(start,"DIAMOND");
 		}
 		else if(rand.nextInt((int)(100/Defaults.coal.probToSpawn))==0)
 		{
+			DebugLogger.console("made coal at"+start.toString());
 			SedimentHostedDepositSystem layers = new SedimentHostedDepositSystem(start,"COAL");
 		}
 		else if(rand.nextInt((int)(100/Defaults.bif.probToSpawn))==0)
 		{
+			DebugLogger.console("made banded iron formation at"+start.toString());
 			SedimentHostedDepositSystem layers = new SedimentHostedDepositSystem(start,"BIF");
 		}
 		else if(rand.nextInt((int)(100/Defaults.lapiz.probToSpawn))==0)
 		{
+			DebugLogger.console("made lapiz at"+start.toString());
 			MetamorphicSystem system = new MetamorphicSystem(start);
 		}
 		else if(rand.nextInt((int)(100/Defaults.emerald.probToSpawn))==0)
 		{
+			DebugLogger.console("made emerald at"+start.toString());
 			int branchType=1;
 			double value = Defaults.emerald.chooseType.getRVar(rand);
 			if(value <1)
@@ -65,6 +70,7 @@ public class OreGenerator
 		}
 		else if(rand.nextInt((int)(100/Defaults.redstone.probToSpawn))==0)
 		{
+			DebugLogger.console("made redstone at"+start.toString());
 			int branchType=1;
 			double value = Defaults.redstone.chooseType.getRVar(rand);
 			if(value <1)
@@ -83,6 +89,7 @@ public class OreGenerator
 		}
 		else if(rand.nextInt((int)(100/Defaults.gold.probToSpawn))==0)
 		{
+			DebugLogger.console("made gold at"+start.toString());
 			int branchType=1;
 			double value = Defaults.gold.chooseType.getRVar(rand);
 			if(value <1)
@@ -101,6 +108,7 @@ public class OreGenerator
 		}
 		else if(rand.nextInt((int)(100/Defaults.iron.probToSpawn))==0)
 		{
+			DebugLogger.console("made iron at"+start.toString());
 			int branchType=1;
 			double value = Defaults.iron.chooseType.getRVar(rand);
 			if(value <1)

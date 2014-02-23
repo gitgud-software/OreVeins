@@ -19,7 +19,7 @@ public class Emerald
 	public VeinSwitch chooseType;
 	public Emerald()
 	{
-		probToSpawn = 0.01;
+		probToSpawn = 0.1;
 		primaryVein = new PrimaryVein(path);
 		secondaryVein = new SecondaryVein(path);
 		tertiaryVein = new TertiaryVein(path);

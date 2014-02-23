@@ -20,7 +20,7 @@ public class Coal
 	public Coal() 
 	{
 		string = "CoalBeds";
-		probToSpawn = 0.013;
+		probToSpawn = 0.1;
 		grade        = new Grade(string);
 		strike       = new Strike(string);
 		width        = new Width(string);

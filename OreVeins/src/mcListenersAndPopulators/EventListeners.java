@@ -15,6 +15,7 @@ import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldInitEvent;
 
+import com.icloud.kevinmendoza.OreVeins.DebugLogger;
 import com.icloud.kevinmendoza.OreVeins.PointMapping;
 
 public final class EventListeners implements Listener 
@@ -50,13 +51,16 @@ public final class EventListeners implements Listener
 		HashMap<String,String[][][]> drawableChunks = PointMapping.getDrawListAndRemove();
 		TwoPoint drawingChunk;
 		Chunk chunkObj;
-		for(String entry: drawableChunks.keySet())
+		if(!drawableChunks.isEmpty())
 		{
-			drawingChunk = new TwoPoint(entry);
-			chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
-			if(drawableChunks.get(entry)!=null)
+			for(String entry: drawableChunks.keySet())
 			{
-				VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
+				drawingChunk = new TwoPoint(entry);
+				chunkObj = Bukkit.getWorlds().get(0).getChunkAt(drawingChunk.x, drawingChunk.z);
+				if(drawableChunks.get(entry)!=null)
+				{
+					VeinDrawer.drawVein(drawableChunks.get(entry), chunkObj);
+				}
 			}
 		}
 	}

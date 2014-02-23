@@ -20,7 +20,7 @@ public class BIF
 	public BIF() 
 	{
 		string = "BandedIronFormations";
-		probToSpawn = 0.01;
+		probToSpawn = 0.1;
 		grade        = new Grade(string);
 		strike       = new Strike(string);
 		width        = new Width(string);

@@ -19,7 +19,7 @@ public class Redstone
 	
 	public Redstone()
 	{
-		probToSpawn = 0.02;
+		probToSpawn = 0.5;
 		primaryVein = new PrimaryVein(path);
 		secondaryVein = new SecondaryVein(path);
 		tertiaryVein = new TertiaryVein(path);

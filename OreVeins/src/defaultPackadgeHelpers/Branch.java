@@ -29,28 +29,28 @@ public class Branch extends TruncatedSkewDistribution
 		if(ore.contains("Gold"))
 		{
 			this.min = 0;
-			this.max = 3;
+			this.max = 5;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
 			this.min = 0;
-			this.max = 3;
+			this.max = 5;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
 			this.min = 0;
-			this.max = 3;
+			this.max = 5;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
 			this.min = 0;
-			this.max = 3;
+			this.max = 5;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
@@ -93,28 +93,28 @@ public class Branch extends TruncatedSkewDistribution
 		if(ore.contains("Gold"))
 		{
 			this.min = 0;
-			this.max = 6;
+			this.max = 3;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Iron"))
 		{
 			this.min = 0;
-			this.max = 6;
+			this.max = 3;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Redstone"))
 		{
 			this.min = 0;
-			this.max = 6;
+			this.max = 3;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}
 		else if(ore.contains("Emerald"))
 		{
 			this.min = 0;
-			this.max = 6;
+			this.max = 3;
 			this.skew = 1.0;
 			this.bias = 0.0;
 		}

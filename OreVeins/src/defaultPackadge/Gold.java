@@ -18,7 +18,7 @@ public class Gold
 	public VeinSwitch chooseType;
 	public Gold()
 	{
-		probToSpawn = 0.02;
+		probToSpawn = 0.7;
 		primaryVein = new PrimaryVein(path);
 		secondaryVein = new SecondaryVein(path);
 		tertiaryVein = new TertiaryVein(path);
