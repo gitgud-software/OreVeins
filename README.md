@@ -1,6 +1,9 @@
 OreVeins
 ========
-Authors: Kevin M. and  Kevin S.
+Author:
+Kevin Mendoza 
+Major Contributors: 
+Kevin Song, Alex Lin, Darren Chang, Drew Parliament, Zeno Hao
 
 A naive attempt at creating realistic ore controls for a minecraft bukkit plugin.
 Mojang has in the past taken a simplistic approach to Ore Generation and distribution in Minecraft. To understand why
@@ -9,20 +12,12 @@ This plugin is in development, lets first look at how Minecraft 'nilla generates
 'Nilla World structure & Ore Generation
 =======================================
 
-In a Minecraft world, every block exists in an object called a 'chunk.' A chunk is simply a 16x16x256 slice of the world
-in which all the blocks reside. Every tree, leaf, dirt, stone, and lava block has both a coordinate based on the (0,0,0)
-vector of the chunk, and based on the coordinate of the chunk itself in relation to the (0,0) chunk coordinate. This
-means that if you place a block at the coordinate x:33 y:64 z:34, you're placing in the (3,3) chunk, and at coordinates
-(1,64,2) within that chunk.
-
 Ores in minecraft then are distributed in two ways within these chunks: by depth and by 'mass'. Mojang and most of the
 programming world feels that rarer ores should be deeper in the world (where deeper == harder or something?) and more 
 common and necessary ores should be able to be found over a wide range of depths. As a result, ores like Diamond and 
 Gold are only found below a certain depth, while coal and iron can be found quite high up. 
 
-In addition to this, each ore 'vein' is given a simple geometric configuraiton of a little glob of blocks. Iron, for example
-is commonly found as groups of 4-6 blocks, while Coal 'veins' can be found in as big masses as 30 blocks. As far as I
-know this distinction is arbitrary and only based upon what the felt 'rarity' of these ores should be. 
+In addition to this, each ore 'vein' is given a simple geometric configuraiton of a little glob of blocks. Iron, for exampl, is commonly found as groups of 4-6 blocks, while Coal 'veins' can be found in as big masses as 30 blocks. As far as I know this distinction is arbitrary and only based upon what the felt 'rarity' of these ores should be. 
 
 It should be noted that only one type of ore, Emerald Ore, is found distributed by location (in this case, extreme hills
 Biomes)
@@ -30,9 +25,7 @@ Biomes)
 OverView of Real world Ore Controls
 ===================================
 
-It would be naive to think that including a perfectly accurate model of ore geology and structural controls into minecraft
-would be feasable, easy, or even desireable. Still, it is useful to have some background about the structures and
-distribution of the minecraft ores. It is my hope that real world ore controls can be leveraged to create a more
+It would be naive to think that including a perfectly accurate model of ore geology and structural controls into minecraft would be feasable, easy, or even desireable. Still, it is useful to have some background about the structures and distribution of the minecraft ores. It is my hope that real world ore controls can be leveraged to create a more
 engaging server environment; one where caving and exploration, both below and above the surface, pay larger dividends
 than blindly creating drift mines.
 
@@ -53,7 +46,7 @@ Iron
 ====
 Iron is an extremely common element in nature, and is found in mineable grades in a wide range of geologic settings. Just a few will be listed here.
 
-Bog Iron: occasionally in swamps and in waterlogged soils, Fe3+ & Fe2+ complexes will be precipitated out of solution by bacteria and into small nodules of iron.
+Bog Iron: occasionally in swamps and in waterlogged soils, Fe3+ & Fe2+ complexes will be precipitated out of solution by bacteria and into small nodules of iron. (currently Unimplemented)
 
 Banded Iron Formations BIFs: BIFs are the major source of commercial iron. Between 4 & 3 Billion years ago, the Earth's oceans were so full of sulphur and iron minerals dissolved in solution that it was likely that the ocean appeared a deep green. However, as soon as photoautotrophs appeared on the scene and began pumping out O2, sulphide and iron minerals began to oxidize and fall to the sea floor. The compressed and often highly folded sediments are called Banded Iron formations, and are nearly pure hematite. They range from just a few inches thick to a few yards, and once were very common in old, sedimentary terranes. 
 
