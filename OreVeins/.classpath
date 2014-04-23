@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 6 (MacOS X Default)"/>
-	<classpathentry kind="lib" path="/Users/allmac/Desktop/CraftBukkit/craftbukkit-1.7.2-R0.3-20140106.202339-8.jar">
+	<classpathentry kind="lib" path="/Users/allmac/Desktop/CraftBukkit/craftbukkit.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jd.bukkit.org/apidocs/"/>
 		</attributes>

@@ -1,10 +1,4 @@
 name: OreVeins
 main: com.icloud.kevinmendoza.OreVeins.OreVeins
-version: 1.0A
+version: 1.1A
 load: STARTUP
-commands:
-   testChunk:
-      description: Shows you OreVein Mapping info
-      usage: /<testChunk>
-      permission: <OreVeins>.basic
-      permission-message: You don't have <permission>

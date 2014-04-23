@@ -1,3 +1,23 @@
+/*******************************************************************************
+ * OreVeins realistic ore distribution plugin
+ * Copyright (C) 2014  Kevin Mendoza
+ * kevinmendoza@mac.com
+ * Major Contributors: Kevin Song, Alex Lin, Darren Chang, Drew Parliament, Zeno Hao
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *******************************************************************************/
 package geometryClasses;
 
 import java.util.ArrayList;
@@ -31,14 +51,14 @@ public class Geode extends Shape
 		int dy = e-g;
 		int dz = f-g;
 		
-		Ellipsoid shell = new Ellipsoid(d,e,f);
+		Ellipsoid shell = new Ellipsoid(d+1,e+1,f+1);
 		Ellipsoid pocket = new Ellipsoid(dx,dy,dz);
-		Random rand = new Random();
-		int x = rand.nextInt(360);
-		int y = rand.nextInt(360);
-		int z = rand.nextInt(360);
-		shell.rotateX(x);shell.rotateY(y); shell.rotateZ(z);
-		pocket.rotateX(x);shell.rotateY(y); shell.rotateZ(z);
+		//Random rand = new Random();
+		//int x = rand.nextInt(360);
+		//int y = rand.nextInt(360);
+		//int z = rand.nextInt(360);
+		//shell.rotateX(x);shell.rotateY(y); shell.rotateZ(z);
+		//pocket.rotateX(x);shell.rotateY(y); shell.rotateZ(z);
 		theShell = new ArrayList<ThreePoint>();
 		createPointList(shell,pocket);
 		this.points = pocket.points;
