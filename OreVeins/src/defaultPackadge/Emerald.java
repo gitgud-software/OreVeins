@@ -65,7 +65,7 @@ public class Emerald
 		}
 		else
 		{
-			probToSpawn = config.getInt(path+".SpawnProbability");
+			probToSpawn = config.getDouble(path+".SpawnProbability");
 		}
 	}
 }

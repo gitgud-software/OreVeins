@@ -66,7 +66,7 @@ public class Coal
 		}
 		else
 		{
-			probToSpawn = config.getInt(string+".SpawnProbability");
+			probToSpawn = config.getDouble(string+".SpawnProbability");
 		}
 	}
 }

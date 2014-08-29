@@ -41,7 +41,7 @@ public class TruncatedSkewDistribution
 		}
 		else
 		{
-			min = config.getInt(configPath+".Min");
+			min = config.getDouble(configPath+".Min");
 		}
 		if(!config.contains(configPath + ".Max"))
 		{
@@ -49,7 +49,7 @@ public class TruncatedSkewDistribution
 		}
 		else
 		{
-			max = config.getInt(configPath+".Max");
+			max = config.getDouble(configPath+".Max");
 		}
 		if(!config.contains(this.configPath + ".Skew"))
 		{
@@ -57,7 +57,7 @@ public class TruncatedSkewDistribution
 		}
 		else
 		{
-			skew = config.getInt(configPath + ".Skew");
+			skew = config.getDouble(configPath + ".Skew");
 		}
 		if(!config.contains(configPath + ".Bias"))
 		{
@@ -65,7 +65,7 @@ public class TruncatedSkewDistribution
 		}
 		else
 		{
-			bias = config.getInt(configPath +".Bias");
+			bias = config.getDouble(configPath +".Bias");
 		}
 	}
 	

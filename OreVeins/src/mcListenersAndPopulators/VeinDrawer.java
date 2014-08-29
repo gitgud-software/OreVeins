@@ -43,7 +43,7 @@ public class VeinDrawer
 	private static Random rand = new Random();
 	public static void drawVein(String[][][] vein, Chunk chunk) 
 	{
-		//DebugLogger.console("drawingOres");
+		DebugLogger.console("drawingOres at chunk" +chunk.getX() + ":" + chunk.getZ());
 		thechunk = chunk;
 		Block block;
 		ThreePoint point;

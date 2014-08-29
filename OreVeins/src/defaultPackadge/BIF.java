@@ -67,7 +67,7 @@ public class BIF
 		}
 		else
 		{
-			probToSpawn = config.getInt(string+".SpawnProbability");
+			probToSpawn = config.getDouble(string+".SpawnProbability");
 		}
 	}
 }

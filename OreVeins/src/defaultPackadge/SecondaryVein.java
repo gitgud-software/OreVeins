@@ -99,7 +99,7 @@ public class SecondaryVein
 		}
 		else
 		{
-			probToSpawn = config.getInt(string+".SpawnProbability");
+			probToSpawn = config.getDouble(string+".SpawnProbability");
 		}
 	}
 	public double getProbToSpawn() 

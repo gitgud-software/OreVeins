@@ -93,7 +93,7 @@ public class Lapiz
 		}
 		else
 		{
-			probToSpawn = config.getInt(string+".SpawnProbability");
+			probToSpawn = config.getDouble(string+".SpawnProbability");
 		}
 	}
 }

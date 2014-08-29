@@ -38,7 +38,7 @@ public class Diamond
 	private int type =1;
 	public Diamond()
 	{
-		probToSpawn = 0.1;
+		probToSpawn = 0.15;
 		veinDikes = new PrimaryVein(path);
 		diatreme = new Diatreme(path);
 	}
@@ -61,7 +61,7 @@ public class Diamond
 		}
 		else
 		{
-			probToSpawn = config.getInt(path+".SpawnProbability");
+			probToSpawn = config.getDouble(path+".SpawnProbability");
 		}
 	}
 

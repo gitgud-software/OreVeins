@@ -71,7 +71,7 @@ public final class OreVeins extends JavaPlugin
 	private void popFileTree()
 	{
 		File Ovein = new File("plugins/OreVeins");
-		config = new File("plugins/OreVeins/config.yml");
+		config = new File("plugins/OreVeins.yml");
 		File popList = new File("plugins/OreVeins/popList.txt");
 		File ChunkInfo = new File("plugins/OreVeins/ChunkInfo");
 		try
